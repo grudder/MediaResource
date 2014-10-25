@@ -1,0 +1,186 @@
+﻿@{
+	ViewBag.Title = "用户上传视频";
+}
+
+@using MediaResource.Web.Helper
+@using MediaResource.Web.Models.ViewModels
+@using PagedList.Mvc;
+
+@model PagedList.IPagedList<ImageViewModel>
+
+<div class="row">
+	<div class="col-md-3">
+		@Html.Action("IndexPartial", "Group", new {actionUrl = "/UserVideo/Group"})
+	</div>
+	<div class="col-md-9">
+		<h4>
+            搜索结果（关键字：@ViewBag.Keyword）
+			|
+			<a href="#" class="btn btn-primary" role="button" onclick="applyForDownload()">申请下载</a>
+		</h4>
+		<div class="row">
+			@foreach (var item in Model)
+			{
+				<div class="col-sm-3 thumbnail-sm">
+					<div class="thumbnail">
+						<a title="查看" data-toggle="modal" href="#" onclick="showUserVideoDetailModal(@item.Id)">
+							<img src='@Url.Content(item.FileUrl)' />
+						</a>
+						<div class="caption">
+							<p class="title">
+								@Html.TrimText(item.Name, 18)
+							</p>
+							<input type="checkbox" onclick="checkUserVideo('@item.Name')" />
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+		<div class="text-center">
+			@Html.PagedListPager(Model, page => Url.Action("Search", new { keyword = ViewBag.Keyword, page }))
+		</div>
+	</div>
+</div>
+
+<div id="userVideoDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="applyForDownloadModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">
+					申请下载
+				</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+					    <label class="col-sm-offset-2 col-sm-10">
+					        由于网络下载限制，我们将用移动硬盘或光盘为您拷贝<br/>（联系电话：63559316）
+					    </label>
+                    </div>
+					<div class="form-group">
+						<label for="inputReason" class="col-sm-2 control-label">原因</label>
+					    <div id="divReason" class="col-sm-10">
+					        <div class="radio">
+					            <label>
+					                <input type="radio" name="optionReason" value="报送媒体（高清）" checked="checked" />
+					                报送媒体（高清）
+					            </label>
+					        </div>
+					        <div class="radio">
+					            <label>
+					                <input type="radio" name="optionReason" value="宣传片制作（标清）" />
+					                宣传片制作（标清）
+					            </label>
+					        </div>
+					        <div class="radio">
+					            <label>
+					                <input type="radio" name="optionReason" value="工作报告（流媒体）" />
+					                工作报告（流媒体）
+					            </label>
+					        </div>
+					        <div class="radio">
+					            <label>
+					                <input type="radio" name="optionReason" value="" />
+					                自填
+					            </label>
+					        </div>
+					        <textarea id="inputReason" class="form-control" rows="5" placeholder="自填申请下载原因"></textarea>
+					    </div>
+					</div>
+					<div class="form-group">
+						<label for="inputDetail" class="col-sm-2 control-label">详情</label>
+						<div class="col-sm-10">
+							<textarea id="inputDetail" class="form-control" rows="5" disabled="disabled"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button class="btn btn-primary" type="button" onclick="submitApply()">确定</button>
+							<button class="btn btn-default" type="button" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts
+{
+	<script type="text/javascript">
+	$(function () {
+		// 刷新模态对话框
+		$("#userVideoDetailModal").on("hidden.bs.modal", function () {
+			$(this).removeData("bs.modal");
+		});
+		$("#applyForDownloadModal").on("hidden.bs.modal", function () {
+			$("#inputReason").val("");
+		});
+	});
+
+	function submitApply() {
+	    var reason = $('input[name="optionReason"]:checked').val();
+	    if (reason == "") {
+	        reason = $("#inputReason").val();
+	    }
+	    if (reason == "") {
+	        alert("请填写原因！");
+	        return;
+	    }
+
+		var detail = $("#inputDetail").val();
+
+		var url = '@Url.Action("Create", "ApplyForDownload")';
+			$.post(
+				url,
+				{
+					reason: reason,
+					detail: detail
+				},
+				function () {
+					alert("申请已提交！");
+
+					$("#applyForDownloadModal").modal("hide");
+				}
+			);
+	}
+
+		var selectedUserVideos = new Array();
+
+		function showUserVideoDetailModal(id) {
+			$("#userVideoDetailModal").modal({
+				show: true,
+				remote: '@Url.Action("Detail", "UserVideo")' + "/" + id
+			});
+		}
+
+		function checkUserVideo(name) {
+			if (event.srcElement.checked) {
+				selectedUserVideos.push(name);
+			}
+			else {
+				var index = selectedUserVideos.indexOf(name);
+				selectedUserVideos.splice(index, 1);
+			}
+			$("#inputDetail").val(selectedUserVideos.join("，"));
+		}
+
+		function applyForDownload() {
+			var description = $("#inputDetail").val();
+			if (description == "") {
+				alert("请选择您要下载的视频！");
+				return;
+			}
+
+			$("#applyForDownloadModal").modal();
+		}
+	</script>
+}

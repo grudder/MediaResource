@@ -1,0 +1,73 @@
+﻿@using MediaResource.Web.Helper
+@using MediaResource.Web.Models
+@using MediaResource.Web.Models.ViewModels
+
+@model Tuple<List<ImageViewModel>, List<ImageViewModel>>
+
+<div class="row">
+	<div class="col-md-12">
+		<ul id="rankTab" class="nav nav-tabs" role="tablist">
+			<li class="active">
+				<a href="#userPhotoPanel" data-toggle="tab">照片评分排行</a>
+			</li>
+			<li>
+				<a href="#userVideoPanel" data-toggle="tab">视频评分排行</a>
+			</li>
+		</ul>
+		<div class="panel panel-info">
+			<div class="panel-body panel-body-group">
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div class="tab-pane active" id="userPhotoPanel">
+						<ul class="list-group">
+							@foreach (var item in Model.Item1)
+							{
+								<li class="list-group-item">
+				                    @if (item.ObjectType == ObjectType.UserPhoto)
+				                    {
+				                        <a data-toggle="modal" href='@Url.Action("Detail", "UserPhoto", new {id = item.Id})' data-target="#userPhotoDetailModal">
+				                            @Html.TrimText(item.Name, 20)
+				                        </a>
+                                    }
+                                    @if (item.ObjectType == ObjectType.Photo)
+                                    {
+                                        <a data-toggle="modal" href='@Url.Action("Detail", "Photo", new {id = item.Id})' data-target="#photoDetailModal">
+                                            @Html.TrimText(item.Name, 20)
+                                        </a>
+                                    }
+									<span class="badge">
+										@item.Score
+									</span>
+								</li>
+							}
+						</ul>
+					</div>
+					<div class="tab-pane" id="userVideoPanel">
+						<ul class="list-group">
+							@foreach (var item in Model.Item2)
+							{
+								<li class="list-group-item">
+				                    @if (item.ObjectType == ObjectType.UserVideo)
+                                    {
+                                        <a data-toggle="modal" href='@Url.Action("Detail", "UserVideo", new { id = item.Id})' data-target="#userVideoDetailModal">
+                                            @Html.TrimText(item.Name, 20)
+                                        </a>
+                                    }
+                                @if (item.ObjectType == ObjectType.Video)
+                                {
+                                    <a data-toggle="modal" href='@Url.Action("Detail", "Video", new { id = item.Id})' data-target="#videoDetailModal">
+                                        @Html.TrimText(item.Name, 20)
+                                    </a>
+                                }
+									<span class="badge">
+										@item.Score
+									</span>
+								</li>
+							}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,262 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Helper
+@model MediaResource.Web.Models.UserPhoto
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.Name
+		@Html.HiddenFor(model => model.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+			    <div class="col-md-12">
+			        <div class="img-lg-wrap">
+			            <img src="@ImageHelper.GetLargeThumbUrl(Model.FileUrl)" />
+                    </div>
+			    </div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenUserPhotoScore">评分：</label>
+						<input type="hidden" id="hiddenUserPhotoScore" value="0" />
+						<div id="divUserPhotoScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonUserPhotoPostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postUserPhotoScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblUserPhotoScore">@Model.Score</label>
+							（<label id="lblUserPhotoScoreCount">@Model.ScoreCount</label>次打分）
+                            <a href="@WebHelper.Instance.RootUrl@Model.FileUrl" target="_blank" class="btn btn-default">下载</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="userPhotoTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#userPhotoDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#userPhotoCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblUserPhotoCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="userPhotoDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									@Html.DisplayNameFor(model => model.Name)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Name)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Folder)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Folder.Name)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.IsPublic)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.IsPublic)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.CreateByEntity)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.CreateByEntity.FullName)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.CreateDate)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.CreateDate)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="userPhotoCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textUserPhotoCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgUserPhotoVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshUserPhotoVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputUserPhotoVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postUserPhotoCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframeUserPhotoCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+	var _userPhotoId;
+
+	$(function () {
+		_userPhotoId = $("#Id").val();
+
+		changeUserPhotoScore();
+		showUserPhotoCommentList();
+		showUserPhotoCommentCount();
+	});
+
+	function changeUserPhotoScore() {
+	    var buttons = document.getElementById("divUserPhotoScore").getElementsByTagName("input");
+	    for (var i = 0; i < parseInt(document.getElementById("hiddenUserPhotoScore").value) ; i++) {
+			buttons[i].style.backgroundPosition = "right center";
+		}
+
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].onclick = function () {
+				for (var m = 0; m < buttons.length; m++) {
+					buttons[m].style.backgroundPosition = "right center";
+				}
+				for (var n = 0; n < this.value; n++) {
+					buttons[n].style.backgroundPosition = "left center";
+				}
+				document.getElementById("hiddenUserPhotoScore").value = this.value;
+			}
+		}
+	}
+
+	function postUserPhotoScore() {
+	    var score = $("#hiddenUserPhotoScore").val();
+		$.post(
+			'@Url.Action("Create", "Score")',
+			{
+				ObjectType: ObjectType.UserPhoto,
+				ObjectId: _userPhotoId,
+				Value: score
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					// 禁用评分按钮
+				    $("#buttonUserPhotoPostScore").attr("disabled", "disabled");
+
+					// 刷新平均分和评分次数
+				    $("#lblUserPhotoScore").text(result.Score);
+				    $("#lblUserPhotoScoreCount").text(result.ScoreCount);
+				}
+			}
+		);
+	}
+
+    function showUserPhotoCommentList() {
+		var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.UserPhoto + "&objectId=" + _userPhotoId;
+	    $("#iframeUserPhotoCommentList").attr("src", commentListPageUrl);
+	}
+
+    function showUserPhotoCommentCount() {
+		$.get(
+			'@Url.Action("Count", "Comment")',
+			{
+				objectType: ObjectType.UserPhoto,
+				objectId: _userPhotoId
+			},
+			function (result) {
+			    $("#lblUserPhotoCommentCount").text(result.count);
+			}
+		);
+	}
+
+    function refreshUserPhotoVerificationCode() {
+        var img = $("#imgUserPhotoVerificationCode");
+		img.attr("src", img.attr("src") + "?");
+	}
+
+    function postUserPhotoCommit() {
+        var content = $("#textUserPhotoCommentContent").val();
+		if (content == "") {
+			alert("评论内容不能为空！");
+			return;
+		}
+		var verificationCode = $("#inputUserPhotoVerificationCode").val();
+		if (verificationCode == "") {
+			alert("验证码不能为空！");
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+				if (!result.success) {
+					alert("验证码错误！");
+					refreshUserPhotoVerificationCode();
+					return;
+				}
+
+				$.post(
+					'@Url.Action("Create", "Comment")',
+					{
+						ObjectType: ObjectType.UserPhoto,
+						ObjectId: _userPhotoId,
+						Content: content
+					},
+					function (result1) {
+						if (result1.success) {
+							alert(result1.message);
+
+							// 清空表单
+							$("#commentContent").val("");
+							$("#verificationCode").val("");
+
+							// 刷新验证码
+							refreshUserPhotoVerificationCode();
+
+							// 刷新评论数量
+							showUserPhotoCommentCount();
+
+							// 刷新评论列表
+							showUserPhotoCommentList();
+						}
+					}
+				);
+			}
+		);
+	}
+</script>

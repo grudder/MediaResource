@@ -1,0 +1,102 @@
+﻿@using MediaResource.Web.Models;
+@using PagedList.Mvc;
+
+@model PagedList.IPagedList<TaskList>
+
+@{
+	ViewBag.Title = "任务单";
+}
+
+<h2>任务单</h2>
+
+<p>
+	<a data-toggle="modal" class="btn btn-primary" href='@Url.Action("Create", "TaskList")' data-target="#createTaskListModal">
+		新建
+	</a>
+</p>
+<table class="table">
+	<tr>
+		<th>
+			编号
+		</th>
+		<th>
+			名称
+		</th>
+		<th>
+			时间
+		</th>
+		<th>
+			地点
+		</th>
+		<th>
+			联系人
+		</th>
+		<th>
+			派出人员
+		</th>
+		<th>
+			审批状态
+		</th>
+		<th>
+			确认状态
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>
+
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.TaskNo)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Name)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.TaskDate)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Location)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Contact)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Sent)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.IsApprove)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.IsConfirm)
+			</td>
+			<td>
+				@Html.ActionLink("查看", "Details", new { id = item.Id })
+			</td>
+		</tr>
+	}
+</table>
+<div class="text-center">
+	@Html.PagedListPager(Model, page => Url.Action("Index", new { ViewBag.Id, page }))
+</div>
+
+<div id="createTaskListModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts
+{
+	<script type="text/javascript">
+		$(function () {
+			// 刷新模态对话框
+			$("#createTaskListModal").on("hidden.bs.modal", function () {
+				$(this).removeData("bs.modal");
+			});
+		});
+	</script>
+}

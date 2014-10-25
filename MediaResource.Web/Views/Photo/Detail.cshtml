@@ -1,0 +1,292 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Helper
+@model MediaResource.Web.Models.Photo
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.Name
+		@Html.HiddenFor(model => model.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+				    <div class="img-lg-wrap">
+					    <img src="@ImageHelper.GetLargeThumbUrl(Model.FileUrl)" />
+				    </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenPhotoScore">评分：</label>
+						<input type="hidden" id="hiddenPhotoScore" value="0" />
+						<div id="divPhotoScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonPhotoPostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postPhotoScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblPhotoScore">@Model.Score</label>
+							（<label id="lblPhotoScoreCount">@Model.ScoreCount</label>次打分）
+                            <a href="@Url.Action("Download", new {id = @Model.Id})" target="_blank" class="btn btn-default">下载</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="photoTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#photoDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#photoCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblPhotoCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="photoDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									名　　称
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Name)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.RecordingTime)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.RecordingTime)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Location)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Location)
+								</dd>
+								<dt>
+									拍&nbsp;&nbsp;摄&nbsp;&nbsp;人
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Shooting)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Leadership)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Leadership)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Participants)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Participants)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Offices)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Offices)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Association)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Association)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.ClickCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.ClickCount)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.DownloadCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.DownloadCount)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="photoCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textPhotoCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgPhotoVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshPhotoVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputPhotoVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postPhotoCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframePhotoCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+	var _photoId;
+
+	$(function () {
+		_photoId = $("#Id").val();
+
+		changePhotoScore();
+		showPhotoCommentList();
+		showPhotoCommentCount();
+	});
+
+	function changePhotoScore() {
+	    var buttons = document.getElementById("divPhotoScore").getElementsByTagName("input");
+	    for (var i = 0; i < parseInt(document.getElementById("hiddenPhotoScore").value) ; i++) {
+			buttons[i].style.backgroundPosition = "right center";
+		}
+
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].onclick = function () {
+				for (var m = 0; m < buttons.length; m++) {
+					buttons[m].style.backgroundPosition = "right center";
+				}
+				for (var n = 0; n < this.value; n++) {
+					buttons[n].style.backgroundPosition = "left center";
+				}
+				document.getElementById("hiddenPhotoScore").value = this.value;
+			}
+		}
+	}
+
+	function postPhotoScore() {
+	    var score = $("#hiddenPhotoScore").val();
+		$.post(
+			'@Url.Action("Create", "Score")',
+			{
+				ObjectType: ObjectType.Photo,
+				ObjectId: _photoId,
+				Value: score
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					// 禁用评分按钮
+				    $("#buttonPhotoPostScore").attr("disabled", "disabled");
+
+					// 刷新平均分和评分次数
+				    $("#lblPhotoScore").text(result.Score);
+				    $("#lblPhotoScoreCount").text(result.ScoreCount);
+				}
+			}
+		);
+	}
+
+    function showPhotoCommentList() {
+		var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.Photo + "&objectId=" + _photoId;
+	    $("#iframePhotoCommentList").attr("src", commentListPageUrl);
+	}
+
+    function showPhotoCommentCount() {
+		$.get(
+			'@Url.Action("Count", "Comment")',
+			{
+				objectType: ObjectType.Photo,
+				objectId: _photoId
+			},
+			function (result) {
+			    $("#lblPhotoCommentCount").text(result.count);
+			}
+		);
+	}
+
+    function refreshPhotoVerificationCode() {
+        var img = $("#imgPhotoVerificationCode");
+		img.attr("src", img.attr("src") + "?");
+	}
+
+    function postPhotoCommit() {
+	    var content = $("#textPhotoCommentContent").val();
+		if (content == "") {
+			alert("评论内容不能为空！");
+			return;
+		}
+		var verificationCode = $("#inputPhotoVerificationCode").val();
+		if (verificationCode == "") {
+			alert("验证码不能为空！");
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+				if (!result.success) {
+					alert("验证码错误！");
+					refreshPhotoVerificationCode();
+					return;
+				}
+
+				$.post(
+					'@Url.Action("Create", "Comment")',
+					{
+						ObjectType: ObjectType.Photo,
+						ObjectId: _photoId,
+						Content: content
+					},
+					function (result1) {
+						if (result1.success) {
+							alert(result1.message);
+
+							// 清空表单
+							$("#commentContent").val("");
+							$("#verificationCode").val("");
+
+							// 刷新验证码
+							refreshPhotoVerificationCode();
+
+							// 刷新评论数量
+							showPhotoCommentCount();
+
+							// 刷新评论列表
+							showPhotoCommentList();
+						}
+					}
+				);
+			}
+		);
+	}
+</script>

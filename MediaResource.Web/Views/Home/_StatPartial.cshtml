@@ -1,0 +1,68 @@
+﻿@using MediaResource.Web.Models.ViewModels
+
+@model Tuple<List<StatViewModel>, List<StatViewModel>, List<StatViewModel>>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <img src='@Url.Content("~/Images/stat-icon.png")' />
+                    素材统计
+                </h3>
+            </div>
+
+            <ul id="rankTab" class="nav nav-tabs">
+                <li class="active">
+                    <a href="#totalPanel" data-toggle="tab">库内总量</a>
+                </li>
+                <li>
+                    <a href="#monthPanel" data-toggle="tab">本月新增</a>
+                </li>
+                <li>
+                    <a href="#yearPanel" data-toggle="tab">本年新增</a>
+                </li>
+            </ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div class="tab-pane active" id="totalPanel">
+                    <ul class="list-group">
+                        @foreach (var item in Model.Item1)
+                        {
+                            <li class="list-group-item">
+                                @item.Name
+                                ：
+                                @Html.FormatValue(item.Count, "{0:N0}")
+                            </li>
+                        }
+                    </ul>
+				</div>
+				<div class="tab-pane" id="monthPanel">
+                    <ul class="list-group">
+                        @foreach (var item in Model.Item2)
+                        {
+                            <li class="list-group-item">
+                                @item.Name
+                                ：
+                                @Html.FormatValue(item.Count, "{0:N0}")
+                            </li>
+                        }
+                    </ul>
+				</div>
+				<div class="tab-pane" id="yearPanel">
+                    <ul class="list-group">
+                        @foreach (var item in Model.Item3)
+                        {
+                            <li class="list-group-item">
+                                @item.Name
+                                ：
+                                @Html.FormatValue(item.Count, "{0:N0}")
+                            </li>
+                        }
+                    </ul>
+				</div>
+			</div>
+        </div>
+    </div>
+</div>

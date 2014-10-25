@@ -1,0 +1,38 @@
+﻿@model List<MediaResource.Web.Models.Group>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-warning">
+			<div class="panel-heading">
+				<div class="row">
+				    <div class="col-md-6">
+				        <h3 class="panel-title">
+				            <img src='@Url.Content("~/Images/special-icon.png")' />
+				            专栏
+				        </h3>
+				    </div>
+                    @if (@ViewBag.ActionUrl == Url.Action("Index", "Home"))
+                    {
+                        <div class="col-md-6">
+                            <a href='@Url.Action("Index", "Group")' class="navbar-right">更多&gt;&gt;</a>
+                        </div>
+                    }
+				</div>
+			</div>
+			<div id="groupPanelBody" class="list-group" style="background-color: #f1f1f1;">
+				@foreach (var item in Model)
+				{
+				    <a href='@Url.Action("Index", "Group", new {item.Id})' class="list-group-item
+                       @if (Request.Path.EndsWith("/" + item.Id))
+                       {
+                           @:active
+                       }
+                       ">
+						@item.Name
+						&gt;&gt;
+					</a>
+				}
+			</div>
+		</div>
+	</div>
+</div>

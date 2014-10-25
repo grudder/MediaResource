@@ -1,0 +1,94 @@
+﻿@{
+	Layout = null;
+}
+
+@model PagedList.IPagedList<MediaResource.Web.Models.TaskList>
+
+@using PagedList.Mvc;
+
+<table class="table table-striped">
+	<tr>
+		<th>
+			编号
+		</th>
+		<th>
+			名称
+		</th>
+		<th>
+			时间
+		</th>
+		<th>
+			地点
+		</th>
+		<th>
+			联系人
+		</th>
+		<th>
+			派出人员
+		</th>
+		<th>
+			审批状态
+		</th>
+		<th>
+			确认状态
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>
+
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.TaskNo)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Name)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.TaskDate)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Location)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Contact)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Sent)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.IsApprove)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.IsConfirm)
+			</td>
+			<td>
+				<button class="btn btn-link" onclick="doApprove(@item.Id, true)">通过</button>
+				<button class="btn btn-link" onclick="doApprove(@item.Id, false)">退回</button>
+			</td>
+		</tr>
+	}
+</table>
+<div class="text-center">
+	@Html.PagedListPager(Model, page => Url.Action("Index", new { ViewBag.Id, page }))
+</div>
+
+<script type="text/javascript">
+	function doApprove(id, ifApprove) {
+		$.post(
+			'@Url.Action("DoApprove", "TaskList")',
+			{
+				id: id,
+				ifApprove: ifApprove
+			},
+			function (result) {
+				if (result.success) {
+				    alert(result.message);
+				    location.href = '@Url.Action("Index", "User", new {activeTab = 6})';
+				}
+			}
+		);
+	}
+</script>

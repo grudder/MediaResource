@@ -1,0 +1,310 @@
+﻿@{
+	Layout = null;
+}
+
+@model MediaResource.Web.Models.ViewModels.VideoViewModel
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.Video.Name
+		@Html.HiddenFor(model => model.Video.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+			    <div class="col-md-12">
+			        <p>
+				        <div class="img-lg-wrap">
+					        <img id="imgPreviewImage" src="@Model.ImageUrl" />
+				        </div>
+                    </p>
+			    </div>
+			</div>
+			<div class="row">
+				@foreach (string previewImage in Model.PreviewImages)
+				{
+				    <div class="col-md-4">
+				        <p>
+				            <a href="#">
+				                <div class="img-sm-wrap">
+				                    <img src="@previewImage" title="显示大图" onclick="showPreviewImage()" />
+                                </div>
+				            </a>
+				        </p>
+				    </div>
+				}
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenVideoScore">评分：</label>
+						<input type="hidden" id="hiddenVideoScore" value="0" />
+						<div id="divVideoScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonVideoPostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postVideoScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblVideoScore">@Model.Video.Score</label>
+							（<label id="lblVideoScoreCount">@Model.Video.ScoreCount</label>次打分）
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="videoTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#videoDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#videoCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblVideoCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="videoDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									名　　称
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Video.Name)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Video.RecordingTime)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Video.RecordingTime)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Video.Location)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Video.Location)
+								</dd>
+								<dt>
+                                    拍&nbsp;&nbsp;摄&nbsp;&nbsp;人
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Video.Shooting)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Video.Leadership)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Video.Leadership)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Video.Participants)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Video.Participants)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Video.Offices)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Video.Offices)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Video.Association)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Video.Association)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Video.ClickCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Video.ClickCount)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Video.DownloadCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Video.DownloadCount)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="videoCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textVideoCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgVideoVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshVideoVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputVideoVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postVideoCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframeVideoCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+	var _videoId;
+
+	$(function () {
+		_videoId = $("#Video_Id").val();
+
+		changeVideoScore();
+		showVideoCommentList();
+		showVideoCommentCount();
+	});
+
+    function showPreviewImage() {
+        document.getElementById('imgPreviewImage').src = event.srcElement.src;
+    }
+
+    function changeVideoScore() {
+        var buttons = document.getElementById("divVideoScore").getElementsByTagName("input");
+        for (var i = 0; i < parseInt(document.getElementById("hiddenVideoScore").value) ; i++) {
+			buttons[i].style.backgroundPosition = "right center";
+		}
+
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].onclick = function () {
+				for (var m = 0; m < buttons.length; m++) {
+					buttons[m].style.backgroundPosition = "right center";
+				}
+				for (var n = 0; n < this.value; n++) {
+					buttons[n].style.backgroundPosition = "left center";
+				}
+				document.getElementById("hiddenVideoScore").value = this.value;
+			}
+		}
+	}
+
+    function postVideoScore() {
+	    var score = $("#hiddenVideoScore").val();
+		$.post(
+			'@Url.Action("Create", "Score")',
+			{
+				ObjectType: ObjectType.Video,
+				ObjectId: _videoId,
+				Value: score
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					// 禁用评分按钮
+				    $("#buttonVideoPostScore").attr("disabled", "disabled");
+
+					// 刷新平均分和评分次数
+					$("#lblVideoScore").text(result.Score);
+					$("#lblVideoScoreCount").text(result.ScoreCount);
+				}
+			}
+		);
+	}
+
+    function showVideoCommentList() {
+		var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.Video + "&objectId=" + _videoId;
+	    $("#iframeVideoCommentList").attr("src", commentListPageUrl);
+	}
+
+    function showVideoCommentCount() {
+		$.get(
+			'@Url.Action("Count", "Comment")',
+			{
+				objectType: ObjectType.Video,
+				objectId: _videoId
+			},
+			function (result) {
+			    $("#lblVideoCommentCount").text(result.count);
+			}
+		);
+	}
+
+    function refreshVideoVerificationCode() {
+	    var img = $("#imgVideoVerificationCode");
+		img.attr("src", img.attr("src") + "?");
+	}
+
+    function postVideoCommit() {
+	    var content = $("#textVideoCommentContent").val();
+		if (content == "") {
+			alert("评论内容不能为空！");
+			return;
+		}
+		var verificationCode = $("#inputVideoVerificationCode").val();
+		if (verificationCode == "") {
+			alert("验证码不能为空！");
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+				if (!result.success) {
+					alert("验证码错误！");
+					refreshVideoVerificationCode();
+					return;
+				}
+
+				$.post(
+					'@Url.Action("Create", "Comment")',
+					{
+						ObjectType: ObjectType.Video,
+						ObjectId: _videoId,
+						Content: content
+					},
+					function (result1) {
+						if (result1.success) {
+							alert(result1.message);
+
+							// 清空表单
+							$("#commentContent").val("");
+							$("#verificationCode").val("");
+
+							// 刷新验证码
+							refreshVideoVerificationCode();
+
+							// 刷新评论数量
+							showVideoCommentCount();
+
+							// 刷新评论列表
+							showVideoCommentList();
+						}
+					}
+				);
+			}
+		);
+	}
+</script>

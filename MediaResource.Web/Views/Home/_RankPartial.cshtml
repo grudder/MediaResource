@@ -1,0 +1,50 @@
+﻿@using MediaResource.Web.Helper
+@using MediaResource.Web.Models
+
+@model Tuple<List<Photo>, List<Video>>
+
+<div class="row">
+	<div class="col-md-12">
+		<ul id="rankTab" class="nav nav-tabs">
+		    <li class="active">
+		        <a href="#photoPanel" data-toggle="tab">图片评分排行</a>
+		    </li>
+		    <li>
+		        <a href="#videoPanel" data-toggle="tab">视频评分排行</a>
+		    </li>
+		</ul>
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div class="tab-pane active" id="photoPanel">
+				<ul class="list-group">
+					@foreach (var item in Model.Item1)
+					{
+						<li class="list-group-item">
+							<a data-toggle="modal" href='@Url.Action("Detail", "Photo", new { id = item.Id})' data-target="#photoDetailModal">
+								@Html.TrimText(item.Name, 30)
+							</a>
+							<span class="badge">
+								@item.Score
+							</span>
+						</li>
+					}
+				</ul>
+			</div>
+			<div class="tab-pane" id="videoPanel">
+				<ul class="list-group">
+					@foreach (var item in Model.Item2)
+					{
+						<li class="list-group-item">
+							<a data-toggle="modal" href='@Url.Action("Detail", "Video", new { id = item.Id})' data-target="#videoDetailModal">
+								@Html.TrimText(item.Name, 30)
+							</a>
+							<span class="badge">
+								@item.Score
+							</span>
+						</li>
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

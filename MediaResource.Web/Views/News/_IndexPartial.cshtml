@@ -1,0 +1,46 @@
+﻿@using MediaResource.Web.Helper
+@model List<MediaResource.Web.Models.ViewModels.ImageViewModel>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<img src='@Url.Content("~/Images/news-icon.png")' />
+							电视新闻
+						</h3>
+					</div>
+					<div class="col-md-6">
+						<a href='@Url.Action("Category", "News")' class="navbar-right">更多&gt;&gt;</a>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					@foreach (var item in Model)
+					{
+						<div class="col-md-6 thumbnail-sm">
+							<a data-toggle="modal" href='@Url.Action("Detail", "News", new { id = item.Id})' data-target="#newsDetailModal">
+							    <div class="img-md-wrap">
+							        <img src='@Url.Content(item.FileUrl)' />
+                                </div>
+							</a>
+							<p>
+								@Html.TrimText(item.Name, 38)
+							</p>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="newsDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

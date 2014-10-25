@@ -1,0 +1,269 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Helper
+@model MediaResource.Web.Models.UserVideo
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.Title
+		@Html.HiddenFor(model => model.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<div id="userVideoPlayer">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenUserVideoScore">评分：</label>
+						<input type="hidden" id="hiddenUserVideoScore" value="0" />
+						<div id="divUserVideoScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonUserVideoPostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postUserVideoScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblUserVideoScore">@Model.Score</label>
+							（<label id="lblUserVideoScoreCount">@Model.ScoreCount</label>次打分）
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="userVideoTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#userVideoDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#userVideoCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblUserVideoCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="userVideoDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									@Html.DisplayNameFor(model => model.Title)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Title)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Folder)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Folder.Name)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.IsPublic)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.IsPublic)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.CreateByEntity)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.CreateByEntity.FullName)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.CreateDate)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.CreateDate)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="userVideoCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textUserVideoCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgUserVideoVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshUserVideoVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputUserVideoVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postUserVideoCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframeUserVideoCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/jwplayer/jwplayer.js")'></script>
+<script type="text/javascript" src='@Url.Content("~/Scripts/jwplayer/jwplayer.html5.js")'></script>
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+    var _userVideoId;
+
+    $(function () {
+        _userVideoId = $("#Id").val();
+
+        var userVideoUrl = "@WebHelper.Instance.RootUrl + @Model.FlvPath";
+        jwplayer("userVideoPlayer").setup({
+            file: userVideoUrl,
+            width: "480px",
+            height: "360px"
+        });
+
+        changeUserVideoScore();
+        showUserVideoCommentList();
+        showUserVideoCommentCount();
+    });
+
+    function changeUserVideoScore() {
+        var buttons = document.getElementById("divUserVideoScore").getElementsByTagName("input");
+        for (var i = 0; i < parseInt(document.getElementById("hiddenUserVideoScore").value) ; i++) {
+            buttons[i].style.backgroundPosition = "right center";
+        }
+
+        for (var j = 0; j < buttons.length; j++) {
+            buttons[j].onclick = function () {
+                for (var m = 0; m < buttons.length; m++) {
+                    buttons[m].style.backgroundPosition = "right center";
+                }
+                for (var n = 0; n < this.value; n++) {
+                    buttons[n].style.backgroundPosition = "left center";
+                }
+                document.getElementById("hiddenUserVideoScore").value = this.value;
+            }
+        }
+    }
+
+    function postUserVideoScore() {
+        var score = $("#hiddenUserVideoScore").val();
+        $.post(
+			'@Url.Action("Create", "Score")',
+			{
+			    ObjectType: ObjectType.UserVideo,
+			    ObjectId: _userVideoId,
+			    Value: score
+			},
+			function (result) {
+			    alert(result.message);
+			    if (result.success) {
+			        // 禁用评分按钮
+			        $("#buttonUserVideoPostScore").attr("disabled", "disabled");
+
+			        // 刷新平均分和评分次数
+			        $("#lblUserVideoScore").text(result.Score);
+			        $("#lblUserVideoScoreCount").text(result.ScoreCount);
+			    }
+			}
+		);
+    }
+
+    function showUserVideoCommentList() {
+        var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.UserVideo + "&objectId=" + _userVideoId;
+        $("#iframeUserVideoCommentList").attr("src", commentListPageUrl);
+    }
+
+    function showUserVideoCommentCount() {
+        $.get(
+			'@Url.Action("Count", "Comment")',
+			{
+			    objectType: ObjectType.UserVideo,
+			    objectId: _userVideoId
+			},
+			function (result) {
+			    $("#lblUserVideoCommentCount").text(result.count);
+			}
+		);
+    }
+
+    function refreshUserVideoVerificationCode() {
+        var img = $("#imgUserVideoVerificationCode");
+        img.attr("src", img.attr("src") + "?");
+    }
+
+    function postUserVideoCommit() {
+        var content = $("#textUserVideoCommentContent").val();
+        if (content == "") {
+            alert("评论内容不能为空！");
+            return;
+        }
+        var verificationCode = $("#inputUserVideoVerificationCode").val();
+        if (verificationCode == "") {
+            alert("验证码不能为空！");
+            return;
+        }
+
+        $.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+			    if (!result.success) {
+			        alert("验证码错误！");
+			        refreshUserVideoVerificationCode();
+			        return;
+			    }
+
+			    $.post(
+					'@Url.Action("Create", "Comment")',
+					{
+					    ObjectType: ObjectType.UserVideo,
+					    ObjectId: _userVideoId,
+					    Content: content
+					},
+					function (result1) {
+					    if (result1.success) {
+					        alert(result1.message);
+
+					        // 清空表单
+					        $("#commentContent").val("");
+					        $("#verificationCode").val("");
+
+					        // 刷新验证码
+					        refreshUserVideoVerificationCode();
+
+					        // 刷新评论数量
+					        showUserVideoCommentCount();
+
+					        // 刷新评论列表
+					        showUserVideoCommentList();
+					    }
+					}
+				);
+			}
+		);
+    }
+</script>

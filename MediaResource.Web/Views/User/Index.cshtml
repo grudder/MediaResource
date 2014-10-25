@@ -1,0 +1,188 @@
+﻿@using MediaResource.Web.Helper
+@{
+	ViewBag.Title = "个人中心";
+}
+
+<input id="hiddenActiveTab" type="hidden" value="@ViewBag.ActiveTab" />
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+	<li
+        @if (ViewBag.ActiveTab == null)
+        {
+            @:class="active"
+        }
+        >
+		<a href="#personInfo" data-toggle="tab">个人信息</a>
+	</li>
+	<li
+        @if (ViewBag.ActiveTab == 1)
+        {
+            @:class="active"
+        }
+        >
+		<a href="#contactList" data-toggle="tab">通讯录</a>
+	</li>
+    <li
+        @if (ViewBag.ActiveTab == 2)
+        {
+            @:class="active"
+        }
+        >
+		<a href="#photoFolder" data-toggle="tab">个人照片目录管理</a>
+	</li>
+	<li
+        @if (ViewBag.ActiveTab == 3)
+        {
+            @:class="active"
+        }
+        >
+		<a href="#photoUpload" data-toggle="tab">个人上传照片管理</a>
+	</li>
+	<li
+        @if (ViewBag.ActiveTab == 4)
+        {
+            @:class="active"
+        }
+        >
+		<a href="#videoFolder" data-toggle="tab">个人视频目录管理</a>
+	</li>
+	<li
+        @if (ViewBag.ActiveTab == 5)
+        {
+            @:class="active"
+        }
+        >
+		<a href="#videoUpload" data-toggle="tab">个人上传视频管理</a>
+	</li>
+	@if (WebHelper.Instance.CurrentUser.CanApproveTask == true)
+	{
+		<li
+            @if (ViewBag.ActiveTab == 6)
+            {
+                @:class="active"
+            }
+            >
+			<a href="#taskListApprove" data-toggle="tab">任务单审批</a>
+		</li>
+	}
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div id="personInfo"
+        @if (ViewBag.ActiveTab == null)
+        {
+            @:class="tab-pane active"
+        }
+        else
+        {
+            @:class="tab-pane"
+        }
+        >
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <iframe id="iframePersonInfo" height="500" scrolling="no" src='@Url.Action("Edit", "User")' onLoad="iframeAutoHeight()"></iframe>
+            </div>
+        </div>
+    </div>
+    <div id="contactList"
+        @if (ViewBag.ActiveTab == 1)
+        {
+            @:class="tab-pane active"
+        }
+        else
+        {
+            @:class="tab-pane"
+        }
+        >
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @Html.Action("ContactListPartial", "User")
+            </div>
+        </div>
+    </div>
+    <div id="photoFolder"
+        @if (ViewBag.ActiveTab == 2)
+        {
+            @:class="tab-pane active"
+        }
+        else
+        {
+            @:class="tab-pane"
+        }
+        >
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @Html.Action("PhotoListPartial", "UserFolder")
+            </div>
+        </div>
+    </div>
+    <div id="photoUpload"
+        @if (ViewBag.ActiveTab == 3)
+        {
+            @:class="tab-pane active"
+        }
+        else
+        {
+            @:class="tab-pane"
+        }
+        >
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @Html.Action("ListPartial", "UserPhoto")
+            </div>
+        </div>
+    </div>
+    <div id="videoFolder"
+        @if (ViewBag.ActiveTab == 4)
+        {
+            @:class="tab-pane active"
+        }
+        else
+        {
+            @:class="tab-pane"
+        }
+        >
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @Html.Action("VideoListPartial", "UserFolder")
+            </div>
+        </div>
+    </div>
+    <div id="videoUpload"
+        @if (ViewBag.ActiveTab == 5)
+        {
+            @:class="tab-pane active"
+        }
+        else
+        {
+            @:class="tab-pane"
+        }
+        >
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @Html.Action("ListPartial", "UserVideo")
+            </div>
+        </div>
+    </div>
+    @if (WebHelper.Instance.CurrentUser.CanApproveTask == true)
+    {
+        <div id="taskListApprove"
+            @if (ViewBag.ActiveTab == 6)
+            {
+                @:class="tab-pane active"
+            }
+            else
+            {
+                @:class="tab-pane"
+            }
+            >
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @Html.Action("ApprovePartial", "TaskList")
+                </div>
+            </div>
+        </div>
+    }
+</div>

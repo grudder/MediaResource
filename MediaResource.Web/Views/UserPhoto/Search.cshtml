@@ -1,0 +1,67 @@
+﻿@{
+	ViewBag.Title = "用户上传照片";
+}
+
+@using MediaResource.Web.Helper
+@using MediaResource.Web.Models.ViewModels
+@using PagedList.Mvc;
+
+@model PagedList.IPagedList<ImageViewModel>
+
+<div class="row">
+	<div class="col-md-3">
+		@Html.Action("IndexPartial", "Group", new {actionUrl = "/UserPhoto/Group"})
+	</div>
+	<div class="col-md-9">
+		<h4>
+			搜索结果（关键字：@ViewBag.Keyword）
+		</h4>
+		<div class="row">
+			@foreach (var item in Model)
+			{
+				<div class="col-sm-3 thumbnail-sm">
+					<div class="thumbnail">
+						<a title="查看" data-toggle="modal" href="#" onclick="showUserPhotoDetailModal(@item.Id)">
+							<img src="@item.FileUrl" />
+						</a>
+						<div class="caption">
+							<p class="title">
+								@Html.TrimText(item.Name, 18)
+							</p>
+						    <a href="@item.RawUrl" target="_blank" class="btn btn-default">下载</a>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+		<div class="text-center">
+			@Html.PagedListPager(Model, page => Url.Action("Search", new { keyword = ViewBag.Keyword, page }))
+		</div>
+	</div>
+</div>
+
+<div id="userPhotoDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts
+{
+	<script type="text/javascript">
+	    $(function () {
+		    // 刷新模态对话框
+		    $("#userPhotoDetailModal").on("hidden.bs.modal", function () {
+			    $(this).removeData("bs.modal");
+		    });
+	    });
+
+		function showUserPhotoDetailModal(id) {
+			$("#userPhotoDetailModal").modal({
+				show: true,
+				remote: '@Url.Action("Detail", "UserPhoto")' + "/" + id
+			});
+		}
+	</script>
+}

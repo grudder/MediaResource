@@ -1,0 +1,69 @@
+﻿@using MediaResource.Web.Helper
+@using MediaResource.Web.Models
+@using MediaResource.Web.Models.ViewModels
+
+@model List<ImageViewModel>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<img src='@Url.Content("~/Images/video-icon.png")' />
+							最新视频
+						</h3>
+					</div>
+					<div class="col-md-6">
+						<a href='@Url.Action("Group", "UserVideo", new {id = ViewBag.GroupId})' class="navbar-right">更多&gt;&gt;</a>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body panel-body-group">
+				<div class="row">
+					@foreach (var item in Model)
+					{
+						<div class="col-md-4 thumbnail-sm">
+				            @if (item.ObjectType == ObjectType.UserVideo)
+                            {
+                                <a data-toggle="modal" href='@Url.Action("Detail", "UserVideo", new { id = item.Id})' data-target="#userVideoDetailModal">
+			                        <div class="img-md-wrap">
+                                        <img src='@Url.Content(item.FileUrl)' />
+			                        </div>
+                                </a>
+                            }
+                            @if (item.ObjectType == ObjectType.Video)
+                            {
+                                <a data-toggle="modal" href='@Url.Action("Detail", "Video", new { id = item.Id})' data-target="#videoDetailModal">
+			                        <div class="img-md-wrap">
+                                        <img src='@Url.Content(item.FileUrl)' />
+			                        </div>
+                                </a>
+                            }
+							<p>
+								@Html.TrimText(item.Name, 18)
+								<br />
+								@Html.FormatValue(item.CreateDate, "{0:yyyy-MM-dd}")
+							</p>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="userVideoDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="videoDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,259 @@
+﻿/* Set width on the form input elements since they're 100% wide by default */
+input, select, textarea {
+    /* max-width: 280px; */
+}
+
+iframe {
+    border: none;
+    width: 100%;
+}
+
+/* 详情页中防止无内容时造成错位 */
+dd:before {
+    content: ".";
+    visibility: hidden;
+}
+
+.fixed-width {
+    /* width: 980px; */
+}
+
+.nav-tabs {
+    border: none;
+}
+
+.panel-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.list-group {
+    margin-bottom: 10px;
+}
+
+.list-group-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.modal-dialog-lg {
+    width: 1100px;
+}
+
+.tab-content .dl-horizontal dt {
+    width: 100px;
+}
+
+.tab-content .dl-horizontal dd {
+    margin-left: 120px;
+}
+
+
+.top {
+    height: 130px;
+    background-image: url("images/top-bg.jpg");
+    background-repeat: repeat-x;
+}
+
+.top-banner {
+    height: 130px;
+    background-image: url("images/top-banner-bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.bottom {
+    height: 82px;
+    background-image: url("images/bottom-bg.jpg");
+    background-repeat: repeat-x;
+}
+
+.bottom-banner {
+    height: 82px;
+    background-image: url("images/bottom-banner-bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#footer {
+    margin-top: 40px;
+}
+
+
+.thumbnail-xl p {
+    margin-top: -40px;
+    background-color: #333;
+    opacity: 0.4;
+    color: white;
+    width: 320px;
+    height: 40px;
+    padding: 2px;
+}
+
+.img-xl-wrap {
+    width: 320px;
+    height: 240px;
+    text-align: center;
+    font-family: arial;
+    line-height: 240px;
+    font-size: 0;
+    _font-size: 240px;
+}
+    .img-xl-wrap img {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 320px;
+        max-height: 240px;
+    }
+
+
+.img-lg-wrap {
+    width: 480px;
+    height: 360px;
+    text-align: center;
+    font-family: arial;
+    line-height: 360px;
+    font-size: 0;
+    _font-size: 340px;
+}
+    .img-lg-wrap img {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 480px;
+        max-height: 360px;
+    }
+
+.thumbnail .img-md-wrap {
+    margin-left: 9px;
+}
+.img-md-wrap {
+    width: 160px;
+    height: 120px;
+    text-align: center;
+    font-family: arial;
+    line-height: 120px;
+    font-size: 0;
+    _font-size: 100px;
+}
+    .img-md-wrap img {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 160px;
+        max-height: 120px;
+    }
+
+.img-sm-wrap {
+    width: 120px;
+    height: 90px;
+    text-align: center;
+    font-family: arial;
+    line-height: 90px;
+    font-size: 0;
+    _font-size: 70px;
+}
+    .img-sm-wrap img {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 120px;
+        max-height: 90px;
+    }
+
+.img-xs-wrap {
+    width: 80px;
+    height: 60px;
+    text-align: center;
+    font-family: arial;
+    line-height: 60px;
+    font-size: 0;
+    _font-size: 40px;
+}
+    .img-xs-wrap img {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 80px;
+        max-height: 60px;
+    }
+
+
+.thumbnail-sm p {
+    margin-top: -40px;
+    background-color: #333;
+    opacity: 0.5;
+    color: white;
+    width: 160px;
+    height: 40px;
+    padding: 2px;
+}
+
+    .thumbnail-sm p.title {
+        background-color: #000;
+        opacity: 1;
+        margin-top: -10px;
+        height: 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+#photoListPanel .panel-body {
+    padding-top: 35px;
+    padding-bottom: 35px;
+}
+
+#videoPlayer, #filmPlayer, #newsPlayer, #musicPlayer, #userVideoPlayer {
+    width: 480px;
+    height: 360px;
+}
+
+#videoListPanel .panel-body {
+    padding-top: 35px;
+    padding-bottom: 35px;
+}
+
+#musicPanelBody {
+    height: 290px;
+}
+
+#taskListPanelBody {
+    height: 180px;
+}
+
+    #taskListPanelBody .list-group {
+        height: 110px;
+    }
+
+
+#groupPanelBody {
+    height: auto;
+    min-height: 735px;
+}
+
+.panel-body-group {
+    height: 410px;
+}
+
+.panel-body-tree {
+    padding-left: 0;
+    padding-right: 0;
+    overflow-x: auto;
+}
+
+    .panel-body-tree li {
+        line-height: 1.2;
+        font-size: 13px;
+    }
+
+    .panel-body-tree .treeview span.indent {
+        margin-left: 6px;
+        margin-right: 6px;
+    }
+
+.score input {
+    background: url("images/score-icon.png") no-repeat scroll right center;
+    background-position: right center;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    padding: 0;
+    border: 0;
+}

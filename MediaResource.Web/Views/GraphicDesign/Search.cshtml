@@ -1,0 +1,122 @@
+﻿@using MediaResource.Web.Helper
+@using MediaResource.Web.Models
+@using MediaResource.Web.Models.ViewModels
+@using PagedList.Mvc;
+
+@model PagedList.IPagedList<ImageViewModel>
+
+@{
+    ViewBag.Title = "图文设计成品";
+}
+
+@section styles
+{
+	<link href="~/Content/zTree/zTreeStyle.css" rel="stylesheet" type="text/css" />
+}
+
+<div class="row">
+	<div class="col-md-3">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="panel-title">
+							<img src='@Url.Content("~/Images/graphicDesign-icon.png")' />
+							图文设计成品
+						</h3>
+					</div>
+				</div>
+			</div>
+		    <small>请点击“+”打开下一级目录，并点击右侧图片列表获取详细信息</small>
+			<div class="panel-body">
+			    <ul id="treeCategory" class="ztree">
+			    </ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+	    <h4>
+		    搜索结果（关键字：@ViewBag.Keyword）
+	    </h4>
+	    <div class="row">
+		    @foreach (var item in Model)
+            {
+                <div class="col-sm-3 thumbnail-sm">
+                    <div class="thumbnail">
+                        <a title="查看" data-toggle="modal" href="#" onclick="showGraphicDesignDetailModal(@item.Id)">
+                            <div class="img-md-wrap">
+                                <img src="@item.FileUrl" />
+                            </div>
+                        </a>
+                        <div class="caption">
+                            <p class="title">
+                                @Html.TrimText(item.Name, 18)
+                            </p>
+                            <a href="@Url.Action("Download", new {id = @item.Id})" target="_blank" class="btn btn-default">下载</a>
+                        </div>
+                    </div>
+                </div>
+            }
+	    </div>
+	    <div class="text-center">
+		    @Html.PagedListPager(Model, page => Url.Action("Search", new { keyword = ViewBag.Keyword, page }))
+	    </div>
+	</div>
+</div>
+
+<div id="graphicDesignDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts
+{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.ztree.all-3.5.min.js")'></script>
+    <script type="text/javascript">
+        var firstAsyncSuccessFlag = false;
+        var setting = {
+            async: {
+                enable: true,
+                url: '@Url.Action("GetChildNodes", "Category", new {objectType = (int) ObjectType.GraphicDesign})' + "&actionName=Category",
+                autoParam: ["id"]
+            },
+            callback: {
+                onAsyncSuccess: function (event, treeId, msg) {
+                    if (firstAsyncSuccessFlag == false) {
+                        //调用默认展开第一个结点
+                        var treeObj = $.fn.zTree.getZTreeObj("treeCategory");
+                        var nodes = treeObj.getNodes();
+                        treeObj.expandNode(nodes[0], true);
+                        treeObj.selectNode(nodes[0]);
+
+                        firstAsyncSuccessFlag = true;
+                    }
+                },
+                onClick: function (event, treeId, treeNode) {
+                    location.href = treeNode.href;
+                }
+            }
+        };
+
+        $(function() {
+            $.fn.zTree.init($("#treeCategory"), setting);
+
+			// 刷新模态对话框
+			$("#graphicDesignDetailModal").on("hidden.bs.modal", function () {
+				$(this).removeData("bs.modal");
+			});
+			$("#applyForDownloadModal").on("hidden.bs.modal", function () {
+				$("#inputReason").val("");
+			});
+		});
+
+        function showGraphicDesignDetailModal(id) {
+            $("#graphicDesignDetailModal").modal({
+                show: true,
+                remote: '@Url.Action("Detail", "GraphicDesign")' + "/" + id
+            });
+        }
+	</script>
+}

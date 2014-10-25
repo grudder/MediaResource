@@ -1,0 +1,63 @@
+﻿@model MediaResource.Web.Models.Group
+
+@{
+	ViewBag.Title = "专栏";
+}
+
+<div class="row">
+	<div class="col-md-3">
+		@Html.Action("IndexPartial", "Group", new {actionUrl = Url.Action("Index", "Group")})
+	</div>
+    <div class="col-md-9">
+        @if (Model != null)
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        处室：
+                        <label>
+                            @Model.Name
+                        </label>
+                    </p>
+                </div>
+            </div>
+        }
+		<div class="row">
+		    <div class="col-md-8">
+		        @Html.Action("GroupPartial", "UserPhoto", new {groupId = (Model == null) ? null : (int?)Model.Id})
+		    </div>
+		    <div class="col-md-4">
+		        @Html.Action("StatPartial", new {groupId = (Model == null) ? null : (int?)Model.Id})
+		    </div>
+		</div>
+		<div class="row">
+		    <div class="col-md-8">
+		        @Html.Action("GroupPartial", "UserVideo", new {groupId = (Model == null) ? null : (int?)Model.Id})
+		    </div>
+		    <div class="col-md-4">
+		        @Html.Action("RankPartial", new {groupId = (Model == null) ? null : (int?)Model.Id})
+		    </div>
+		</div>
+	</div>
+</div>
+
+@section scripts
+{
+	<script type="text/javascript">
+		$(function () {
+		    // 刷新模态对话框
+		    $("#userPhotoDetailModal").on("hidden.bs.modal", function () {
+		        $(this).removeData("bs.modal");
+		    });
+			$("#photoDetailModal").on("hidden.bs.modal", function () {
+				$(this).removeData("bs.modal");
+			});
+			$("#userVideoDetailModal").on("hidden.bs.modal", function () {
+			    $(this).removeData("bs.modal");
+			});
+			$("#videoDetailModal").on("hidden.bs.modal", function () {
+			    $(this).removeData("bs.modal");
+			});
+		});
+	</script>
+}

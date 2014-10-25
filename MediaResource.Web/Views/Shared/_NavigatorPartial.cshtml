@@ -1,0 +1,98 @@
+﻿<header class="navbar navbar-default" role="banner">
+	<div class="container">
+		<div class="navbar-header">
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+				<span class="sr-only">导航</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<nav class="collapse navbar-collapse" role="navigation">
+			<ul class="nav navbar-nav">
+			    <li
+                    @if (Request.Path == Request.ApplicationPath)
+                    {
+                        @:class="active"
+                    }
+                    >
+					@Html.ActionLink("首页", "Index", "Home")
+				</li>
+			    <li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "User").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+			        @Html.ActionLink("个人中心", "Index", "User")
+			    </li>
+				<li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "TaskList").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+					@Html.ActionLink("任务单", "Index", "TaskList")
+				</li>
+				<li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "Photo").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+					@Html.ActionLink("照片素材", "Category", "Photo")
+				</li>
+				<li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "Video").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+					@Html.ActionLink("视频集", "Category", "Video")
+				</li>
+				<li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "GraphicDesign").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+					@Html.ActionLink("图文设计成品", "Category", "GraphicDesign")
+				</li>
+				<li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "Graphic").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+					@Html.ActionLink("纸质媒体", "Category", "Graphic")
+				</li>
+				<li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "Film").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+					@Html.ActionLink("影视成片", "Category", "Film")
+				</li>
+				<li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "News").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+					@Html.ActionLink("电视新闻", "Category", "News")
+				</li>
+				<li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "Group").ToLower())
+                        || Request.Path.ToLower().StartsWith(Url.Action("Group", "UserPhoto").ToLower())
+                        || Request.Path.ToLower().StartsWith(Url.Action("Group", "UserVideo").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+					@Html.ActionLink("专栏", "Index", "Group")
+				</li>
+			</ul>
+		</nav>
+	</div>
+</header>

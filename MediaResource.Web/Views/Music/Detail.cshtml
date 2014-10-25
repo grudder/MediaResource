@@ -1,0 +1,309 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Helper
+@model MediaResource.Web.Models.Music
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.Title
+		@Html.HiddenFor(model => model.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<div id="musicPlayer">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenMusicScore">评分：</label>
+						<input type="hidden" id="hiddenMusicScore" value="0" />
+						<div id="divMusicScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonMusicPostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postMusicScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblMusicScore">@Model.Score</label>
+							（<label id="lblMusicScoreCount">@Model.ScoreCount</label>次打分）
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="musicTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#musicDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#musicCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblMusicCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="musicDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									@Html.DisplayNameFor(model => model.Title)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Title)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Length)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Length)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.MusicType)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.MusicType)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Original)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Original)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Description)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Description)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Association)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Association)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.CreateDate)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.CreateDate)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.CreateByEntity)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.CreateByEntity.FullName)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.ClickCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.ClickCount)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.DownloadCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.DownloadCount)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="musicCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textMusicCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgMusicVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshMusicVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputMusicVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postMusicCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframeMusicCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/jwplayer/jwplayer.js")'></script>
+<script type="text/javascript" src='@Url.Content("~/Scripts/jwplayer/jwplayer.html5.js")'></script>
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+    var _musicId;
+    var _musicPlayer;
+
+	$(function () {
+		_musicId = $("#Id").val();
+
+		var musicUrl = "@WebHelper.Instance.RootUrl/@Model.FileUrl";
+	    _musicPlayer = jwplayer("musicPlayer").setup({
+		    file: musicUrl,
+			width: "480px",
+			height: "480px"
+		});
+
+		changeMusicScore();
+		showMusicCommentList();
+		showMusicCommentCount();
+	});
+
+	function changeMusicScore() {
+		var buttons = document.getElementById("divMusicScore").getElementsByTagName("input");
+		for (var i = 0; i < parseInt(document.getElementById("hiddenMusicScore").value) ; i++) {
+			buttons[i].style.backgroundPosition = "right center";
+		}
+
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].onclick = function () {
+				for (var m = 0; m < buttons.length; m++) {
+					buttons[m].style.backgroundPosition = "right center";
+				}
+				for (var n = 0; n < this.value; n++) {
+					buttons[n].style.backgroundPosition = "left center";
+				}
+				document.getElementById("hiddenMusicScore").value = this.value;
+			}
+		}
+	}
+
+	function postMusicScore() {
+	    var score = $("#hiddenMusicScore").val();
+		$.post(
+			'@Url.Action("Create", "Score")',
+			{
+				ObjectType: ObjectType.Music,
+				ObjectId: _musicId,
+				Value: score
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					// 禁用评分按钮
+				    $("#buttonMusicPostScore").attr("disabled", "disabled");
+
+					// 刷新平均分和评分次数
+					$("#lblMusicScore").text(result.Score);
+					$("#lblMusicScoreCount").text(result.ScoreCount);
+				}
+			}
+		);
+	}
+
+	function initMusicTab() {
+		$("#musicTab a").click(function (e) {
+			e.preventDefault();
+			$(this).tab("show");
+		});
+
+		$("#musicTab a:first").tab("show");
+	}
+
+	function showMusicCommentList() {
+		var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.Music + "&objectId=" + _musicId;
+		$("#iframeMusicCommentList").attr("src", commentListPageUrl);
+	}
+
+	function showMusicCommentCount() {
+		$.get(
+			'@Url.Action("Count", "Comment")',
+			{
+				objectType: ObjectType.Music,
+				objectId: _musicId
+			},
+			function (result) {
+				$("#lblMusicCommentCount").text(result.count);
+			}
+		);
+	}
+
+	function refreshMusicVerificationCode() {
+		var img = $("#imgMusicVerificationCode");
+		img.attr("src", img.attr("src") + "?");
+	}
+
+	function postMusicCommit() {
+		var content = $("#textMusicCommentContent").val();
+		if (content == "") {
+			alert("评论内容不能为空！");
+			return;
+		}
+		var verificationCode = $("#inputMusicVerificationCode").val();
+		if (verificationCode == "") {
+			alert("验证码不能为空！");
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+				if (!result.success) {
+					alert("验证码错误！");
+					refreshMusicVerificationCode();
+					return;
+				}
+
+				$.post(
+					'@Url.Action("Create", "Comment")',
+					{
+						ObjectType: ObjectType.Music,
+						ObjectId: _musicId,
+						Content: content
+					},
+					function (result1) {
+						if (result1.success) {
+							alert(result1.message);
+
+							// 清空表单
+							$("#textMusicCommentContent").val("");
+							$("#inputMusicVerificationCode").val("");
+
+							// 刷新验证码
+							refreshMusicVerificationCode();
+
+							// 刷新评论数量
+							showMusicCommentCount();
+
+							// 刷新评论列表
+							showMusicCommentList();
+						}
+					}
+				);
+			}
+		);
+	}
+</script>

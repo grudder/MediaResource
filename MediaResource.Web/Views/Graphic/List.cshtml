@@ -1,0 +1,70 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Helper
+@using MediaResource.Web.Models.ViewModels
+@using PagedList.Mvc;
+
+@model PagedList.IPagedList<ImageViewModel>
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>纸质媒体</title>
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		@Scripts.Render("~/bundles/html5")
+    <![endif]-->
+</head>
+<body>
+	<h4>
+		分类：
+		@if (ViewBag.Category != null)
+		{
+			@ViewBag.Category.Name
+		}
+	</h4>
+	<div class="row">
+		@foreach (var item in Model)
+		{
+			<div class="col-sm-3 thumbnail-sm">
+				<div class="thumbnail">
+					<a title="查看" data-toggle="modal" href="#" onclick="showGraphicDetailModal(@item.Id)">
+			            <div class="img-md-wrap">
+			                <img src="@item.FileUrl" />
+			            </div>
+					</a>
+					<div class="caption">
+						<p class="title">
+							@Html.TrimText(item.Name, 18)
+						</p>
+                        <a href="@Url.Action("Download", new {id = @item.Id})" target="_blank" class="btn btn-default">下载</a>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+	<div class="text-center">
+		@Html.PagedListPager(Model, page => Url.Action("List", new { ViewBag.Id, page }))
+	</div>
+	
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/bootstrap")
+	<script type="text/javascript">
+		function showGraphicDetailModal(id) {
+			parent.$("#graphicDetailModal").modal({
+				show: true,
+				remote: '@Url.Action("Detail")' + "/" + id
+			});
+		}
+	</script>
+</body>
+</html>

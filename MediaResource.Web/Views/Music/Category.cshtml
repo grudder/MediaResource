@@ -1,0 +1,161 @@
+﻿@using MediaResource.Web.Models
+
+@{
+	ViewBag.Title = "音频素材";
+}
+
+@section styles
+{
+	<link href="~/Content/bootstrap-treeview.min.css" rel="stylesheet" type="text/css" />
+}
+
+<div class="row">
+	<div class="col-md-3">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="panel-title">
+							<img src='@Url.Content("~/Images/music-icon.png")' />
+							音频素材
+						</h3>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body panel-body-tree">
+				<div id="treeCategory">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<iframe id="iframeMusicList" height="500" scrolling="no" src='@Url.Action("List", "Music", new { ViewBag.Id })' onload="iframeAutoHeight()"></iframe>
+	</div>
+</div>
+
+<div id="musicDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="applyForDownloadModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">
+					申请下载
+				</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+					    <label class="col-sm-offset-2 col-sm-10">
+					        由于网络下载限制，我们将用移动硬盘或光盘为您拷贝<br/>（联系电话：63559316）
+					    </label>
+                    </div>
+					<div class="form-group">
+						<label for="inputReason" class="col-sm-2 control-label">原因</label>
+					    <div id="divReason" class="col-sm-10">
+					        <div class="radio">
+					            <label>
+					                <input type="radio" name="optionReason" value="报送媒体（高清）" checked="checked" />
+					                报送媒体（高清）
+					            </label>
+					        </div>
+					        <div class="radio">
+					            <label>
+					                <input type="radio" name="optionReason" value="宣传片制作（标清）" />
+					                宣传片制作（标清）
+					            </label>
+					        </div>
+					        <div class="radio">
+					            <label>
+					                <input type="radio" name="optionReason" value="工作报告（流媒体）" />
+					                工作报告（流媒体）
+					            </label>
+					        </div>
+					        <div class="radio">
+					            <label>
+					                <input type="radio" name="optionReason" value="" />
+					                自填
+					            </label>
+					        </div>
+					        <textarea id="inputReason" class="form-control" rows="5" placeholder="自填申请下载原因"></textarea>
+					    </div>
+					</div>
+					<div class="form-group">
+						<label for="inputDetail" class="col-sm-2 control-label">详情</label>
+						<div class="col-sm-10">
+							<textarea id="inputDetail" class="form-control" rows="5" disabled="disabled"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button class="btn btn-primary" type="button" onclick="submitApply()">确定</button>
+							<button class="btn btn-default" type="button" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section scripts
+{
+	<script type="text/javascript" src='@Url.Content("~/Scripts/bootstrap-treeview.min.js")'></script>
+	<script type="text/javascript">
+		$(function () {
+			var url = '@Url.Action("Index", "Category", new { objectType = (int)ObjectType.Music })';
+			$.get(url, function (result) {
+				$("#treeCategory").treeview({
+					nodeIcon: null,
+					showBorder: false,
+					enableLinks: false,
+					data: "[" + result.data + "]",
+					onNodeSelected: function (event, node) {
+						$("#iframeMusicList").attr("src", node.href);
+					}
+				});
+			});
+
+			// 刷新模态对话框
+			$("#musicDetailModal").on("hidden.bs.modal", function () {
+			    _musicPlayer.stop();
+				$(this).removeData("bs.modal");
+			});
+			$("#applyForDownloadModal").on("hidden.bs.modal", function () {
+				$("#inputReason").val("");
+			});
+		});
+
+        function submitApply() {
+            var reason = $('input[name="optionReason"]:checked').val();
+            if (reason == "") {
+                reason = $("#inputReason").val();
+            }
+            if (reason == "") {
+                alert("请填写原因！");
+                return;
+            }
+
+			var detail = $("#inputDetail").val();
+
+			var url = '@Url.Action("Create", "ApplyForDownload")';
+			$.post(
+				url,
+				{
+					reason: reason,
+					detail: detail
+				},
+				function () {
+					alert("申请已提交！");
+
+					$("#applyForDownloadModal").modal("hide");
+				}
+			);
+		}
+	</script>
+}

@@ -1,0 +1,67 @@
+﻿@using MediaResource.Web.Helper
+@using MediaResource.Web.Models
+@model List<MediaResource.Web.Models.ViewModels.ImageViewModel>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<img src='@Url.Content("~/Images/photo-icon.png")' />
+							最新照片
+						</h3>
+					</div>
+					<div class="col-md-6">
+						<a href='@Url.Action("Group", "UserPhoto", new {id = ViewBag.GroupId})' class="navbar-right">更多&gt;&gt;</a>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body panel-body-group">
+				<div class="row">
+					@foreach (var item in Model)
+					{
+						<div class="col-md-4 thumbnail-sm">
+				            @if (item.ObjectType == ObjectType.UserPhoto)
+				            {
+				                <a data-toggle="modal" href='@Url.Action("Detail", "UserPhoto", new {id = item.Id})' data-target="#userPhotoDetailModal">
+			                        <div class="img-md-wrap">
+                                        <img src='@Url.Content(item.FileUrl)' />
+			                        </div>
+				                </a>
+                            }
+                            @if (item.ObjectType == ObjectType.Photo)
+                            {
+                                <a data-toggle="modal" href='@Url.Action("Detail", "Photo", new {id = item.Id})' data-target="#photoDetailModal">
+			                        <div class="img-md-wrap">
+                                        <img src='@Url.Content(item.FileUrl)' />
+			                        </div>
+                                </a>
+                            }
+							<p>
+								@Html.TrimText(item.Name, 18)
+								<br />
+								@Html.FormatValue(item.CreateDate, "{0:yyyy-MM-dd}")
+							</p>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="userPhotoDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="photoDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

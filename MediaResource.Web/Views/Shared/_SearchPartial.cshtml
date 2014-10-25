@@ -1,0 +1,38 @@
+﻿<form id="formSearch" class="form-inline" role="form" method="POST">
+    <div class="form-group">
+        <label class="sr-only" for="inputKeyword">搜索内容</label>
+        <input id="inputKeyword" type="text" class="form-control" placeholder="请输入搜索内容" />
+    </div>
+    <div class="form-group">
+        <label class="sr-only" for="selectObjectType">搜索类别</label>
+        <select id="selectObjectType" class="form-control">
+            <option value="Photo">照片素材</option>
+            <option value="Video">视频集</option>
+            <option value="GraphicDesign">图文设计成品</option>
+            <option value="Graphic">纸质媒体</option>
+            <option value="Film">影视成片</option>
+            <option value="News">电视新闻</option>
+            <option value="UserPhoto">个人照片</option>
+            <option value="UserVideo">个人视频</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary" onclick="javascript:return doSearch();">搜索</button>
+</form>
+
+<script type="text/javascript">
+    function doSearch() {
+        var keyword = $("#inputKeyword").val();
+        if (keyword.trim() == "") {
+            alert("请输入搜索内容！");
+            $("#inputKeyword").val("");
+            $("#inputKeyword").focus();
+            return false;
+        }
+
+        var objectType = $("#selectObjectType").val();
+        var actionUrl = "/" + objectType + "/Search?keyword=" + keyword;
+        $("#formSearch")[0].action = actionUrl;
+
+        return true;
+    }
+</script>

@@ -1,0 +1,61 @@
+﻿@using MediaResource.Web.Helper
+@model List<MediaResource.Web.Models.ViewModels.ImageViewModel>
+
+<div id="photoListPanel" class="row">
+	<div class="col-md-12">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<img src='@Url.Content("~/Images/photo-icon.png")' />
+							照片集
+						</h3>
+					</div>
+					<div class="col-md-6">
+						<a href='@Url.Action("Category", "Photo")' class="navbar-right">更多&gt;&gt;</a>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="col-md-6 thumbnail-xl">
+					@if (Model.Count > 0)
+					{
+						<a href='@Url.Action("Category", "Photo", new {id = Model[0].Id})' target="_new">
+						    <div class="img-xl-wrap">
+						        <img src='@Url.Content(Model[0].FileUrl)' />
+						    </div>
+						</a>
+						<p>
+							@Html.TrimText(Model[0].Name, 82)
+						</p>
+					}
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						@for (int i = 1; i < Model.Count; ++i)
+						{
+							<div class="col-md-6 thumbnail-sm">
+								<a href='@Url.Action("Category", "Photo", new {id = Model[i].Id})' target="_new">
+								    <div class="img-md-wrap">
+								        <img src='@Url.Content(Model[i].FileUrl)' />
+                                    </div>
+								</a>
+								<p>
+									@Html.TrimText(Model[i].Name, 38)
+								</p>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="photoDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

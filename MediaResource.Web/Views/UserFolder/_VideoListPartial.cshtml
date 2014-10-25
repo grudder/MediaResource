@@ -1,0 +1,90 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Models
+@model List<UserFolder>
+
+<p>
+	<a data-toggle="modal" class="btn btn-primary" href='@Url.Action("Create", "UserFolder", new {objectType = ObjectType.UserVideo})' data-target="#createVideoUserFolderModal">
+		新建
+	</a>
+</p>
+<table class="table table-striped">
+	<tr>
+		<th>
+			名称
+		</th>
+		<th>
+			创建时间
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>
+
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Name)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.CreateDate)
+			</td>
+			<td>
+				@if (item.Name != "默认目录")
+				{
+					<a data-toggle="modal" href='@Url.Action("Edit", "UserFolder", new {objectType = ViewBag.ObjectType, id = item.Id})' data-target="#editVideoUserFolderModal">
+						修改
+					</a>
+					<button class="btn btn-link" onclick="deleteVideoFolder(@item.Id)">删除</button>
+				}
+			</td>
+		</tr>
+	}
+</table>
+
+<div id="createVideoUserFolderModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="editVideoUserFolderModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+	$(function () {
+		$("#createVideoUserFolderModal").on("hidden.bs.modal", function () {
+			$(this).removeData("bs.modal");
+		});
+		$("#editVideoUserFolderModal").on("hidden.bs.modal", function () {
+			$(this).removeData("bs.modal");
+		});
+	});
+
+	function deleteVideoFolder(id) {
+		if (!confirm("确认要删除吗？")) {
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Delete", "UserFolder")',
+			{
+				id: id
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					location.href = '@Url.Action("Index", "User", new {activeTab = 4})';
+				}
+			}
+		);
+	}
+</script>

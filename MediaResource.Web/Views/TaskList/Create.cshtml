@@ -1,0 +1,126 @@
+﻿@{
+	Layout = null;
+}
+
+@model MediaResource.Web.Models.TaskList
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>新建任务单 - 媒体资源系统</title>
+</head>
+<body>
+@using (Html.BeginForm()) 
+{
+	@Html.AntiForgeryToken()
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">
+			新建任务单
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="form-horizontal">
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+			<div class="form-group">
+				@Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.TaskDate, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.DatePickerFor(model => model.TaskDate)
+					@Html.ValidationMessageFor(model => model.TaskDate, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.Location, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.TaskListType, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					<label class="checkbox-inline">
+						<input name="TaskListType" type="radio" value="摄像" checked="checked" />摄像
+					</label>
+					<label class="checkbox-inline">
+						<input name="TaskListType" type="radio" value="照相" />照相
+					</label>
+					<label class="checkbox-inline">
+						<input name="TaskListType" type="radio" value="摄像和照相" />摄像和照相
+					</label>
+					@Html.ValidationMessageFor(model => model.TaskListType, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.Category, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					<label class="checkbox-inline">
+						<input name="Category" type="radio" value="委外宣传拍摄" checked="checked" />委外宣传拍摄
+					</label>
+					<label class="checkbox-inline">
+						<input name="Category" type="radio" value="委机关拍摄" />委机关拍摄
+					</label>
+					<label class="checkbox-inline">
+						<input name="Category" type="radio" value="直报拍摄" />直报拍摄
+					</label>
+					@Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.Leader, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.Leader, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.Leader, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.Inoffices, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.Inoffices, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.Inoffices, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.Demand, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.TextAreaFor(model => model.Demand, new { @class = "form-control", rows = 3 })
+					@Html.ValidationMessageFor(model => model.Demand, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.Contact, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">确定</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	</div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+</body>
+</html>

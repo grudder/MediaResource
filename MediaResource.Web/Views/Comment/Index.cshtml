@@ -1,0 +1,67 @@
+﻿@{
+	Layout = null;
+}
+
+@model PagedList.IPagedList<MediaResource.Web.Models.Comment>
+
+@using PagedList.Mvc;
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>评论列表</title>
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+	<ul class="list-group clearfix">
+		@foreach (var item in Model)
+		{
+			<li class="list-group-item">
+				<h5 class="list-group-item-heading">
+				    <strong>
+				        @item.CreateByEntity.Name
+				    </strong>
+                    @if (item.CreateByEntity.Name == User.Identity.Name)
+                    {
+                        <button class="btn btn-link" onclick="deleteComment(@item.Id)">删除</button>
+                    }
+				</h5>
+				<span class="badge">
+					@Html.DisplayFor(model => item.CreateDate)
+				</span>
+				<p class="list-group-item-text">
+					@item.Content
+				</p>
+			</li>
+		}
+	</ul>
+	<div class="text-center">
+		@Html.PagedListPager(Model, page => Url.Action("Index", "Comment", new { objectType = Request["objectType"], objectId = Request["objectId"], pageSize = Request["pageSize"], page }))
+	</div>
+
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+        function deleteComment(id) {
+            if (!confirm("确认要删除此条评论吗？")) {
+                return;
+            }
+
+            $.post(
+                '@Url.Action("Delete", "Comment")',
+                {
+                    id: id
+                },
+                function (result) {
+                    if (result.success) {
+                        location.reload();
+                    }
+                }
+            );
+        }
+    </script>
+</body>
+</html>

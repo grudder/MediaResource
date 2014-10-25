@@ -1,0 +1,274 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Helper
+@model MediaResource.Web.Models.Graphic
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.Name
+		@Html.HiddenFor(model => model.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+				    <div class="img-lg-wrap">
+					    <img src="@WebHelper.Instance.RootUrl@Model.PreviewPath" />
+				    </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenGraphicScore">评分：</label>
+						<input type="hidden" id="hiddenGraphicScore" value="0" />
+						<div id="divGraphicScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonGraphicPostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postGraphicScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblGraphicScore">@Model.Score</label>
+							（<label id="lblGraphicScoreCount">@Model.ScoreCount</label>次打分）
+                            <a href="@Url.Action("Download", new {id = @Model.Id})" target="_blank" class="btn btn-default">下载</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="graphicTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#graphicDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#graphicCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblGraphicCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="graphicDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									名　　称
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Name)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.FileSize)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.FileSize)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Format)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Format)
+								</dd>
+								<dt>
+									描　　述
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Description)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Association)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Association)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.ClickCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.ClickCount)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.DownloadCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.DownloadCount)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="graphicCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textGraphicCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgGraphicVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshGraphicVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputGraphicVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postGraphicCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframeGraphicCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+	var _graphicId;
+
+	$(function () {
+		_graphicId = $("#Id").val();
+
+		changeGraphicScore();
+		showGraphicCommentList();
+		showGraphicCommentCount();
+	});
+
+	function changeGraphicScore() {
+		var buttons = document.getElementById("divGraphicScore").getElementsByTagName("input");
+		for (var i = 0; i < parseInt(document.getElementById("hiddenGraphicScore").value) ; i++) {
+			buttons[i].style.backgroundPosition = "right center";
+		}
+
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].onclick = function () {
+				for (var m = 0; m < buttons.length; m++) {
+					buttons[m].style.backgroundPosition = "right center";
+				}
+				for (var n = 0; n < this.value; n++) {
+					buttons[n].style.backgroundPosition = "left center";
+				}
+				document.getElementById("hiddenGraphicScore").value = this.value;
+			}
+		}
+	}
+
+	function postGraphicScore() {
+		var score = $("#hiddenGraphicScore").val();
+		$.post(
+			'@Url.Action("Create", "Score")',
+			{
+				ObjectType: ObjectType.Graphic,
+				ObjectId: _graphicId,
+				Value: score
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					// 禁用评分按钮
+					$("#buttonGraphicPostScore").attr("disabled", "disabled");
+
+					// 刷新平均分和评分次数
+					$("#lblGraphicScore").text(result.Score);
+					$("#lblGraphicScoreCount").text(result.ScoreCount);
+				}
+			}
+		);
+	}
+
+	function showGraphicCommentList() {
+		var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.Graphic + "&objectId=" + _graphicId;
+		$("#iframeGraphicCommentList").attr("src", commentListPageUrl);
+	}
+
+	function showGraphicCommentCount() {
+		$.get(
+			'@Url.Action("Count", "Comment")',
+			{
+				objectType: ObjectType.Graphic,
+				objectId: _graphicId
+			},
+			function (result) {
+				$("#lblGraphicCommentCount").text(result.count);
+			}
+		);
+	}
+
+	function refreshGraphicVerificationCode() {
+		var img = $("#imgGraphicVerificationCode");
+		img.attr("src", img.attr("src") + "?");
+	}
+
+	function postGraphicCommit() {
+		var content = $("#textGraphicCommentContent").val();
+		if (content == "") {
+			alert("评论内容不能为空！");
+			return;
+		}
+		var verificationCode = $("#inputGraphicVerificationCode").val();
+		if (verificationCode == "") {
+			alert("验证码不能为空！");
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+				if (!result.success) {
+					alert("验证码错误！");
+					refreshGraphicVerificationCode();
+					return;
+				}
+
+				$.post(
+					'@Url.Action("Create", "Comment")',
+					{
+						ObjectType: ObjectType.Graphic,
+						ObjectId: _graphicId,
+						Content: content
+					},
+					function (result1) {
+						if (result1.success) {
+							alert(result1.message);
+
+							// 清空表单
+							$("#textGraphicCommentContent").val("");
+							$("#inputGraphicVerificationCode").val("");
+
+							// 刷新验证码
+							refreshGraphicVerificationCode();
+
+							// 刷新评论数量
+							showGraphicCommentCount();
+
+							// 刷新评论列表
+							showGraphicCommentList();
+						}
+					}
+				);
+			}
+		);
+	}
+</script>

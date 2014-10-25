@@ -1,0 +1,81 @@
+﻿@{
+	ViewBag.Title = "主页";
+}
+
+@section styles
+{
+	<style>
+		.panel-body
+		{
+			background-color: #f1f1f1;
+		}
+	</style>
+}
+
+<div class="row">
+	<div class="col-md-8">
+		@Html.Action("IndexPartial", "Photo")
+		@Html.Action("IndexPartial", "Video")
+	</div>
+	<div class="col-md-4">
+		@Html.Action("IndexPartial", "TaskList")
+		@Html.Action("StatPartial")
+		@Html.Action("RankPartial")
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<img src='@Url.Content("~/Images/index-banner.jpg")' width="100%" />
+		<br />
+		<br />
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-8">
+		@Html.Action("IndexPartial", "Film")
+		@Html.Action("IndexPartial", "Graphic")
+		<div class="row">
+			<div class="col-md-6">
+				@Html.Action("IndexPartial", "News")
+			</div>
+			<div class="col-md-6">
+				@Html.Action("IndexPartial", "GraphicDesign")
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		@Html.Action("IndexPartial", "Group", new {actionUrl = Url.Action("Index", "Home")})
+	</div>
+</div>
+
+@section scripts
+{
+	<script type="text/javascript">
+		$(function () {
+			// 刷新模态对话框
+			$("#videoDetailModal").on("hidden.bs.modal", function () {
+				$(this).removeData("bs.modal");
+			});
+			$("#filmDetailModal").on("hidden.bs.modal", function () {
+				$(this).removeData("bs.modal");
+			});
+			$("#graphicDetailModal").on("hidden.bs.modal", function () {
+				$(this).removeData("bs.modal");
+			});
+			$("#newsDetailModal").on("hidden.bs.modal", function () {
+				$(this).removeData("bs.modal");
+			});
+			$("#graphicDesignDetailModal").on("hidden.bs.modal", function () {
+				$(this).removeData("bs.modal");
+			});
+			$("#photoDetailModal").on("hidden.bs.modal", function () {
+				$(this).removeData("bs.modal");
+			});
+			$("#createTaskListModal").on("hidden.bs.modal", function () {
+				$(this).removeData("bs.modal");
+			});
+		});
+	</script>
+}

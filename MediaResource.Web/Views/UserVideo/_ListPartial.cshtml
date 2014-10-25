@@ -1,0 +1,104 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Models
+@model List<UserVideo>
+
+<p>
+	<a data-toggle="modal" class="btn btn-primary" href='@Url.Action("Create", "UserVideo")' data-target="#createUserVideoModal">
+		新建
+	</a>
+</p>
+<table class="table table-striped">
+	<tr>
+		<th>
+			所属目录
+		</th>
+		<th>
+			名称
+		</th>
+		<th>
+			公开显示
+		</th>
+		<th>
+			创建时间
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>
+
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Folder.Name)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Title)
+			</td>
+			<td>
+                <input type="checkbox"
+                    @if (item.IsPublic == true)
+                    {
+                        @:checked="checked"
+                    }
+                />
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.CreateDate)
+			</td>
+			<td>
+				<a data-toggle="modal" href='@Url.Action("Edit", "UserVideo", new {id = item.Id})' data-target="#editUserVideoModal">
+					修改
+				</a>
+				<a href="javascript:deleteUserVideo(@item.Id)">删除</a>
+			</td>
+		</tr>
+	}
+</table>
+
+<div id="createUserVideoModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="editUserVideoModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+	$(function () {
+		$("#createUserVideoModal").on("hidden.bs.modal", function () {
+			$(this).removeData("bs.modal");
+		});
+		$("#editUserVideoModal").on("hidden.bs.modal", function () {
+			$(this).removeData("bs.modal");
+		});
+	});
+
+	function deleteUserVideo(id) {
+		if (!confirm("确认要删除吗？")) {
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Delete", "UserVideo")',
+			{
+				id: id
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					location.href = '@Url.Action("Index", "User", new {activeTab = 5})';
+				}
+			}
+		);
+	}
+</script>

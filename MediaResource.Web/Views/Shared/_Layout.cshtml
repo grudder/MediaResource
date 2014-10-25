@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - 媒体资源系统</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        @Scripts.Render("~/bundles/html5")
+    <![endif]-->
+    <script type="text/javascript" src='@Url.Content("~/Scripts/site.js")'></script>
+    @RenderSection("styles", false)
+    @RenderSection("headScripts", false)
+</head>
+<body>
+    <div class="top">
+        <div class="container top-banner fixed-width">
+            <div class="row">
+                <div class="pull-right">
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+            <br /><br />
+            <div class="row">
+                <div class="pull-right">
+                    @Html.Partial("_SearchPartial")
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_NavigatorPartial")
+    <div class="container fixed-width">
+        @RenderBody()
+    </div>
+    <div class="bottom">
+        <div class="container bottom-banner fixed-width">
+            <footer>
+                @Html.Partial("_FooterPartial")
+            </footer>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", false)
+</body>
+</html>

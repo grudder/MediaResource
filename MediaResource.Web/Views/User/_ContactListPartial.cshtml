@@ -1,0 +1,75 @@
+﻿@{
+	Layout = null;
+}
+
+@model PagedList.IPagedList<MediaResource.Web.Models.User>
+
+@using PagedList.Mvc;
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>通讯录</title>
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    用户名
+                </th>
+                <th>
+                    所属单位
+                </th>
+                <th>
+                    真实姓名
+                </th>
+                <th>
+                    固定电话
+                </th>
+                <th>
+                    手机
+                </th>
+                <th>
+                    电子邮件
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GroupEntity.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Contact)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mobile)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+	<div class="text-center">
+		@Html.PagedListPager(Model, page => Url.Action("Index", new { pageSize = 10, page }))
+	</div>
+
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>

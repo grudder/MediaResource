@@ -1,0 +1,293 @@
+﻿@{
+	Layout = null;
+}
+
+@model MediaResource.Web.Models.ViewModels.FilmViewModel
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.Film.Title
+		@Html.HiddenFor(model => model.Film.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<div id="filmPlayer">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				@{
+					int index = 0;
+				}
+				@foreach (string thubminalImage in Model.ThubminalImages)
+				{
+				    <div class="col-md-2">
+				        <div class="img-xs-wrap">
+				            <img src="@thubminalImage" />
+                        </div>
+				    </div>
+					if (index == 4)
+					{
+						@:</div><br/><br/><div class="row">
+					}
+					++index;
+				}
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenFilmScore">评分：</label>
+						<input type="hidden" id="hiddenFilmScore" value="0" />
+						<div id="divFilmScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonFilmPostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postFilmScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblFilmScore">@Model.Film.Score</label>
+							（<label id="lblFilmScoreCount">@Model.Film.ScoreCount</label>次打分）
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="filmTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#filmDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#filmCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblFilmCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="filmDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									片　　名
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Film.Title)
+								</dd>
+								<dt>
+                                    片　　长
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Film.Length)
+								</dd>
+								<dt>
+                                    描　　述
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Film.Description)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Film.Association)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Film.Association)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Film.ClickCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Film.ClickCount)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Film.DownloadCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Film.DownloadCount)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="filmCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textFilmCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgFilmVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshFilmVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputFilmVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postFilmCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframeFilmCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/jwplayer/jwplayer.js")'></script>
+<script type="text/javascript" src='@Url.Content("~/Scripts/jwplayer/jwplayer.html5.js")'></script>
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+    var _filmId;
+    var _filmPlayer;
+
+	$(function () {
+		_filmId = $("#Film_Id").val();
+
+		var filmUrl = "@Model.FlvUrl";
+		_filmPlayer = jwplayer("filmPlayer").setup({
+			file: filmUrl,
+			width: "480px",
+			height: "360px"
+		});
+
+		changeFilmScore();
+		showFilmCommentList();
+		showFilmCommentCount();
+	});
+
+    function changeFilmScore() {
+	    var buttons = document.getElementById("divFilmScore").getElementsByTagName("input");
+	    for (var i = 0; i < parseInt(document.getElementById("hiddenFilmScore").value) ; i++) {
+			buttons[i].style.backgroundPosition = "right center";
+		}
+
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].onclick = function () {
+				for (var m = 0; m < buttons.length; m++) {
+					buttons[m].style.backgroundPosition = "right center";
+				}
+				for (var n = 0; n < this.value; n++) {
+					buttons[n].style.backgroundPosition = "left center";
+				}
+				document.getElementById("hiddenFilmScore").value = this.value;
+			}
+		}
+	}
+
+	function postFilmScore() {
+	    var score = $("#hiddenFilmScore").val();
+		$.post(
+			'@Url.Action("Create", "Score")',
+			{
+				ObjectType: ObjectType.Film,
+				ObjectId: _filmId,
+				Value: score
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					// 禁用评分按钮
+				    $("#buttonFilmPostScore").attr("disabled", "disabled");
+
+					// 刷新平均分和评分次数
+				    $("#lblFilmScore").text(result.Score);
+				    $("#lblFilmScoreCount").text(result.ScoreCount);
+				}
+			}
+		);
+	}
+
+	function showFilmCommentList() {
+		var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.Film + "&objectId=" + _filmId;
+	    $("#iframeFilmCommentList").attr("src", commentListPageUrl);
+	}
+
+    function showFilmCommentCount() {
+		$.get(
+			'@Url.Action("Count", "Comment")',
+			{
+				objectType: ObjectType.Film,
+				objectId: _filmId
+			},
+			function (result) {
+			    $("#lblFilmCommentCount").text(result.count);
+			}
+		);
+	}
+
+    function refreshFilmVerificationCode() {
+	    var img = $("#imgFilmVerificationCode");
+		img.attr("src", img.attr("src") + "?");
+	}
+
+    function postFilmCommit() {
+	    var content = $("#textFilmCommentContent").val();
+		if (content == "") {
+			alert("评论内容不能为空！");
+			return;
+		}
+		var verificationCode = $("#inputFilmVerificationCode").val();
+		if (verificationCode == "") {
+			alert("验证码不能为空！");
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+				if (!result.success) {
+					alert("验证码错误！");
+					refreshFilmVerificationCode();
+					return;
+				}
+
+				$.post(
+					'@Url.Action("Create", "Comment")',
+					{
+						ObjectType: ObjectType.Film,
+						ObjectId: _filmId,
+						Content: content
+					},
+					function (result1) {
+						if (result1.success) {
+							alert(result1.message);
+
+							// 清空表单
+							$("#textFilmCommentContent").val("");
+							$("#inputFilmVerificationCode").val("");
+
+							// 刷新验证码
+							refreshFilmVerificationCode();
+
+							// 刷新评论数量
+							showFilmCommentCount();
+
+							// 刷新评论列表
+							showFilmCommentList();
+						}
+					}
+				);
+			}
+		);
+	}
+</script>

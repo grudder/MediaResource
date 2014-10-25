@@ -1,0 +1,42 @@
+﻿body {
+	background-color: #064d7a;
+}
+
+#loginForm {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 140px;
+	padding-top: 90px;
+	padding-left: 220px;
+	width: 597px;
+	height: 339px;
+	background-image: url("images/login-bg.jpg");
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+#loginForm .control-label {
+	color: #fff;
+}
+
+#loginForm .form-control {
+	background-color: #32a2e3;
+	padding-top: 0;
+	padding-bottom: 0;
+    width: 220px;
+    height: 30px;
+	line-height: 30px;
+}
+
+#formLinks {
+	margin-top: 10px;
+	margin-left: 165px;
+}
+
+#formLinks a {
+	margin-left: 10px;
+	color: #fff;
+}
+#formLinks a:hover, #formLinks a:visited {
+	color: #fff;
+}

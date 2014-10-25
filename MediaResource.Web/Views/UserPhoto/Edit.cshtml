@@ -1,0 +1,98 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Models
+@model UserPhoto
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>修改个人照片 - 媒体资源系统</title>
+</head>
+<body>
+@using (Html.BeginForm("Edit", "UserPhoto", FormMethod.Post, new { enctype = "multipart/form-data" })) 
+{
+	@Html.AntiForgeryToken()
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">
+			修改个人照片
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="form-horizontal">
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.FileUrl, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.HiddenFor(model => model.FileUrl)
+					<img width="120" height="90" src="@ViewBag.PhotoUrl" />
+					<input type="file" name="photoFile" accept="image/gif, image/jpeg, image/png" />
+				</div>
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.FolderId, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.DropDownList("FolderId", (List<SelectListItem>)ViewBag.UserPhotoFolders, new { @class = "form-control" })
+					@Html.ValidationMessageFor(model => model.FolderId, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.IsPublic, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+                    <label class="radio-inline">
+                        <input type="radio" name="IsPublic" value="true"
+                            @if (Model.IsPublic == true)
+                            {
+                                @:checked="checked"
+                            }
+                            />公开
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="IsPublic" value="false"
+                            @if (Model.IsPublic != true)
+                            {
+                                @:checked="checked"
+                            }/>私密
+                    </label>
+					@Html.ValidationMessageFor(model => model.IsPublic, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="form-group hide">
+				@Html.LabelFor(model => model.CreateBy, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.CreateBy)
+				</div>
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.CreateDate, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.CreateDate, new { htmlAttributes = new { @class = "form-control", @readonly="readonly" } })
+					@Html.ValidationMessageFor(model => model.CreateDate, "", new { @class = "text-danger" })
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">确定</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	</div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+</body>
+</html>
