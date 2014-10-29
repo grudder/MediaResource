@@ -93,6 +93,90 @@ namespace MediaResource.Web.Services
             return pagedList;
         }
 
+        public StaticPagedList<ImageViewModel> AdvancedSearch(string nameOrKeyword, string person, string startTime, string endTime, string groupIds, int? categoryId, int? pageSize, int? pageIndex)
+        {
+            // 执行查询
+            IQueryable<Film> query;
+            if (categoryId == null || categoryId == 0)
+            {
+                query = from film in _db.Films
+                        where film.Status == 1
+                        && film.ImagePath != null
+                        && film.ImagePath != ""
+                        && film.CategoryEntity.CategoryType == ObjectType.Film
+                        orderby film.CreateDate descending
+                        select film;
+            }
+            else
+            {
+                query = from film in _db.Films
+                        where film.Status == 1
+                        && film.ImagePath != null
+                        && film.ImagePath != ""
+                        && film.CategoryEntity.CategoryType == ObjectType.Film
+                        && (film.Category == categoryId
+                        || film.CategoryEntity.CategoryNum.Contains(categoryId + "_"))
+                        orderby film.CreateDate descending
+                        select film;
+            }
+
+            // 构造查询条件
+            if (!String.IsNullOrWhiteSpace(nameOrKeyword))
+            {
+                query = query.Where(i => i.Title.Contains(nameOrKeyword));
+            }
+            //if (!String.IsNullOrWhiteSpace(person))
+            //{
+            //    query = query.Where(i => i.Leadership.Contains(person) || i.Participants.Contains(person));
+            //}
+            //if (!String.IsNullOrWhiteSpace(startTime))
+            //{
+            //    DateTime dateStart = DateTime.Parse(startTime);
+            //    query = query.Where(i => i.RecordingTime != null && i.RecordingTime.Value >= dateStart);
+            //}
+            //if (!String.IsNullOrWhiteSpace(endTime))
+            //{
+            //    DateTime dateEnd = DateTime.Parse(endTime).AddDays(1);
+            //    query = query.Where(i => i.RecordingTime != null && i.RecordingTime.Value < dateEnd);
+            //}
+            if (!String.IsNullOrWhiteSpace(groupIds))
+            {
+                Expression<Func<Film, bool>> groupCondition = i => false;
+                foreach (string groupId in groupIds.Split(','))
+                {
+                    string groupName = _db.Groups.Find(int.Parse(groupId)).Name;
+                    groupCondition = groupCondition.Or(i => i.Association.Contains(groupName));
+                }
+                query = query.Where(groupCondition);
+            }
+
+            // 进行静态分页处理
+            pageSize = (pageSize ?? 20);
+            pageIndex = (pageIndex ?? 1);
+            int totalCount;
+            IEnumerable<ImageViewModel> images = GetImagesInPage(query, pageIndex.Value, pageSize.Value, out totalCount);
+            var pagedList = new StaticPagedList<ImageViewModel>(images, pageIndex.Value, pageSize.Value, totalCount);
+
+            return pagedList;
+        }
+
+        private IEnumerable<ImageViewModel> GetImagesInPage(IEnumerable<Film> query, int pageIndex, int pageSize,
+            out int totalCount)
+        {
+            IEnumerable<Film> enumerable = query as Film[] ?? query.ToArray();
+            totalCount = enumerable.Count();
+            IEnumerable<Film> films = enumerable.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+
+            return films.ToList().Select(film => new ImageViewModel
+            {
+                Id = film.Id,
+                Name = film.Title,
+                RawUrl = WebHelper.Instance.RootUrl + film.FileUrl,
+                FileUrl = ImageHelper.GetSmallThumbUrl(film.FileUrl),
+                CreateDate = film.CreateDate
+            });
+        }
+
         public IPagedList<ImageViewModel> Search(string keyword, int? pageSize, int? pageIndex)
         {
             // 执行查询

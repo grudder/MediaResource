@@ -13,7 +13,8 @@ namespace MediaResource.Web.Controllers
 	public class GraphicDesignController : Controller
 	{
 		private readonly GraphicDesignService _graphicDesignService = new GraphicDesignService();
-		private readonly CategoryService _categoryService = new CategoryService();
+        private readonly CategoryService _categoryService = new CategoryService();
+        private readonly GroupService _gruopService = new GroupService();
 
 		[ChildActionOnly]
 		public ActionResult IndexPartial()
@@ -52,18 +53,25 @@ namespace MediaResource.Web.Controllers
 		//
 		// GET: /GraphicDesign/List
 		public ActionResult List(int? id, int? pageSize, int? page)
-		{
-			if (id == null)
-			{
-				id = 0;
-			}
+        {
+            if (id == null)
+            {
+                id = 0;
+            }
 
-			ViewBag.Category = _categoryService.Get(id);
-			IPagedList<ImageViewModel> images = _graphicDesignService.GetImagesByCategory(id, pageSize, page);
+            ViewBag.Category = _categoryService.Get(id);
+            ViewBag.Id = id;
+            ViewBag.Groups = _gruopService.GetTopVisibleList(-1);
 
-			ViewBag.Id = id;
+            ViewBag.NameOrKeyword = Request["nameOrKeyword"];
+            ViewBag.Person = Request["person"];
+            ViewBag.StartTime = Request["startTime"];
+            ViewBag.EndTime = Request["endTime"];
+            ViewBag.GroupIds = Request["groupIds"];
 
-			return View(images);
+            StaticPagedList<ImageViewModel> images = _graphicDesignService.AdvancedSearch(ViewBag.NameOrKeyword, ViewBag.Person, ViewBag.StartTime, ViewBag.EndTime, ViewBag.GroupIds, id, pageSize, page);
+
+            return View(images);
 		}
 
         //

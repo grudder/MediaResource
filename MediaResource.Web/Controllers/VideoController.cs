@@ -12,7 +12,8 @@ namespace MediaResource.Web.Controllers
 	public class VideoController : Controller
 	{
 		private readonly VideoService _videoService = new VideoService();
-		private readonly CategoryService _categoryService = new CategoryService();
+        private readonly CategoryService _categoryService = new CategoryService();
+        private readonly GroupService _gruopService = new GroupService();
 
 		[ChildActionOnly]
 		public ActionResult IndexPartial()
@@ -58,9 +59,16 @@ namespace MediaResource.Web.Controllers
 			}
 
 			ViewBag.Category = _categoryService.Get(id);
-			IPagedList<ImageViewModel> images = _videoService.GetImagesByCategory(id, pageSize, page);
+            ViewBag.Id = id;
+            ViewBag.Groups = _gruopService.GetTopVisibleList(-1);
 
-			ViewBag.Id = id;
+            ViewBag.NameOrKeyword = Request["nameOrKeyword"];
+            ViewBag.Person = Request["person"];
+            ViewBag.StartTime = Request["startTime"];
+            ViewBag.EndTime = Request["endTime"];
+            ViewBag.GroupIds = Request["groupIds"];
+
+            StaticPagedList<ImageViewModel> images = _videoService.AdvancedSearch(ViewBag.NameOrKeyword, ViewBag.Person, ViewBag.StartTime, ViewBag.EndTime, ViewBag.GroupIds, id, pageSize, page);
 
 			return View(images);
 		}

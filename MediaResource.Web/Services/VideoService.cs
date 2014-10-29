@@ -123,6 +123,90 @@ namespace MediaResource.Web.Services
             return pagedList;
         }
 
+        public StaticPagedList<ImageViewModel> AdvancedSearch(string nameOrKeyword, string person, string startTime, string endTime, string groupIds, int? categoryId, int? pageSize, int? pageIndex)
+        {
+            // 执行查询
+            IQueryable<Video> query;
+            if (categoryId == null || categoryId == 0)
+            {
+                query = from video in _db.Videos
+                        where video.Status == 1
+                        && video.PreviewPath != null
+                        && video.PreviewPath != ""
+                        && video.CategoryEntity.CategoryType == ObjectType.Video
+                        orderby video.CreateDate descending
+                        select video;
+            }
+            else
+            {
+                query = from video in _db.Videos
+                        where video.Status == 1
+                        && video.PreviewPath != null
+                        && video.PreviewPath != ""
+                        && video.CategoryEntity.CategoryType == ObjectType.Video
+                        && (video.Category == categoryId
+                        || video.CategoryEntity.CategoryNum.Contains(categoryId + "_"))
+                        orderby video.CreateDate descending
+                        select video;
+            }
+
+            // 构造查询条件
+            if (!String.IsNullOrWhiteSpace(nameOrKeyword))
+            {
+                query = query.Where(i => i.Name.Contains(nameOrKeyword) || i.Keyword.Contains(nameOrKeyword));
+            }
+            if (!String.IsNullOrWhiteSpace(person))
+            {
+                query = query.Where(i => i.Leadership.Contains(person) || i.Participants.Contains(person));
+            }
+            if (!String.IsNullOrWhiteSpace(startTime))
+            {
+                DateTime dateStart = DateTime.Parse(startTime);
+                query = query.Where(i => i.RecordingTime != null && i.RecordingTime.Value >= dateStart);
+            }
+            if (!String.IsNullOrWhiteSpace(endTime))
+            {
+                DateTime dateEnd = DateTime.Parse(endTime).AddDays(1);
+                query = query.Where(i => i.RecordingTime != null && i.RecordingTime.Value < dateEnd);
+            }
+            if (!String.IsNullOrWhiteSpace(groupIds))
+            {
+                Expression<Func<Video, bool>> groupCondition = i => false;
+                foreach (string groupId in groupIds.Split(','))
+                {
+                    string groupName = _db.Groups.Find(int.Parse(groupId)).Name;
+                    groupCondition = groupCondition.Or(i => i.Association == groupName);
+                }
+                query = query.Where(groupCondition);
+            }
+
+            // 进行静态分页处理
+            pageSize = (pageSize ?? 20);
+            pageIndex = (pageIndex ?? 1);
+            int totalCount;
+            IEnumerable<ImageViewModel> images = GetImagesInPage(query, pageIndex.Value, pageSize.Value, out totalCount);
+            var pagedList = new StaticPagedList<ImageViewModel>(images, pageIndex.Value, pageSize.Value, totalCount);
+
+            return pagedList;
+        }
+
+        private IEnumerable<ImageViewModel> GetImagesInPage(IEnumerable<Video> query, int pageIndex, int pageSize,
+            out int totalCount)
+        {
+            IEnumerable<Video> enumerable = query as Video[] ?? query.ToArray();
+            totalCount = enumerable.Count();
+            IEnumerable<Video> videos = enumerable.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+
+            return videos.ToList().Select(video => new ImageViewModel
+            {
+                Id = video.Id,
+                Name = video.Name,
+                RawUrl = WebHelper.Instance.RootUrl + video.FileUrl,
+                FileUrl = ImageHelper.GetSmallThumbUrl(video.FileUrl),
+                CreateDate = video.CreateDate
+            });
+        }
+
         public IPagedList<ImageViewModel> Search(string keyword, int? pageSize, int? pageIndex)
         {
             // 执行查询

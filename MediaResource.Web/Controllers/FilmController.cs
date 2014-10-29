@@ -11,7 +11,8 @@ namespace MediaResource.Web.Controllers
 	public class FilmController : Controller
 	{
 		private readonly FilmService _filmService = new FilmService();
-		private readonly CategoryService _categoryService = new CategoryService();
+        private readonly CategoryService _categoryService = new CategoryService();
+        private readonly GroupService _groupService = new GroupService();
 
 		[ChildActionOnly]
 		public ActionResult IndexPartial()
@@ -50,18 +51,25 @@ namespace MediaResource.Web.Controllers
 		//
 		// GET: /Film/List
 		public ActionResult List(int? id, int? pageSize, int? page)
-		{
-			if (id == null)
-			{
-				id = 0;
-			}
+        {
+            if (id == null)
+            {
+                id = 0;
+            }
 
-			ViewBag.Category = _categoryService.Get(id);
-			IPagedList<ImageViewModel> images = _filmService.GetImagesByCategory(id, pageSize, page);
+            ViewBag.Category = _categoryService.Get(id);
+            ViewBag.Id = id;
+            ViewBag.Groups = _groupService.GetTopVisibleList(-1);
 
-			ViewBag.Id = id;
+            ViewBag.NameOrKeyword = Request["nameOrKeyword"];
+            ViewBag.Person = Request["person"];
+            ViewBag.StartTime = Request["startTime"];
+            ViewBag.EndTime = Request["endTime"];
+            ViewBag.GroupIds = Request["groupIds"];
 
-			return View(images);
+            StaticPagedList<ImageViewModel> images = _filmService.AdvancedSearch(ViewBag.NameOrKeyword, ViewBag.Person, ViewBag.StartTime, ViewBag.EndTime, ViewBag.GroupIds, id, pageSize, page);
+
+            return View(images);
 		}
 
         //

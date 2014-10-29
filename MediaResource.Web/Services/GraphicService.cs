@@ -58,6 +58,60 @@ namespace MediaResource.Web.Services
             return list;
         }
 
+        public List<ImageViewModel> GetTopImages(int count, int? groupId)
+        {
+            IQueryable<ImageViewModel> graphics;
+            if (groupId == null)
+            {
+                graphics = from graphic in _db.Graphics
+                           where graphic.CategoryEntity.CategoryType == ObjectType.Graphic
+                           && graphic.Status == 1
+                           && graphic.FileUrl != null
+                           && graphic.FileUrl != ""
+                           orderby graphic.CreateDate descending
+                           select new ImageViewModel
+                           {
+                               Id = graphic.Id,
+                               Name = graphic.Name,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                               FileUrl = graphic.FileUrl,
+                               CreateDate = graphic.CreateDate,
+                               ObjectType = ObjectType.Graphic
+                           };
+            }
+            else
+            {
+                string groupName = _db.Groups.Find(groupId).Name;
+
+                graphics = from graphic in _db.Graphics
+                           where graphic.CategoryEntity.CategoryType == ObjectType.Graphic
+                           && graphic.Status == 1
+                           && graphic.FileUrl != null
+                           && graphic.FileUrl != ""
+                           && (graphic.CreateByEntity.GroupId == groupId
+                           || graphic.Association.Contains(groupName))
+                           orderby graphic.CreateDate descending
+                           select new ImageViewModel
+                           {
+                               Id = graphic.Id,
+                               Name = graphic.Name,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                               FileUrl = graphic.FileUrl,
+                               CreateDate = graphic.CreateDate,
+                               ObjectType = ObjectType.Graphic
+                           };
+            }
+
+            // 获取缩略图地址
+            List<ImageViewModel> groupGraphics = graphics.Take(count).ToList();
+            foreach (ImageViewModel item in groupGraphics)
+            {
+                item.FileUrl = ImageHelper.GetSmallThumbUrl(item.FileUrl);
+            }
+
+            return groupGraphics;
+        }
+
         public IPagedList<ImageViewModel> GetImagesByCategory(int? categoryId, int? pageSize, int? pageIndex)
         {
             // 构造分类查询条件
@@ -93,6 +147,150 @@ namespace MediaResource.Web.Services
             }
 
             return pagedList;
+        }
+
+        public IPagedList<ImageViewModel> GetImagesByGroup(int? groupId, int? pageSize, int? pageIndex)
+        {
+            // 执行查询
+            IQueryable<ImageViewModel> graphics;
+            if (groupId == null)
+            {
+                graphics = from graphic in _db.Graphics
+                           where graphic.CategoryEntity.CategoryType == ObjectType.Graphic
+                           && graphic.Status == 1
+                           && graphic.FileUrl != null
+                           && graphic.FileUrl != ""
+                           orderby graphic.CreateDate descending
+                           select new ImageViewModel
+                           {
+                               Id = graphic.Id,
+                               Name = graphic.Name,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                               FileUrl = graphic.FileUrl,
+                               CreateDate = graphic.CreateDate,
+                               ObjectType = ObjectType.Graphic
+                           };
+            }
+            else
+            {
+                string groupName = _db.Groups.Find(groupId).Name;
+
+                graphics = from graphic in _db.Graphics
+                           where graphic.CategoryEntity.CategoryType == ObjectType.Graphic
+                           && graphic.Status == 1
+                           && graphic.FileUrl != null
+                           && graphic.FileUrl != ""
+                           && (graphic.CreateByEntity.GroupId == groupId
+                           || graphic.Association.Contains(groupName))
+                           orderby graphic.CreateDate descending
+                           select new ImageViewModel
+                           {
+                               Id = graphic.Id,
+                               Name = graphic.Name,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                               FileUrl = graphic.FileUrl,
+                               CreateDate = graphic.CreateDate,
+                               ObjectType = ObjectType.Graphic
+                           };
+            }
+
+
+            // 分页处理
+            pageSize = (pageSize ?? 20);
+            pageIndex = (pageIndex ?? 1);
+            var pagedList = graphics.ToPagedList(pageIndex.Value, pageSize.Value);
+
+            // 获取缩略图地址
+            foreach (ImageViewModel item in pagedList)
+            {
+                item.FileUrl = ImageHelper.GetSmallThumbUrl(item.FileUrl);
+            }
+
+            return pagedList;
+        }
+
+        public StaticPagedList<ImageViewModel> AdvancedSearch(string nameOrKeyword, string person, string startTime, string endTime, string groupIds, int? categoryId, int? pageSize, int? pageIndex)
+        {
+            // 执行查询
+            IQueryable<Graphic> query;
+            if (categoryId == null || categoryId == 0)
+            {
+                query = from graphic in _db.Graphics
+                        where graphic.Status == 1
+                        && graphic.FileUrl != null
+                        && graphic.FileUrl != ""
+                        && graphic.CategoryEntity.CategoryType == ObjectType.Graphic
+                        orderby graphic.CreateDate descending
+                        select graphic;
+            }
+            else
+            {
+                query = from graphic in _db.Graphics
+                        where graphic.Status == 1
+                        && graphic.FileUrl != null
+                        && graphic.FileUrl != ""
+                        && graphic.CategoryEntity.CategoryType == ObjectType.Graphic
+                        && (graphic.Category == categoryId
+                        || graphic.CategoryEntity.CategoryNum.Contains(categoryId + "_"))
+                        orderby graphic.CreateDate descending
+                        select graphic;
+            }
+
+            // 构造查询条件
+            if (!String.IsNullOrWhiteSpace(nameOrKeyword))
+            {
+                query = query.Where(i => i.Name.Contains(nameOrKeyword));
+            }
+            //if (!String.IsNullOrWhiteSpace(person))
+            //{
+            //    query = query.Where(i => i.Leadership.Contains(person) || i.Participants.Contains(person));
+            //}
+            //if (!String.IsNullOrWhiteSpace(startTime))
+            //{
+            //    DateTime dateStart = DateTime.Parse(startTime);
+            //    query = query.Where(i => i.RecordingTime != null && i.RecordingTime.Value >= dateStart);
+            //}
+            //if (!String.IsNullOrWhiteSpace(endTime))
+            //{
+            //    DateTime dateEnd = DateTime.Parse(endTime).AddDays(1);
+            //    query = query.Where(i => i.RecordingTime != null && i.RecordingTime.Value < dateEnd);
+            //}
+            if (!String.IsNullOrWhiteSpace(groupIds))
+            {
+                Expression<Func<Graphic, bool>> groupCondition = i => false;
+                foreach (string groupId in groupIds.Split(','))
+                {
+                    string groupName = _db.Groups.Find(int.Parse(groupId)).Name;
+                    groupCondition = groupCondition.Or(i => i.Association.Contains(groupName));
+                }
+                query = query.Where(groupCondition);
+            }
+
+            // 进行静态分页处理
+            pageSize = (pageSize ?? 20);
+            pageIndex = (pageIndex ?? 1);
+            int totalCount;
+            IEnumerable<ImageViewModel> images = GetImagesInPage(query, pageIndex.Value, pageSize.Value, out totalCount);
+            var pagedList = new StaticPagedList<ImageViewModel>(images, pageIndex.Value, pageSize.Value, totalCount);
+
+            return pagedList;
+        }
+
+        private IEnumerable<ImageViewModel> GetImagesInPage(IEnumerable<Graphic> query, int pageIndex, int pageSize,
+            out int totalCount)
+        {
+            IEnumerable<Graphic> enumerable = query as Graphic[] ?? query.ToArray();
+            totalCount = enumerable.Count();
+            IEnumerable<Graphic> graphics = enumerable.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+
+            return graphics.ToList().Select(graphic => new ImageViewModel
+            {
+                Id = graphic.Id,
+                Name = graphic.Name,
+                RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                FileUrl = ImageHelper.GetSmallThumbUrl(graphic.FileUrl),
+                CreateDate = graphic.CreateDate
+            });
         }
 
         public IPagedList<ImageViewModel> Search(string keyword, int? pageSize, int? pageIndex)

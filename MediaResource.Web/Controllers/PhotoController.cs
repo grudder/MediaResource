@@ -18,6 +18,7 @@ namespace MediaResource.Web.Controllers
     {
         private readonly PhotoService _photoService = new PhotoService();
         private readonly CategoryService _categoryService = new CategoryService();
+        private readonly GroupService _groupService = new GroupService();
 
         private const string UserUploadPhotoPath = @"mov1\Download\Photo\";
 
@@ -65,9 +66,16 @@ namespace MediaResource.Web.Controllers
             }
 
             ViewBag.Category = _categoryService.Get(id);
-            StaticPagedList<ImageViewModel> images = _photoService.GetImagesByCategory(id, pageSize, page);
-
             ViewBag.Id = id;
+            ViewBag.Groups = _groupService.GetTopVisibleList(-1);
+
+            ViewBag.NameOrKeyword = Request["nameOrKeyword"];
+            ViewBag.Person = Request["person"];
+            ViewBag.StartTime = Request["startTime"];
+            ViewBag.EndTime = Request["endTime"];
+            ViewBag.GroupIds = Request["groupIds"];
+
+            StaticPagedList<ImageViewModel> images = _photoService.AdvancedSearch(ViewBag.NameOrKeyword, ViewBag.Person, ViewBag.StartTime, ViewBag.EndTime, ViewBag.GroupIds, id, pageSize, page);
 
             return View(images);
         }

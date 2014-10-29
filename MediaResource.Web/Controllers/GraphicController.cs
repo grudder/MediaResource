@@ -13,13 +13,23 @@ namespace MediaResource.Web.Controllers
 	public class GraphicController : Controller
 	{
 		private readonly GraphicService _graphicService = new GraphicService();
-		private readonly CategoryService _categoryService = new CategoryService();
+        private readonly CategoryService _categoryService = new CategoryService();
+        private readonly GroupService _groupService = new GroupService();
 
 		[ChildActionOnly]
 		public ActionResult IndexPartial()
 		{
 			return PartialView("_IndexPartial", _graphicService.GetTopImages(4));
 		}
+
+        // GET: Graphic/GroupPartial/5
+        [ChildActionOnly]
+        public ActionResult GroupPartial(int? groupId)
+        {
+            ViewBag.GroupId = groupId;
+
+            return PartialView("_GroupPartial", _graphicService.GetTopImages(6, groupId));
+        }
 
 		//
 		// GET: /Graphic/Detail
@@ -52,19 +62,40 @@ namespace MediaResource.Web.Controllers
 		//
 		// GET: /Graphic/List
 		public ActionResult List(int? id, int? pageSize, int? page)
-		{
-			if (id == null)
-			{
-				id = 0;
-			}
+        {
+            if (id == null)
+            {
+                id = 0;
+            }
 
-			ViewBag.Category = _categoryService.Get(id);
-			IPagedList<ImageViewModel> images = _graphicService.GetImagesByCategory(id, pageSize, page);
+            ViewBag.Category = _categoryService.Get(id);
+            ViewBag.Id = id;
+            ViewBag.Groups = _groupService.GetTopVisibleList(-1);
 
-			ViewBag.Id = id;
+            ViewBag.NameOrKeyword = Request["nameOrKeyword"];
+            ViewBag.Person = Request["person"];
+            ViewBag.StartTime = Request["startTime"];
+            ViewBag.EndTime = Request["endTime"];
+            ViewBag.GroupIds = Request["groupIds"];
 
-			return View(images);
+            StaticPagedList<ImageViewModel> images = _graphicService.AdvancedSearch(ViewBag.NameOrKeyword, ViewBag.Person, ViewBag.StartTime, ViewBag.EndTime, ViewBag.GroupIds, id, pageSize, page);
+
+            return View(images);
 		}
+
+        //
+        // GET: /Graphic/Group/5
+        public ActionResult Group(int? id, int? pageSize, int? page)
+        {
+            Group group = _groupService.Find(id);
+
+            ViewBag.GroupId = id;
+            ViewBag.Group = group;
+
+            IPagedList<ImageViewModel> images = _graphicService.GetImagesByGroup(id, pageSize, page);
+
+            return View(images);
+        }
 
         //
         // GET: /Graphic/Search

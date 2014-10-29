@@ -40,7 +40,7 @@ namespace MediaResource.Web.Controllers
 		{
 			ViewBag.GroupId = groupId;
 
-			return PartialView("_GroupPartial", _userVideoService.GetTopImages(9, groupId));
+			return PartialView("_GroupPartial", _userVideoService.GetTopImages(6, groupId));
 		}
 
 		//

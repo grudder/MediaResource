@@ -43,7 +43,7 @@ namespace MediaResource.Web.Controllers
 		[ChildActionOnly]
 		public ActionResult RankPartial(int? groupId)
 		{
-            var models = new Tuple<List<ImageViewModel>, List<ImageViewModel>>(_userPhotoService.GetTopRankList(12, groupId), _userVideoService.GetTopRankList(12, groupId));
+            var models = new Tuple<List<ImageViewModel>, List<ImageViewModel>>(_userPhotoService.GetTopRankList(8, groupId), _userVideoService.GetTopRankList(12, groupId));
 			return PartialView("_RankPartial", models);
 		}
 

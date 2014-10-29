@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-
+using System.Linq.Expressions;
 using MediaResource.Web.DataAccess;
 using MediaResource.Web.Helper;
 using MediaResource.Web.Models;
@@ -64,12 +64,12 @@ namespace MediaResource.Web.Services
 
                 var category = topCategory;
                 var photos = from p in _db.Photos
-                    where p.Status == 1
-                          && p.FileUrl != null
-                          && p.FileUrl != ""
-                          && p.Category == category.Id
-                    orderby p.CreateDate descending
-                    select p;
+                             where p.Status == 1
+                                   && p.FileUrl != null
+                                   && p.FileUrl != ""
+                                   && p.Category == category.Id
+                             orderby p.CreateDate descending
+                             select p;
                 if (!photos.Any())
                 {
                     continue;
@@ -130,6 +130,73 @@ namespace MediaResource.Web.Services
                         || photo.CategoryEntity.CategoryNum.Contains(categoryId + "_"))
                         orderby photo.CreateDate descending
                         select photo;
+            }
+
+            // 进行静态分页处理
+            pageSize = (pageSize ?? 20);
+            pageIndex = (pageIndex ?? 1);
+            int totalCount;
+            IEnumerable<ImageViewModel> images = GetImagesInPage(query, pageIndex.Value, pageSize.Value, out totalCount);
+            var pagedList = new StaticPagedList<ImageViewModel>(images, pageIndex.Value, pageSize.Value, totalCount);
+
+            return pagedList;
+        }
+
+        public StaticPagedList<ImageViewModel> AdvancedSearch(string nameOrKeyword, string person, string startTime, string endTime, string groupIds, int? categoryId, int? pageSize, int? pageIndex)
+        {
+            // 执行查询
+            IQueryable<Photo> query;
+            if (categoryId == null || categoryId == 0)
+            {
+                query = from photo in _db.Photos
+                        where photo.Status == 1
+                        && photo.FileUrl != null
+                        && photo.FileUrl != ""
+                        && photo.CategoryEntity.CategoryType == ObjectType.Photo
+                        orderby photo.CreateDate descending
+                        select photo;
+            }
+            else
+            {
+                query = from photo in _db.Photos
+                        where photo.Status == 1
+                        && photo.FileUrl != null
+                        && photo.FileUrl != ""
+                        && photo.CategoryEntity.CategoryType == ObjectType.Photo
+                        && (photo.Category == categoryId
+                        || photo.CategoryEntity.CategoryNum.Contains(categoryId + "_"))
+                        orderby photo.CreateDate descending
+                        select photo;
+            }
+
+            // 构造查询条件
+            if (!String.IsNullOrWhiteSpace(nameOrKeyword))
+            {
+                query = query.Where(i => i.Name.Contains(nameOrKeyword) || i.Keyword.Contains(nameOrKeyword));
+            }
+            if (!String.IsNullOrWhiteSpace(person))
+            {
+                query = query.Where(i => i.Leadership.Contains(person) || i.Participants.Contains(person));
+            }
+            if (!String.IsNullOrWhiteSpace(startTime))
+            {
+                DateTime dateStart = DateTime.Parse(startTime);
+                query = query.Where(i => i.RecordingTime != null && i.RecordingTime.Value >= dateStart);
+            }
+            if (!String.IsNullOrWhiteSpace(endTime))
+            {
+                DateTime dateEnd = DateTime.Parse(endTime).AddDays(1);
+                query = query.Where(i => i.RecordingTime != null && i.RecordingTime.Value < dateEnd);
+            }
+            if (!String.IsNullOrWhiteSpace(groupIds))
+            {
+                Expression<Func<Photo, bool>> groupCondition = i => false;
+                foreach (string groupId in groupIds.Split(','))
+                {
+                    string groupName = _db.Groups.Find(int.Parse(groupId)).Name;
+                    groupCondition = groupCondition.Or(i => i.Association.Contains(groupName));
+                }
+                query = query.Where(groupCondition);
             }
 
             // 进行静态分页处理

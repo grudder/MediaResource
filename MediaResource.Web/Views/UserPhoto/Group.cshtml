@@ -33,6 +33,12 @@
                                     <img src="@item.FileUrl" />
                                 </div>
                             </a>
+				            <div class="caption">
+				                <p class="title">
+				                    @Html.TrimText(item.Name, 18)
+				                </p>
+						        <a href="@item.RawUrl" target="_blank" class="btn btn-default">下载</a>
+				            </div>
                         }
 				        @if (item.ObjectType == ObjectType.Photo)
                         {
@@ -41,13 +47,13 @@
                                     <img src="@item.FileUrl" />
                                 </div>
                             </a>
+                            <div class="caption">
+                                <p class="title">
+                                    @Html.TrimText(item.Name, 18)
+                                </p>
+                                <a href="@Url.Action("Download", "Photo", new {id = @item.Id})" target="_blank" class="btn btn-default">下载</a>
+                            </div>
                         }
-				        <div class="caption">
-				            <p class="title">
-				                @Html.TrimText(item.Name, 18)
-				            </p>
-						    <a href="@item.RawUrl" target="_blank" class="btn btn-default">下载</a>
-				        </div>
 				    </div>
 				</div>
 			}
