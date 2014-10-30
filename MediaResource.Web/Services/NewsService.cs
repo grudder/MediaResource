@@ -70,8 +70,8 @@ namespace MediaResource.Web.Services
                            {
                                Id = news.Id,
                                Name = news.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + news.FileUrl,
-                               FileUrl = news.FileUrl,
+                               RawUrl = WebHelper.Instance.RootUrl + news.ImagePath,
+                               FileUrl = news.ImagePath,
                                CreateDate = news.CreateDate,
                                ObjectType = ObjectType.News
                            };
@@ -93,8 +93,8 @@ namespace MediaResource.Web.Services
                            {
                                Id = news.Id,
                                Name = news.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + news.FileUrl,
-                               FileUrl = news.FileUrl,
+                               RawUrl = WebHelper.Instance.RootUrl + news.ImagePath,
+                               FileUrl = news.ImagePath,
                                CreateDate = news.CreateDate,
                                ObjectType = ObjectType.News
                            };
@@ -104,7 +104,7 @@ namespace MediaResource.Web.Services
             List<ImageViewModel> groupNewss = newss.Take(count).ToList();
             foreach (ImageViewModel item in groupNewss)
             {
-                item.FileUrl = ImageHelper.GetSmallThumbUrl(item.FileUrl);
+                item.FileUrl = ImageHelper.GetSnapUrl(item.FileUrl);
             }
 
             return groupNewss;
@@ -166,8 +166,8 @@ namespace MediaResource.Web.Services
                            {
                                Id = news.Id,
                                Name = news.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + news.FileUrl,
-                               FileUrl = news.FileUrl,
+                               RawUrl = WebHelper.Instance.RootUrl + news.ImagePath,
+                               FileUrl = news.ImagePath,
                                CreateDate = news.CreateDate,
                                ObjectType = ObjectType.News
                            };
@@ -189,8 +189,8 @@ namespace MediaResource.Web.Services
                            {
                                Id = news.Id,
                                Name = news.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + news.FileUrl,
-                               FileUrl = news.FileUrl,
+                               RawUrl = WebHelper.Instance.RootUrl + news.ImagePath,
+                               FileUrl = news.ImagePath,
                                CreateDate = news.CreateDate,
                                ObjectType = ObjectType.News
                            };
@@ -205,7 +205,7 @@ namespace MediaResource.Web.Services
             // 获取缩略图地址
             foreach (ImageViewModel item in pagedList)
             {
-                item.FileUrl = ImageHelper.GetSmallThumbUrl(item.FileUrl);
+                item.FileUrl = ImageHelper.GetSnapUrl(item.FileUrl);
             }
 
             return pagedList;
@@ -291,8 +291,8 @@ namespace MediaResource.Web.Services
             {
                 Id = news.Id,
                 Name = news.Name,
-                RawUrl = WebHelper.Instance.RootUrl + news.FileUrl,
-                FileUrl = ImageHelper.GetSmallThumbUrl(news.FileUrl),
+                RawUrl = WebHelper.Instance.RootUrl + news.ImagePath,
+                FileUrl = ImageHelper.GetSnapUrl(news.ImagePath),
                 CreateDate = news.CreateDate
             });
         }
@@ -311,7 +311,7 @@ namespace MediaResource.Web.Services
                         {
                             Id = news.Id,
                             Name = news.Name,
-                            FileUrl = news.FileUrl,
+                            FileUrl = news.ImagePath,
                             CreateDate = news.CreateDate
                         };
 
@@ -323,6 +323,7 @@ namespace MediaResource.Web.Services
             // 获取缩略图地址
             foreach (ImageViewModel item in pagedList)
             {
+                item.RawUrl = WebHelper.Instance.RootUrl + item.FileUrl;
                 item.FileUrl = ImageHelper.GetSnapUrl(item.FileUrl);
             }
 

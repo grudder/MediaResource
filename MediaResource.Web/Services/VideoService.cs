@@ -104,7 +104,9 @@ namespace MediaResource.Web.Services
 
             // 执行查询
             var query = _db.Videos
-                .Where(i => i.Status == 1 && i.PreviewPath != null && i.PreviewPath != "")
+                .Where(i => i.Status == 1
+                    && i.PreviewPath != null
+                    && i.PreviewPath != "")
                 .Where(condition.Compile())
                 .OrderByDescending(video => video.CreateDate)
                 .Select(video => new ImageViewModel
@@ -201,8 +203,7 @@ namespace MediaResource.Web.Services
             {
                 Id = video.Id,
                 Name = video.Name,
-                RawUrl = WebHelper.Instance.RootUrl + video.FileUrl,
-                FileUrl = ImageHelper.GetSmallThumbUrl(video.FileUrl),
+                FileUrl = String.IsNullOrEmpty(video.PreviewPath) ? "#" : WebHelper.Instance.RootUrl + video.PreviewPath,
                 CreateDate = video.CreateDate
             });
         }

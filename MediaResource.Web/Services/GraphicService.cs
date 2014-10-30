@@ -45,15 +45,11 @@ namespace MediaResource.Web.Services
                                Id = graphic.Id,
                                Name = graphic.Name,
                                RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                               FileUrl = graphic.PreviewPath,
+                               FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
                                CreateDate = graphic.CreateDate
                            };
 
             List<ImageViewModel> list = graphics.Take(count).ToList();
-            foreach (ImageViewModel item in list)
-            {
-                item.FileUrl = WebHelper.Instance.RootUrl + item.FileUrl;
-            }
 
             return list;
         }
@@ -66,15 +62,15 @@ namespace MediaResource.Web.Services
                 graphics = from graphic in _db.Graphics
                            where graphic.CategoryEntity.CategoryType == ObjectType.Graphic
                            && graphic.Status == 1
-                           && graphic.FileUrl != null
-                           && graphic.FileUrl != ""
+                           && graphic.PreviewPath != null
+                           && graphic.PreviewPath != ""
                            orderby graphic.CreateDate descending
                            select new ImageViewModel
                            {
                                Id = graphic.Id,
                                Name = graphic.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
-                               FileUrl = graphic.FileUrl,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                               FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
                                CreateDate = graphic.CreateDate,
                                ObjectType = ObjectType.Graphic
                            };
@@ -86,8 +82,8 @@ namespace MediaResource.Web.Services
                 graphics = from graphic in _db.Graphics
                            where graphic.CategoryEntity.CategoryType == ObjectType.Graphic
                            && graphic.Status == 1
-                           && graphic.FileUrl != null
-                           && graphic.FileUrl != ""
+                           && graphic.PreviewPath != null
+                           && graphic.PreviewPath != ""
                            && (graphic.CreateByEntity.GroupId == groupId
                            || graphic.Association.Contains(groupName))
                            orderby graphic.CreateDate descending
@@ -95,8 +91,8 @@ namespace MediaResource.Web.Services
                            {
                                Id = graphic.Id,
                                Name = graphic.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
-                               FileUrl = graphic.FileUrl,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                               FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
                                CreateDate = graphic.CreateDate,
                                ObjectType = ObjectType.Graphic
                            };
@@ -104,10 +100,6 @@ namespace MediaResource.Web.Services
 
             // 获取缩略图地址
             List<ImageViewModel> groupGraphics = graphics.Take(count).ToList();
-            foreach (ImageViewModel item in groupGraphics)
-            {
-                item.FileUrl = ImageHelper.GetSmallThumbUrl(item.FileUrl);
-            }
 
             return groupGraphics;
         }
@@ -123,7 +115,9 @@ namespace MediaResource.Web.Services
 
             // 执行查询
             var query = _db.Graphics
-                .Where(graphic => graphic.Status == 1 && graphic.PreviewPath != null && graphic.PreviewPath != "")
+                .Where(graphic => graphic.Status == 1
+                    && graphic.PreviewPath != null
+                    && graphic.PreviewPath != "")
                 .Where(condition.Compile())
                 .OrderByDescending(graphic => graphic.CreateDate)
                 .Select(graphic => new ImageViewModel
@@ -131,7 +125,7 @@ namespace MediaResource.Web.Services
                     Id = graphic.Id,
                     Name = graphic.Name,
                     RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                    FileUrl = graphic.PreviewPath,
+                    FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
                     CreateDate = graphic.CreateDate
                 });
 
@@ -139,13 +133,7 @@ namespace MediaResource.Web.Services
             pageSize = (pageSize ?? 20);
             pageIndex = (pageIndex ?? 1);
             var pagedList = query.ToPagedList(pageIndex.Value, pageSize.Value);
-
-            // 获取截图地址
-            foreach (ImageViewModel item in pagedList)
-            {
-                item.FileUrl = WebHelper.Instance.RootUrl + item.FileUrl;
-            }
-
+            
             return pagedList;
         }
 
@@ -158,15 +146,15 @@ namespace MediaResource.Web.Services
                 graphics = from graphic in _db.Graphics
                            where graphic.CategoryEntity.CategoryType == ObjectType.Graphic
                            && graphic.Status == 1
-                           && graphic.FileUrl != null
-                           && graphic.FileUrl != ""
+                           && graphic.PreviewPath != null
+                           && graphic.PreviewPath != ""
                            orderby graphic.CreateDate descending
                            select new ImageViewModel
                            {
                                Id = graphic.Id,
                                Name = graphic.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
-                               FileUrl = graphic.FileUrl,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                               FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
                                CreateDate = graphic.CreateDate,
                                ObjectType = ObjectType.Graphic
                            };
@@ -178,8 +166,8 @@ namespace MediaResource.Web.Services
                 graphics = from graphic in _db.Graphics
                            where graphic.CategoryEntity.CategoryType == ObjectType.Graphic
                            && graphic.Status == 1
-                           && graphic.FileUrl != null
-                           && graphic.FileUrl != ""
+                           && graphic.PreviewPath != null
+                           && graphic.PreviewPath != ""
                            && (graphic.CreateByEntity.GroupId == groupId
                            || graphic.Association.Contains(groupName))
                            orderby graphic.CreateDate descending
@@ -187,8 +175,8 @@ namespace MediaResource.Web.Services
                            {
                                Id = graphic.Id,
                                Name = graphic.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
-                               FileUrl = graphic.FileUrl,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                               FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
                                CreateDate = graphic.CreateDate,
                                ObjectType = ObjectType.Graphic
                            };
@@ -199,12 +187,6 @@ namespace MediaResource.Web.Services
             pageSize = (pageSize ?? 20);
             pageIndex = (pageIndex ?? 1);
             var pagedList = graphics.ToPagedList(pageIndex.Value, pageSize.Value);
-
-            // 获取缩略图地址
-            foreach (ImageViewModel item in pagedList)
-            {
-                item.FileUrl = ImageHelper.GetSmallThumbUrl(item.FileUrl);
-            }
 
             return pagedList;
         }
@@ -217,8 +199,8 @@ namespace MediaResource.Web.Services
             {
                 query = from graphic in _db.Graphics
                         where graphic.Status == 1
-                        && graphic.FileUrl != null
-                        && graphic.FileUrl != ""
+                        && graphic.PreviewPath != null
+                        && graphic.PreviewPath != ""
                         && graphic.CategoryEntity.CategoryType == ObjectType.Graphic
                         orderby graphic.CreateDate descending
                         select graphic;
@@ -287,8 +269,8 @@ namespace MediaResource.Web.Services
             {
                 Id = graphic.Id,
                 Name = graphic.Name,
-                RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
-                FileUrl = ImageHelper.GetSmallThumbUrl(graphic.FileUrl),
+                RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
                 CreateDate = graphic.CreateDate
             });
         }
@@ -307,7 +289,7 @@ namespace MediaResource.Web.Services
                             Id = graphic.Id,
                             Name = graphic.Name,
                             RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                            FileUrl = graphic.PreviewPath,
+                            FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
                             CreateDate = graphic.CreateDate
                         };
 
@@ -315,12 +297,6 @@ namespace MediaResource.Web.Services
             pageSize = (pageSize ?? 20);
             pageIndex = (pageIndex ?? 1);
             var pagedList = query.ToPagedList(pageIndex.Value, pageSize.Value);
-
-            // 获取缩略图地址
-            foreach (ImageViewModel item in pagedList)
-            {
-                item.FileUrl = WebHelper.Instance.RootUrl + item.FileUrl;
-            }
 
             return pagedList;
         }

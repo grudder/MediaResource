@@ -49,9 +49,7 @@ namespace MediaResource.Web.Services
             List<ImageViewModel> list = films.Take(count).ToList();
             foreach (ImageViewModel item in list)
             {
-                string fileUrl = item.FileUrl;
-                fileUrl = ImageHelper.GetSnapUrl(fileUrl);
-                item.FileUrl = fileUrl;
+                item.FileUrl = ImageHelper.GetSnapUrl(item.FileUrl);
             }
 
             return list;
@@ -171,8 +169,7 @@ namespace MediaResource.Web.Services
             {
                 Id = film.Id,
                 Name = film.Title,
-                RawUrl = WebHelper.Instance.RootUrl + film.FileUrl,
-                FileUrl = ImageHelper.GetSmallThumbUrl(film.FileUrl),
+                FileUrl = ImageHelper.GetSnapUrl(film.ImagePath),
                 CreateDate = film.CreateDate
             });
         }
@@ -191,7 +188,7 @@ namespace MediaResource.Web.Services
                         {
                             Id = film.Id,
                             Name = film.Title,
-                            FileUrl = film.FileUrl,
+                            FileUrl = film.ImagePath,
                             CreateDate = film.CreateDate
                         };
 

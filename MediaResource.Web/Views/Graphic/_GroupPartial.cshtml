@@ -1,0 +1,48 @@
+﻿@using MediaResource.Web.Helper
+@model List<MediaResource.Web.Models.ViewModels.ImageViewModel>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<img src='@Url.Content("~/Images/graphic-icon.png")' />
+							最新纸质媒体
+						</h3>
+					</div>
+					<div class="col-md-6">
+						<a href='@Url.Action("Group", "Graphic", new {id = ViewBag.GroupId})' class="navbar-right">更多&gt;&gt;</a>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body panel-body-group">
+				<div class="row">
+					@foreach (var item in Model)
+					{
+						<div class="col-md-4 thumbnail-sm">
+                            <a data-toggle="modal" href='@Url.Action("Detail", "Graphic", new {id = item.Id})' data-target="#graphicDetailModal">
+			                    <div class="img-md-wrap">
+                                    <img src="@item.FileUrl" />
+			                    </div>
+                            </a>
+							<p>
+								@Html.TrimText(item.Name, 18)
+								<br />
+								@Html.FormatValue(item.CreateDate, "{0:yyyy-MM-dd}")
+							</p>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="graphicDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
