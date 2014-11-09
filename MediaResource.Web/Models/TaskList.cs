@@ -27,8 +27,7 @@ namespace MediaResource.Web.Models
 
 		[Required]
 		[Display(Name = "Ê±¼ä", Order = 20)]
-		[DataType(DataType.DateTime)]
-		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
+		[DisplayFormat(DataFormatString = "{0:yyyy/M/d H:mm:ss}", ApplyFormatInEditMode = true)]
 		public DateTime TaskDate
 		{
 			get;

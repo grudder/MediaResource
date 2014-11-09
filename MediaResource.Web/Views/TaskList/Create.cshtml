@@ -37,7 +37,7 @@
 			<div class="form-group">
 				@Html.LabelFor(model => model.TaskDate, new { @class = "control-label col-md-2" })
 				<div class="col-md-10">
-					@Html.DatePickerFor(model => model.TaskDate)
+					@Html.TextBoxFor(model => model.TaskDate, new { @class = "Wdate", onFocus="WdatePicker({dateFmt:'yyyy/M/d H:mm:ss'})" })
 					@Html.ValidationMessageFor(model => model.TaskDate, "", new { @class = "text-danger" })
 				</div>
 			</div>
@@ -122,5 +122,6 @@
 }
 
 @Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript" src='@Url.Content("~/Scripts/My97DatePicker/WdatePicker.js")'></script>
 </body>
 </html>
