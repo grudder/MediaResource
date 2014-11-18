@@ -59,7 +59,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "视频集",
+					Name = "视频素材",
 					Count = videos.LongCount()
 				},
 				new StatViewModel
@@ -69,7 +69,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "图文设计成品",
+					Name = "设计成品",
 					Count = graphicDesigns.LongCount()
 				},
 				new StatViewModel
@@ -84,7 +84,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "专栏",
+					Name = "处室专栏",
 					Count = groups.LongCount()
 				}
 			};
@@ -155,7 +155,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "视频集",
+					Name = "视频素材",
 					Count = videos.LongCount()
 				},
 				new StatViewModel
@@ -165,7 +165,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "图文设计成品",
+					Name = "设计成品",
 					Count = graphicDesigns.LongCount()
 				},
 				new StatViewModel
@@ -180,7 +180,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "专栏",
+					Name = "处室专栏",
 					Count = groups.LongCount()
 				}
 			};
@@ -251,7 +251,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "视频集",
+					Name = "视频素材",
 					Count = videos.LongCount()
 				},
 				new StatViewModel
@@ -261,7 +261,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "图文设计成品",
+					Name = "设计成品",
 					Count = graphicDesigns.LongCount()
 				},
 				new StatViewModel
@@ -276,7 +276,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "专栏",
+					Name = "处室专栏",
 					Count = groups.LongCount()
 				}
 			};

@@ -22,8 +22,8 @@ namespace MediaResource.Web.Controllers
         private readonly UserFolderService _userFolderService = new UserFolderService();
         private readonly GroupService _groupService = new GroupService();
 
-        private const string UserUploadPhotoPath = @"mov1\UserUpload\Photo\";
-        private const string UserUploadPhotoUrl = @"mov1/UserUpload/Photo/";
+        private const string UserUploadPhotoPath = @"mov\UserUpload\Photo\";
+        private const string UserUploadPhotoUrl = @"mov/UserUpload/Photo/";
 
         // GET: UserPhoto/ListPartial
         [ChildActionOnly]

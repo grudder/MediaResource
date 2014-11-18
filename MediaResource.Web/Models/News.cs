@@ -65,7 +65,7 @@ namespace MediaResource.Web.Models
 			set;
 		}
 
-		[Display(Name = "关联处室", Order = 70)]
+		[Display(Name = "参与处室", Order = 70)]
 		[StringLength(256)]
 		public string Association
 		{

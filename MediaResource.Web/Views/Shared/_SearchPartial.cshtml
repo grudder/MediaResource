@@ -7,8 +7,8 @@
         <label class="sr-only" for="selectObjectType">搜索类别</label>
         <select id="selectObjectType" class="form-control">
             <option value="Photo">照片素材</option>
-            <option value="Video">视频集</option>
-            <option value="GraphicDesign">图文设计成品</option>
+            <option value="Video">视频素材</option>
+            <option value="GraphicDesign">设计成品</option>
             <option value="Graphic">纸质媒体</option>
             <option value="Film">影视成片</option>
             <option value="News">电视新闻</option>
@@ -17,8 +17,10 @@
         </select>
     </div>
     <button type="submit" class="btn btn-primary" onclick="javascript:return doSearch();">搜索</button>
+    <button type="button" class="btn btn-primary" onclick="javascript:return advancedSearch();">高级搜索</button>
 </form>
 
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
 <script type="text/javascript">
     function doSearch() {
         var keyword = $("#inputKeyword").val();
@@ -34,5 +36,13 @@
         $("#formSearch")[0].action = actionUrl;
 
         return true;
+    }
+
+    function advancedSearch() {
+        var objectType = $("#selectObjectType").val();
+        if (objectType != "UserPhoto" && objectType != "UserVideo") {
+            var url = "/" + objectType + "/Category";
+            location.href = url;
+        }
     }
 </script>

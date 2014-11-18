@@ -82,8 +82,8 @@ dd:before {
 
 .thumbnail-xl p {
     margin-top: -40px;
-    background-color: #333;
-    opacity: 0.4;
+    background-color: #222;
+    opacity: 0.8;
     color: white;
     width: 320px;
     height: 40px;
@@ -177,8 +177,8 @@ dd:before {
 
 .thumbnail-sm p {
     margin-top: -40px;
-    background-color: #333;
-    opacity: 0.5;
+    background-color: #222;
+    opacity: 0.8;
     color: white;
     width: 160px;
     height: 40px;

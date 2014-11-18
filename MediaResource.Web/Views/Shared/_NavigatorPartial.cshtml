@@ -48,7 +48,7 @@
 			            @:class="active"
 			        }
 			        >
-					@Html.ActionLink("视频集", "Category", "Video")
+					@Html.ActionLink("视频素材", "Category", "Video")
 				</li>
 				<li
 			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "GraphicDesign").ToLower()))
@@ -56,7 +56,7 @@
 			            @:class="active"
 			        }
 			        >
-					@Html.ActionLink("图文设计成品", "Category", "GraphicDesign")
+					@Html.ActionLink("设计成品", "Category", "GraphicDesign")
 				</li>
 				<li
 			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "Graphic").ToLower()))
@@ -90,7 +90,7 @@
 			            @:class="active"
 			        }
 			        >
-					@Html.ActionLink("专栏", "Index", "Group")
+					@Html.ActionLink("处室专栏", "Index", "Group")
 				</li>
 			</ul>
 		</nav>

@@ -28,7 +28,7 @@
         Photo = 4,
 
         /// <summary>
-        /// 视频集。
+        /// 视频素材。
         /// </summary>
         Video = 5,
 
@@ -43,7 +43,7 @@
         UserVideo = 7,
 
         /// <summary>
-        /// 图文设计成品。
+        /// 设计成品。
         /// </summary>
         GraphicDesign = 9
     }

@@ -6,7 +6,7 @@
 @model PagedList.IPagedList<ImageViewModel>
 
 @{
-	ViewBag.Title = "视频集";
+	ViewBag.Title = "视频素材";
 }
 
 @section styles
@@ -22,7 +22,7 @@
 					<div class="col-md-12">
 						<h3 class="panel-title">
 							<img src='@Url.Content("~/Images/video-icon.png")' />
-							视频集
+							视频素材
 						</h3>
 					</div>
 				</div>
@@ -228,7 +228,7 @@
 		function applyForDownload() {
 		    var description = parent.$("#inputDetail").val();
 		    if (description == "") {
-		        alert("请选择您要下载的视频集！");
+		        alert("请选择您要下载的视频素材！");
 		        return;
 		    }
 

@@ -34,7 +34,8 @@ namespace MediaResource.Web.Services
 		public List<TaskList> GetTopTaskLists(int count)
 		{
 			var taskLists = from taskList in _db.TaskLists
-							where taskList.IsApprove == true
+							where taskList.IsApprove
+                            && taskList.IsConfirm
 							orderby taskList.CreateDate descending
 							select taskList;
 			return taskLists.Take(count).ToList();

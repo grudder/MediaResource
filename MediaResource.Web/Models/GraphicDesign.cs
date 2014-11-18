@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MediaResource.Web.Models
 {
 	[Table("OA_GraphicDesign")]
-	[DisplayName("图文设计成品")]
+	[DisplayName("设计成品")]
     public class GraphicDesign
 	{
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -73,7 +73,7 @@ namespace MediaResource.Web.Models
             set;
         }
 
-        [Display(Name = "关联处室", Order = 40)]
+        [Display(Name = "参与处室", Order = 40)]
         [StringLength(1024)]
         public string Associate
         {

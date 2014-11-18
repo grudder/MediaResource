@@ -71,7 +71,7 @@ namespace MediaResource.Web.Models
 		}
 
 		[Required]
-		[Display(Name = "参与处室", Order = 70)]
+		[Display(Name = "主办处室", Order = 70)]
 		[StringLength(256)]
 		public string Inoffices
 		{
