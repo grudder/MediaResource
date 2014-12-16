@@ -73,7 +73,7 @@ namespace MediaResource.Web.Models
             set;
         }
 
-        [Display(Name = "参会处室", Order = 80)]
+        [Display(Name = "主办处室", Order = 80)]
         [StringLength(256)]
         public string Offices
         {

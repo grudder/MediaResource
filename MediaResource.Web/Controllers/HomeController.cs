@@ -22,6 +22,13 @@ namespace MediaResource.Web.Controllers
 			return View();
 		}
 
+        //
+        // GET: /Home/ContactUs
+        public ActionResult ContactUs()
+        {
+            return View();
+        }
+
 		[ChildActionOnly]
 		public ActionResult StatPartial()
         {

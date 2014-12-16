@@ -18,14 +18,6 @@
                     >
 					@Html.ActionLink("首页", "Index", "Home")
 				</li>
-			    <li
-			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "User").ToLower()))
-			        {
-			            @:class="active"
-			        }
-			        >
-			        @Html.ActionLink("个人中心", "Index", "User")
-			    </li>
 				<li
 			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "TaskList").ToLower()))
 			        {
@@ -92,6 +84,30 @@
 			        >
 					@Html.ActionLink("处室专栏", "Index", "Group")
 				</li>
+			    <li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "Special").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+			        @Html.ActionLink("专题", "Index", "Special")
+			    </li>
+			    <li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "User").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+			        @Html.ActionLink("个人中心", "Index", "User")
+			    </li>
+			    <li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("ContactUs", "Home").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+			        @Html.ActionLink("联系我们", "ContactUs", "Home")
+			    </li>
 			</ul>
 		</nav>
 	</div>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI.WebControls.Expressions;
 
 using MediaResource.Web.DataAccess;
 using MediaResource.Web.Models;
@@ -20,6 +21,7 @@ namespace MediaResource.Web.Services
 		{
 			var groups = from g in _db.Groups
 						 where g.IsDisplay
+                         orderby g.OrderNum ascending
 						 select g;
 
             if (count == -1)

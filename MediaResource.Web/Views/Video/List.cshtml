@@ -25,15 +25,20 @@
     <![endif]-->
 </head>
 <body>
-	<h4>
-		分类：
-		@if (ViewBag.Category != null)
+    <h4>
+        分类：
+        @if (ViewBag.Category != null)
         {
-			@ViewBag.Category.Name
+            @ViewBag.Category.Name
         }
-		|
-		<a href="#" class="btn btn-primary" role="button" onclick="applyForDownload()">申请下载</a>
-	</h4>
+        |
+        <a href="#" class="btn btn-primary" role="button" onclick=" applyForDownload() ">申请下载</a>
+    </h4>
+    <blockquote>
+        <p>
+            由于视频质量较大，不易直接浏览，在显示方式上我们采用视频截图的形式。如需观看该视频，请点击“申请下载”，我们会尽快与您联系。
+        </p>
+    </blockquote>
 	<div class="row">
 		@foreach (var item in Model)
         {
