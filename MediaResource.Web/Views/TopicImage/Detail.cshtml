@@ -1,0 +1,293 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Helper
+@using MediaResource.Web.Models
+@model TopicImage
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.Name
+		@Html.HiddenFor(model => model.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+				    <div class="img-lg-wrap">
+					    <img src="@ImageHelper.GetLargeThumbUrl(Model.Locations)" />
+				    </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenTopicImageScore">评分：</label>
+						<input type="hidden" id="hiddenTopicImageScore" value="0" />
+						<div id="divTopicImageScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonTopicImagePostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postTopicImageScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblTopicImageScore">@Model.Score</label>
+							（<label id="lblTopicImageScoreCount">@Model.ScoreCount</label>次打分）
+                            <a href="@Url.Action("Download", new {id = @Model.Id})" target="_blank" class="btn btn-default">下载</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="topicImageTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#topicImageDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#topicImageCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblTopicImageCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="topicImageDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									@Html.DisplayNameFor(model => model.Id)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Id)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Name)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Name)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.KeyWords)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.KeyWords)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Nodes)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Nodes)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.TextDate)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.TextDate)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Staff)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Staff)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Summary)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Summary)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Source)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Source)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.ClickCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.ClickCount)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.DownloadCount)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.DownloadCount)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="topicImageCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textTopicImageCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgTopicImageVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshTopicImageVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputTopicImageVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postTopicImageCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframeTopicImageCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+	var _topicImageId;
+
+	$(function () {
+		_topicImageId = $("#Id").val();
+
+		changeTopicImageScore();
+		showTopicImageCommentList();
+		showTopicImageCommentCount();
+	});
+
+	function changeTopicImageScore() {
+	    var buttons = document.getElementById("divTopicImageScore").getElementsByTagName("input");
+	    for (var i = 0; i < parseInt(document.getElementById("hiddenTopicImageScore").value) ; i++) {
+			buttons[i].style.backgroundPosition = "right center";
+		}
+
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].onclick = function () {
+				for (var m = 0; m < buttons.length; m++) {
+					buttons[m].style.backgroundPosition = "right center";
+				}
+				for (var n = 0; n < this.value; n++) {
+					buttons[n].style.backgroundPosition = "left center";
+				}
+				document.getElementById("hiddenTopicImageScore").value = this.value;
+			}
+		}
+	}
+
+	function postTopicImageScore() {
+	    var score = $("#hiddenTopicImageScore").val();
+		$.post(
+			'@Url.Action("Create", "Score")',
+			{
+				ObjectType: ObjectType.TopicImage,
+				ObjectId: _topicImageId,
+				Value: score
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					// 禁用评分按钮
+				    $("#buttonTopicImagePostScore").attr("disabled", "disabled");
+
+					// 刷新平均分和评分次数
+				    $("#lblTopicImageScore").text(result.Score);
+				    $("#lblTopicImageScoreCount").text(result.ScoreCount);
+				}
+			}
+		);
+	}
+
+    function showTopicImageCommentList() {
+		var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.TopicImage + "&objectId=" + _topicImageId;
+	    $("#iframeTopicImageCommentList").attr("src", commentListPageUrl);
+	}
+
+    function showTopicImageCommentCount() {
+		$.get(
+			'@Url.Action("Count", "Comment")',
+			{
+				objectType: ObjectType.TopicImage,
+				objectId: _topicImageId
+			},
+			function (result) {
+			    $("#lblTopicImageCommentCount").text(result.count);
+			}
+		);
+	}
+
+    function refreshTopicImageVerificationCode() {
+        var img = $("#imgTopicImageVerificationCode");
+		img.attr("src", img.attr("src") + "?");
+	}
+
+    function postTopicImageCommit() {
+	    var content = $("#textTopicImageCommentContent").val();
+		if (content == "") {
+			alert("评论内容不能为空！");
+			return;
+		}
+		var verificationCode = $("#inputTopicImageVerificationCode").val();
+		if (verificationCode == "") {
+			alert("验证码不能为空！");
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+				if (!result.success) {
+					alert("验证码错误！");
+					refreshTopicImageVerificationCode();
+					return;
+				}
+
+				$.post(
+					'@Url.Action("Create", "Comment")',
+					{
+						ObjectType: ObjectType.TopicImage,
+						ObjectId: _topicImageId,
+						Content: content
+					},
+					function (result1) {
+						if (result1.success) {
+							alert(result1.message);
+
+							// 清空表单
+							$("#commentContent").val("");
+							$("#verificationCode").val("");
+
+							// 刷新验证码
+							refreshTopicImageVerificationCode();
+
+							// 刷新评论数量
+							showTopicImageCommentCount();
+
+							// 刷新评论列表
+							showTopicImageCommentList();
+						}
+					}
+				);
+			}
+		);
+	}
+</script>

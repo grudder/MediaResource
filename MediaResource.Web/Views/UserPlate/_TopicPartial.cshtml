@@ -1,0 +1,6 @@
+﻿@model MediaResource.Web.Models.UserPlate
+
+@if (Model.Category == "照片")
+{
+    @Html.Action("List", "TopicImage", new {ViewBag.TopicId, ViewBag.UserPlateId})
+}

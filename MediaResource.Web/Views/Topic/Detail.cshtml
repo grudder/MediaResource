@@ -1,0 +1,116 @@
+﻿@using MediaResource.Web.Models
+@model Topic
+
+@{
+	ViewBag.Title = "专题";
+}
+
+@section styles
+{
+	<link href="~/Content/zTree/zTreeStyle.css" rel="stylesheet" type="text/css" />
+}
+
+@Html.Action("TopicSearchPartial", new {id = Model.Id})
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+	<li class="active">
+		<a href="#nodePane" data-toggle="tab">综合资料</a>
+	</li>
+    @foreach (UserPlate userPlate in ViewBag.UserPlates)
+    {
+        <li>
+		    <a href="#userPlate-@userPlate.Id" data-toggle="tab">@userPlate.PlateName</a>
+	    </li>
+    }
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div id="nodePane" class="tab-pane active">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h3 class="panel-title">
+                                            专题节点
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body panel-body-tree">
+                                <ul id="nodeTree" class="ztree">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <iframe id="iframeNodeContent" height="500" scrolling="no" src='@Url.Action("Index", "Node", new {ViewBag.TopicId})' onload="iframeAutoHeight()"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @foreach (UserPlate userPlate in ViewBag.UserPlates)
+    {
+        <div id="userPlate-@userPlate.Id" class="tab-pane">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @userPlate.PlateName
+                    @Html.Action("TopicPartial", "UserPlate", new {userPlate.Id})
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="topicImageDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts
+{
+    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.ztree.all-3.5.min.js")'></script>
+    <script type="text/javascript">
+        var firstAsyncSuccessFlag = false;
+        var setting = {
+            async: {
+                enable: true,
+                url: '@Url.Action("GetChildNodes", "Node", new {ViewBag.TopicId})',
+                autoParam: ["id"]
+            },
+            callback: {
+                onAsyncSuccess: function (event, treeId, msg) {
+                    if (firstAsyncSuccessFlag === false) {
+                        //调用默认展开第一个结点
+                        var treeObj = $.fn.zTree.getZTreeObj(treeId);
+                        var nodes = treeObj.getNodes();
+                        treeObj.expandNode(nodes[0], true);
+                        treeObj.selectNode(nodes[0]);
+
+                        firstAsyncSuccessFlag = true;
+                    }
+                },
+                onClick: function (event, treeId, treeNode) {
+                    $("#iframeNodeContent").attr("src", treeNode.href);
+                }
+            }
+        };
+
+        $(function() {
+            $.fn.zTree.init($("#nodeTree"), setting);
+
+            // 刷新模态对话框
+            $("#topicImageDetailModal").on("hidden.bs.modal", function () {
+                $(this).removeData("bs.modal");
+            });
+        });
+    </script>
+}

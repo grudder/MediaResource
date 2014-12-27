@@ -45,6 +45,26 @@
         /// <summary>
         /// 设计成品。
         /// </summary>
-        GraphicDesign = 9
+        GraphicDesign = 9,
+
+        /// <summary>
+        /// 专题文字资料。
+        /// </summary>
+        TopicText = 10,
+
+        /// <summary>
+        /// 专题图片。
+        /// </summary>
+        TopicImage = 11,
+
+        /// <summary>
+        /// 专题视频。
+        /// </summary>
+        TopicVideo = 12,
+
+        /// <summary>
+        /// 专题媒体报导。
+        /// </summary>
+        TopicNews = 13
     }
 }

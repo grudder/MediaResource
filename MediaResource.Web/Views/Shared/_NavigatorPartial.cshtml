@@ -85,12 +85,12 @@
 					@Html.ActionLink("处室专栏", "Index", "Group")
 				</li>
 			    <li
-			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "Special").ToLower()))
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "Topic").ToLower()))
 			        {
 			            @:class="active"
 			        }
 			        >
-			        @Html.ActionLink("专题", "Index", "Special")
+			        @Html.ActionLink("专题", "Index", "Topic")
 			    </li>
 			    <li
 			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "User").ToLower()))

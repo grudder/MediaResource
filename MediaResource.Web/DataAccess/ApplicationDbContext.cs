@@ -143,6 +143,48 @@ namespace MediaResource.Web.DataAccess
             set;
         }
 
+        public virtual DbSet<Topic> Topics
+        {
+            get;
+            set;
+        }
+
+        public virtual DbSet<Node> Nodes
+        {
+            get;
+            set;
+        }
+
+        public virtual DbSet<UserPlate> UserPlates
+        {
+            get;
+            set;
+        }
+
+        public virtual DbSet<TopicImage> TopicImages
+        {
+            get;
+            set;
+        }
+
+        public virtual DbSet<TopicNews> TopicNewss
+        {
+            get;
+            set;
+        }
+
+        public virtual DbSet<TopicText> TopicTexts
+        {
+            get;
+            set;
+        }
+
+        public virtual DbSet<TopicVideo> TopicVideos
+        {
+            get;
+            set;
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TaskList>()

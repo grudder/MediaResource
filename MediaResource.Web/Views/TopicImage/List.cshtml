@@ -1,0 +1,109 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Helper
+@using MediaResource.Web.Models.ViewModels
+@using PagedList.Mvc;
+
+@model PagedList.StaticPagedList<ImageViewModel>
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>专题照片</title>
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		@Scripts.Render("~/bundles/html5")
+    <![endif]-->
+</head>
+<body>
+    @using (Html.BeginForm("CompressAndDownload", "TopicImage", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h3 class="panel-title">
+                    <img src='@Url.Content("~/Images/photo-icon.png")' />
+                    照片
+                </h3>
+            </div>
+            @if ((ViewBag.TopicId != null && ViewBag.UserPlateId == null) || ViewBag.NodeId != null)
+            {
+                <div class="col-sm-5">
+                    <a href="javascript: history.back();" class="navbar-right">返回</a>
+                </div>
+            }
+        </div>
+        <hr/>
+	    <p>
+	        <label>
+	            <input type="checkbox" onclick="checkAll();" />
+	            全选
+	        </label>
+            <input type="submit" class="btn btn-primary" onclick="return applyForDownload();" value="下载" />
+	    </p>
+	    <div class="row">
+		    @foreach (var item in Model)
+		    {
+			    <div class="col-sm-3 thumbnail-sm">
+			        <div class="thumbnail">
+			            <a title="查看" data-toggle="modal" href="#" onclick="showTopicImageDetailModal(@item.Id)">
+			                <div class="img-md-wrap">
+			                    <img src="@item.FileUrl" />
+			                </div>
+			            </a>
+			            <div class="caption">
+			                <p class="title">
+			                    @Html.TrimText(item.Name, 18)
+			                </p>
+						    <input type="checkbox" name="cbxTopicImage" value="@item.Id" />
+			                <a href="@Url.Action("Download", new {id = @item.Id})" target="_blank" class="btn btn-default">下载</a>
+			            </div>
+			        </div>
+			    </div>
+		    }
+	    </div>
+        <div class="text-center">
+            @Html.PagedListPager(Model, page => Url.Action("List", new { page, ViewBag.TopicId, ViewBag.NodeId, ViewBag.UserPlateId }))
+        </div>
+    }
+	
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/bootstrap")
+	<script type="text/javascript">
+		function showTopicImageDetailModal(id) {
+			parent.parent.$("#topicImageDetailModal").modal({
+				show: true,
+				remote: '@Url.Action("Detail", "TopicImage")' + "/" + id
+			});
+		}
+
+        function checkAll() {
+            $("input[name='cbxTopicImage']").prop("checked", event.srcElement.checked);
+        }
+
+        function applyForDownload() {
+            var checkedIds = "";
+            $("input[name='cbxTopicImage']:checked").each(function () {
+                checkedIds += "," + $(this).val();
+            });
+
+            if (checkedIds === "") {
+                alert("请选择您要下载的照片！");
+                return false;
+            }
+
+            return true;
+        }
+	</script>
+</body>
+</html>

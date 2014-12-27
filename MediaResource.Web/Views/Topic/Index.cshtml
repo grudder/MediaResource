@@ -1,0 +1,27 @@
+﻿@using MediaResource.Web.Models
+@model Dictionary<string, List<Topic>>
+
+@{
+    ViewBag.Title = "专题";
+}
+
+<h2>专题</h2>
+<hr/>
+
+@foreach (string offices in Model.Keys)
+{
+    <h4>
+        @offices
+        &gt;&gt;
+    </h4>
+    <div class="row">
+        @foreach (Topic topic in Model[offices])
+        {
+            <div class="col-md-6">
+                <a href="@Url.Action("Detail", "Topic", new {id = topic.Id})">
+                    <img width="450" height="200" alt="@topic.Name" src="@topic.ListPhotoUrl"/>
+                </a>
+            </div>
+        }
+    </div>
+}

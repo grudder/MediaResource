@@ -13,7 +13,7 @@
 	<title>注册 - 媒体资源系统</title>
 </head>
 <body>
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "form1", @class = "form-horizontal", role = "form", onsubmit = "return false;" }))
 {
     @Html.AntiForgeryToken()
 	
@@ -91,5 +91,33 @@
 }
 
 @Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(function () {
+        // 以AJAX方式提交表单
+        $('#form1').submit(function () {
+            if ($(this).valid()) {
+                $.ajax({
+                    url: this.action,
+                    type: this.method,
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        if (result.success === true) {
+                            alert("注册成功，请登录。");
+                            location.href = '@Url.Action("Index", "Home")';
+                        }
+                        else {
+                            alert(result.reason + "注册失败，请重试。");
+                        }
+                    },
+                    error: function (xmlHttpRequest, textStatus, errorThrown) {
+                        alert("注册失败，请重试。");
+                    }
+                });
+                return true;
+            }
+            return false;
+        });
+    });
+</script>
 </body>
 </html>

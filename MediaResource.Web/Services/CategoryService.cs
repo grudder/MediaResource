@@ -228,7 +228,7 @@ namespace MediaResource.Web.Services
         public List<int?> GetChildCategoryIds(ObjectType objectType, int? categoryId = null)
         {
             var categoryIds = new List<int?> { categoryId };
-            List<int?> childCategoryIds = new CategoryService().GetChildCategoryIds(objectType, categoryIds);
+            List<int?> childCategoryIds = GetChildCategoryIds(objectType, categoryIds);
             return childCategoryIds;
         }
 
