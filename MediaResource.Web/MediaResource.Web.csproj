@@ -433,11 +433,13 @@
     <Content Include="Views\Topic\Index.cshtml" />
     <Content Include="Views\Topic\Detail.cshtml" />
     <Content Include="Views\Topic\_TopicSearchPartial.cshtml" />
-    <Content Include="Views\TopicImage\_NodePartial.cshtml" />
+    <Content Include="Views\TopicImage\_PanelPartial.cshtml" />
     <Content Include="Views\Node\Index.cshtml" />
     <Content Include="Views\TopicImage\Detail.cshtml" />
     <Content Include="Views\TopicImage\List.cshtml" />
-    <Content Include="Views\UserPlate\_TopicPartial.cshtml" />
+    <Content Include="Views\UserPlate\Topic.cshtml" />
+    <Content Include="Views\Topic\Search.cshtml" />
+    <Content Include="Views\Topic\SearchFrame.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

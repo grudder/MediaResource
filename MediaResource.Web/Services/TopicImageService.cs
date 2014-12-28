@@ -41,10 +41,11 @@ namespace MediaResource.Web.Services
         /// <param name="topicId">专题编号。</param>
         /// <param name="nodeId">节点标识。</param>
         /// <param name="userPlateId">板块标识。</param>
+        /// <param name="keyword">关键字。</param>
         /// <param name="pageSize">分页大小。</param>
         /// <param name="pageIndex">页码。</param>
         /// <returns>节点或自建版块下的专题图片分页列表。</returns>
-        public StaticPagedList<ImageViewModel> AdvancedSearch(int? topicId, int? nodeId, int? userPlateId, int? pageSize, int? pageIndex)
+        public StaticPagedList<ImageViewModel> AdvancedSearch(int? topicId, int? nodeId, int? userPlateId, string keyword, int? pageSize, int? pageIndex)
         {
             // 执行查询
             IQueryable<TopicImage> query =
@@ -72,6 +73,10 @@ namespace MediaResource.Web.Services
             {
                 UserPlate userPlate = _userPlateService.Get(userPlateId);
                 query = query.Where(i => ("|" + i.Nodes + "|").Contains("|" + userPlate.PlateName + "|"));
+            }
+            if (!String.IsNullOrWhiteSpace(keyword))
+            {
+                query = query.Where(i => i.Name.Contains(keyword) || i.KeyWords.Contains(keyword) || i.Summary.Contains(keyword));
             }
 
             // 进行静态分页处理

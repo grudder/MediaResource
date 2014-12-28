@@ -1,0 +1,29 @@
+﻿@using MediaResource.Web.Models
+@model Topic
+
+@{
+	ViewBag.Title = "专题搜索";
+}
+
+@Html.Action("TopicSearchPartial", new {id = Model.Id})
+
+<iframe height="500" scrolling="no" src='@Url.Action("SearchFrame", "Topic", new {Model.Id, ViewBag.Keyword})' onload="iframeAutoHeight()"></iframe>
+
+<div id="topicImageDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function() {
+            // 刷新模态对话框
+            $("#topicImageDetailModal").on("hidden.bs.modal", function () {
+                $(this).removeData("bs.modal");
+            });
+        });
+    </script>
+}

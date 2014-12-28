@@ -73,7 +73,7 @@
 		    }
 	    </div>
         <div class="text-center">
-            @Html.PagedListPager(Model, page => Url.Action("List", new { page, ViewBag.TopicId, ViewBag.NodeId, ViewBag.UserPlateId }))
+            @Html.PagedListPager(Model, page => Url.Action("List", new { page, pageSize = 1, ViewBag.TopicId, ViewBag.NodeId, ViewBag.UserPlateId, ViewBag.Keyword }))
         </div>
     }
 	

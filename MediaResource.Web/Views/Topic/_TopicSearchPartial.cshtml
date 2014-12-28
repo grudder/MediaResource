@@ -1,31 +1,32 @@
 ﻿@using MediaResource.Web.Models
 @model Topic
 
-<div class="row">
-<div style="margin-bottom: 20px; width: 980px; height: 100px; background-image: url('@Model.DetailPhotoUrl')">
-    <form id="formTopicSearch" class="form-inline" role="form" method="POST">
-        <div class="form-group">
-            <label class="sr-only" for="inputTopicKeyword">搜索内容</label>
-            <input id="inputTopicKeyword" type="text" class="form-control" placeholder="输入内容搜索本专题"/>
-        </div>
-        <button type="submit" class="btn btn-primary" onclick="javascript: return doTopicSearch();">搜索</button>
-    </form>
+<div style="margin-bottom: 20px; height: 100px; background: url('@Model.DetailPhotoUrl') no-repeat">
+    <br/><br/>
+    <div class="pull-right">
+        <form id="formTopicSearch" class="form-inline" role="form" method="POST">
+            <div class="form-group">
+                <label class="sr-only" for="inputTopicKeyword">搜索内容</label>
+                <input id="inputTopicKeyword" type="text" class="form-control" placeholder="输入内容搜索本专题" value="@ViewBag.Keyword" />
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="javascript: return doTopicSearch();">搜索</button>
+        </form>
 
-    <script type="text/javascript">
-        function doTopicSearch() {
-            var keyword = $("#inputTopicKeyword").val();
-            if (keyword.trim() === "") {
-                alert("请输入搜索内容！");
-                $("#inputTopicKeyword").val("");
-                $("#inputTopicKeyword").focus();
-                return false;
+        <script type="text/javascript">
+            function doTopicSearch() {
+                var keyword = $("#inputTopicKeyword").val();
+                if (keyword.trim() === "") {
+                    alert("请输入搜索内容！");
+                    $("#inputTopicKeyword").val("");
+                    $("#inputTopicKeyword").focus();
+                    return false;
+                }
+
+                var actionUrl = "/Topic/Search/" + @Model.Id + "?keyword=" + keyword;
+                $("#formTopicSearch")[0].action = actionUrl;
+
+                return true;
             }
-
-            var actionUrl = "/Topic/Search?keyword=" + keyword;
-            $("#formTopicSearch")[0].action = actionUrl;
-
-            return true;
-        }
-    </script>
-</div>
+        </script>
+    </div>
 </div>

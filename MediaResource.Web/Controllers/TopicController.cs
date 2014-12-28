@@ -30,10 +30,32 @@ namespace MediaResource.Web.Controllers
             return View(topic);
         }
 
-        [ChildActionOnly]
-        // GET: Topic/SearchPartial/5
-        public ActionResult TopicSearchPartial(int id)
+        //
+        // GET: Topico/Search/5?keyword=xxx
+        public ActionResult Search(int id, string keyword)
         {
+            ViewBag.Keyword = keyword;
+
+            Topic topic = _topicService.Get(id);
+            return View(topic);
+        }
+
+        //
+        // GET: Topico/SearchFrame/5?keyword=xxx
+        public ActionResult SearchFrame(int id, string keyword)
+        {
+            ViewBag.TopicId = id;
+            ViewBag.Keyword = keyword;
+
+            return View();
+        }
+
+        [ChildActionOnly]
+        // GET: Topic/SearchPartial/5?keyword=xxx
+        public ActionResult TopicSearchPartial(int id, string keyword)
+        {
+            ViewBag.Keyword = keyword;
+
             Topic topic = _topicService.Get(id);
             return PartialView("_TopicSearchPartial", topic);
         }

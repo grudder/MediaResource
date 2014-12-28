@@ -9,15 +9,14 @@ namespace MediaResource.Web.Controllers
     {
         private readonly UserPlateService _userPlateService = new UserPlateService();
 
-        [ChildActionOnly]
-        // GET: UserPlate/TopicPartial/5
-        public ActionResult TopicPartial(int id)
+        // GET: UserPlate/Topic/5
+        public ActionResult Topic(int id)
         {
             ViewBag.TopicId = Request["TopicId"];
 
             UserPlate userPlate = _userPlateService.Get(id);
 
-            return PartialView("_TopicPartial", userPlate);
+            return View(userPlate);
         }
 
         protected override void Dispose(bool disposing)

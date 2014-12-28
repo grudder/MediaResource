@@ -1,5 +1,5 @@
 ﻿@{
-	Layout = null;
+    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -19,7 +19,7 @@
     <![endif]-->
 </head>
 <body>
-    @Html.Action("PanelPartial", "TopicImage", new {ViewBag.TopicId, ViewBag.NodeId})
+    @Html.Action("PanelPartial", "TopicImage", new {ViewBag.TopicId, ViewBag.Keyword})
 
 	@Scripts.Render("~/bundles/jquery")
 	@Scripts.Render("~/bundles/bootstrap")

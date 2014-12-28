@@ -37,9 +37,9 @@ namespace MediaResource.Web.Controllers
             return View(topicImage);
         }
 
-        // GET: TopicImage/NodePartial
+        // GET: TopicImage/PanelPartial
         [ChildActionOnly]
-        public ActionResult NodePartial(int? pageSize, int? page)
+        public ActionResult PanelPartial(string keyword, int? pageSize, int? page)
         {
             int? topicId = null;
             if (!String.IsNullOrEmpty(Request["TopicId"]))
@@ -56,14 +56,15 @@ namespace MediaResource.Web.Controllers
             {
                 ViewBag.UserPlateId = userPlateId = int.Parse(Request["UserPlateId"]);
             }
+            ViewBag.Keyword = keyword;
 
-            StaticPagedList<ImageViewModel> images = _topicImageService.AdvancedSearch(topicId, nodeId, userPlateId, pageSize, page);
+            StaticPagedList<ImageViewModel> images = _topicImageService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
 
-            return PartialView("_NodePartial", images);
+            return PartialView("_PanelPartial", images);
         }
 
         // GET: TopicImage/List
-        public ActionResult List(int? pageSize, int? page)
+        public ActionResult List(string keyword, int? pageSize, int? page)
         {
             int? topicId = null;
             if (!String.IsNullOrEmpty(Request["TopicId"]))
@@ -80,8 +81,9 @@ namespace MediaResource.Web.Controllers
             {
                 ViewBag.UserPlateId = userPlateId = int.Parse(Request["UserPlateId"]);
             }
+            ViewBag.Keyword = keyword;
 
-            StaticPagedList<ImageViewModel> images = _topicImageService.AdvancedSearch(topicId, nodeId, userPlateId, pageSize, page);
+            StaticPagedList<ImageViewModel> images = _topicImageService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, 1, page);
 
             return View(images);
         }
