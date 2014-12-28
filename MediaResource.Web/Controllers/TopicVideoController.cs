@@ -14,13 +14,13 @@ using PagedList;
 namespace MediaResource.Web.Controllers
 {
     [Authorize]
-    public class TopicImageController : Controller
+    public class TopicVideoController : Controller
     {
-        private readonly TopicImageService _topicImageService = new TopicImageService();
+        private readonly TopicVideoService _topicVideoService = new TopicVideoService();
 
-        private const string UserDownloadTopicImagePath = @"mov1\Download\TopicImage\";
+        private const string UserDownloadTopicVideoPath = @"mov1\Download\TopicVideo\";
 
-        // GET: TopicImage/Detail
+        // GET: TopicVideo/Detail
         public ActionResult Detail(int? id)
         {
             if (id == null)
@@ -28,16 +28,16 @@ namespace MediaResource.Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            TopicImage topicImage = _topicImageService.View(id);
-            if (topicImage == null)
+            TopicVideoViewModel topicVideoViewModel = _topicVideoService.View(id);
+            if (topicVideoViewModel == null)
             {
                 return HttpNotFound();
             }
 
-            return View(topicImage);
+            return View(topicVideoViewModel);
         }
 
-        // GET: TopicImage/PanelPartial
+        // GET: TopicVideo/PanelPartial
         [ChildActionOnly]
         public ActionResult PanelPartial(string keyword, int? pageSize, int? page)
         {
@@ -58,12 +58,12 @@ namespace MediaResource.Web.Controllers
             }
             ViewBag.Keyword = keyword;
 
-            StaticPagedList<ImageViewModel> images = _topicImageService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
+            StaticPagedList<ImageViewModel> images = _topicVideoService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
 
             return PartialView("_PanelPartial", images);
         }
 
-        // GET: TopicImage/List
+        // GET: TopicVideo/List
         public ActionResult List(string keyword, int? pageSize, int? page)
         {
             int? topicId = null;
@@ -83,27 +83,27 @@ namespace MediaResource.Web.Controllers
             }
             ViewBag.Keyword = keyword;
 
-            StaticPagedList<ImageViewModel> images = _topicImageService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
+            StaticPagedList<ImageViewModel> images = _topicVideoService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
 
             return View(images);
         }
 
-        // GET: TopicImage/Download
+        // GET: TopicVideo/Download
         public FileResult Download(int? id)
         {
-            TopicImage topicImage = _topicImageService.Get(id);
-            string url = WebHelper.Instance.RootUrl + topicImage.Locations;
+            TopicVideo topicVideo = _topicVideoService.Get(id);
+            string url = WebHelper.Instance.RootUrl + topicVideo.Locations;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));
-            return File(stream, "image/jpeg", fileName);
+            return File(stream, "application/octet-stream", fileName);
         }
 
-        // POST: TopicImage/CompressAndDownload
+        // POST: TopicVideo/CompressAndDownload
         [HttpPost]
         [ValidateAntiForgeryToken]
         public FileResult CompressAndDownload()
         {
-            string folderPath = WebHelper.Instance.RootPath1 + UserDownloadTopicImagePath + WebHelper.Instance.CurrentUser.Name;
+            string folderPath = WebHelper.Instance.RootPath1 + UserDownloadTopicVideoPath + WebHelper.Instance.CurrentUser.Name;
             string folderName = DateTime.Now.ToString("yyyyMMddHHmmssffff");
             folderPath = Path.Combine(folderPath, folderName);
             if (!Directory.Exists(folderPath))
@@ -113,12 +113,12 @@ namespace MediaResource.Web.Controllers
             }
 
             // 将要下载的文件拷贝到创建的目录下
-            string ids = Request["cbxTopicImage"];
+            string ids = Request["cbxTopicVideo"];
             string[] arrayId = ids.Split(',');
             foreach (string id in arrayId)
             {
-                TopicImage topicImage = _topicImageService.Get(int.Parse(id));
-                string fileUrl = topicImage.Locations.TrimStart('\\', '/');
+                TopicVideo topicVideo = _topicVideoService.Get(int.Parse(id));
+                string fileUrl = topicVideo.Locations.TrimStart('\\', '/');
 
                 // 不同目录的文件存放在不同的磁盘根路径
                 string rootPath;
@@ -157,7 +157,7 @@ namespace MediaResource.Web.Controllers
         {
             if (disposing)
             {
-                _topicImageService.Dispose();
+                _topicVideoService.Dispose();
             }
             base.Dispose(disposing);
         }

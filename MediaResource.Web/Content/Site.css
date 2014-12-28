@@ -200,7 +200,7 @@ dd:before {
     padding-bottom: 35px;
 }
 
-#videoPlayer, #filmPlayer, #newsPlayer, #musicPlayer, #userVideoPlayer {
+#videoPlayer, #filmPlayer, #newsPlayer, #musicPlayer, #userVideoPlayer, #topicVideoPlayer {
     width: 480px;
     height: 360px;
 }

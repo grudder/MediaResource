@@ -269,12 +269,12 @@
 
     function postNewsCommit() {
         var content = $("#textNewsCommentContent").val();
-		if (content == "") {
+		if (content === "") {
 			alert("评论内容不能为空！");
 			return;
 		}
 		var verificationCode = $("#inputNewsVerificationCode").val();
-		if (verificationCode == "") {
+		if (verificationCode === "") {
 			alert("验证码不能为空！");
 			return;
 		}

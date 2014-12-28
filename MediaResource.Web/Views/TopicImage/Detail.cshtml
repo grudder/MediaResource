@@ -65,28 +65,10 @@
 						<div class="tab-pane active" id="topicImageDetailTab">
 							<dl class="dl-horizontal">
 								<dt>
-									@Html.DisplayNameFor(model => model.Id)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Id)
-								</dd>
-								<dt>
 									@Html.DisplayNameFor(model => model.Name)
 								</dt>
 								<dd>
 									@Html.DisplayFor(model => model.Name)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.KeyWords)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.KeyWords)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Nodes)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Nodes)
 								</dd>
 								<dt>
 									@Html.DisplayNameFor(model => model.TextDate)
@@ -111,18 +93,6 @@
 								</dt>
 								<dd>
 									@Html.DisplayFor(model => model.Source)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.ClickCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.ClickCount)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.DownloadCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.DownloadCount)
 								</dd>
 							</dl>
 						</div>
@@ -239,12 +209,12 @@
 
     function postTopicImageCommit() {
 	    var content = $("#textTopicImageCommentContent").val();
-		if (content == "") {
+		if (content === "") {
 			alert("评论内容不能为空！");
 			return;
 		}
 		var verificationCode = $("#inputTopicImageVerificationCode").val();
-		if (verificationCode == "") {
+		if (verificationCode === "") {
 			alert("验证码不能为空！");
 			return;
 		}

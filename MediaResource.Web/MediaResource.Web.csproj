@@ -135,6 +135,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ApplyForDownloadController.cs" />
+    <Compile Include="Controllers\TopicVideoController.cs" />
     <Compile Include="Controllers\UserPlateController.cs" />
     <Compile Include="Controllers\NodeController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Models\UserDownloadFile.cs" />
     <Compile Include="Models\UserPhoto.cs" />
     <Compile Include="Models\UserVideo.cs" />
+    <Compile Include="Models\ViewModels\TopicVideoViewModel.cs" />
     <Compile Include="Models\ViewModels\NewsViewModel.cs" />
     <Compile Include="Models\ViewModels\FilmViewModel.cs" />
     <Compile Include="Models\ViewModels\ZTreeNode.cs" />
@@ -211,6 +213,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ApplyForDownloadService.cs" />
     <Compile Include="Services\GraphicDesignService.cs" />
+    <Compile Include="Services\TopicVideoService.cs" />
     <Compile Include="Services\TopicImageService.cs" />
     <Compile Include="Services\UserPlateService.cs" />
     <Compile Include="Services\NodeService.cs" />
@@ -440,6 +443,9 @@
     <Content Include="Views\UserPlate\Topic.cshtml" />
     <Content Include="Views\Topic\Search.cshtml" />
     <Content Include="Views\Topic\SearchFrame.cshtml" />
+    <Content Include="Views\TopicVideo\_PanelPartial.cshtml" />
+    <Content Include="Views\TopicVideo\Detail.cshtml" />
+    <Content Include="Views\TopicVideo\List.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

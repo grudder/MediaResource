@@ -8,3 +8,7 @@
 {
     @Html.Action("List", "TopicImage", new {ViewBag.TopicId, ViewBag.UserPlateId})
 }
+@if (Model.Category == "视频")
+{
+    @Html.Action("List", "TopicVideo", new {ViewBag.TopicId, ViewBag.UserPlateId})
+}

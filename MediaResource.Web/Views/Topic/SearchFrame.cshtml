@@ -20,6 +20,7 @@
 </head>
 <body>
     @Html.Action("PanelPartial", "TopicImage", new {ViewBag.TopicId, ViewBag.Keyword})
+    @Html.Action("PanelPartial", "TopicVideo", new {ViewBag.TopicId, ViewBag.Keyword})
 
 	@Scripts.Render("~/bundles/jquery")
 	@Scripts.Render("~/bundles/bootstrap")
