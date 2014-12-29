@@ -21,6 +21,8 @@
 <body>
     @Html.Action("PanelPartial", "TopicImage", new {ViewBag.TopicId, ViewBag.NodeId})
     @Html.Action("PanelPartial", "TopicVideo", new {ViewBag.TopicId, ViewBag.NodeId})
+    @Html.Action("PanelPartial", "TopicText", new {ViewBag.TopicId, ViewBag.NodeId})
+    @Html.Action("PanelPartial", "TopicNews", new {ViewBag.TopicId, ViewBag.NodeId})
 
 	@Scripts.Render("~/bundles/jquery")
 	@Scripts.Render("~/bundles/bootstrap")

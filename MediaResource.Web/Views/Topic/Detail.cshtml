@@ -79,6 +79,18 @@
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div id="topicTextDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="topicNewsDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 @section scripts
 {
@@ -117,6 +129,12 @@
                 $(this).removeData("bs.modal");
             });
             $("#topicVideoDetailModal").on("hidden.bs.modal", function () {
+                $(this).removeData("bs.modal");
+            });
+            $("#topicTextDetailModal").on("hidden.bs.modal", function () {
+                $(this).removeData("bs.modal");
+            });
+            $("#topicNewsDetailModal").on("hidden.bs.modal", function () {
                 $(this).removeData("bs.modal");
             });
         });

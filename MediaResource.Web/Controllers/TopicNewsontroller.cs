@@ -4,7 +4,6 @@ using System.Web.Mvc;
 
 using MediaResource.Web.Helper;
 using MediaResource.Web.Models;
-using MediaResource.Web.Models.ViewModels;
 using MediaResource.Web.Services;
 
 using PagedList;
@@ -12,11 +11,11 @@ using PagedList;
 namespace MediaResource.Web.Controllers
 {
     [Authorize]
-    public class TopicVideoController : Controller
+    public class TopicNewsController : Controller
     {
-        private readonly TopicVideoService _topicVideoService = new TopicVideoService();
+        private readonly TopicNewsService _topicNewsService = new TopicNewsService();
 
-        // GET: TopicVideo/Detail
+        // GET: TopicNews/Detail
         public ActionResult Detail(int? id)
         {
             if (id == null)
@@ -24,16 +23,16 @@ namespace MediaResource.Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            TopicVideoViewModel topicVideoViewModel = _topicVideoService.View(id);
-            if (topicVideoViewModel == null)
+            TopicNews topicNews = _topicNewsService.View(id);
+            if (topicNews == null)
             {
                 return HttpNotFound();
             }
 
-            return View(topicVideoViewModel);
+            return View(topicNews);
         }
 
-        // GET: TopicVideo/PanelPartial
+        // GET: TopicNews/PanelPartial
         [ChildActionOnly]
         public ActionResult PanelPartial(string keyword, int? pageSize, int? page)
         {
@@ -54,12 +53,12 @@ namespace MediaResource.Web.Controllers
             }
             ViewBag.Keyword = keyword;
 
-            StaticPagedList<ImageViewModel> images = _topicVideoService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
+            StaticPagedList<TopicNews> topicNewss = _topicNewsService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
 
-            return PartialView("_PanelPartial", images);
+            return PartialView("_PanelPartial", topicNewss);
         }
 
-        // GET: TopicVideo/List
+        // GET: TopicNews/List
         public ActionResult List(string keyword, int? pageSize, int? page)
         {
             int? topicId = null;
@@ -79,26 +78,26 @@ namespace MediaResource.Web.Controllers
             }
             ViewBag.Keyword = keyword;
 
-            StaticPagedList<ImageViewModel> images = _topicVideoService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
+            StaticPagedList<TopicNews> topicNewss = _topicNewsService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
 
-            return View(images);
+            return View(topicNewss);
         }
 
-        // GET: TopicVideo/Download
+        // GET: TopicNews/Download
         public FileResult Download(int? id)
         {
-            TopicVideo topicVideo = _topicVideoService.Get(id);
-            string url = WebHelper.Instance.RootUrl + topicVideo.Locations;
+            TopicNews topicNews = _topicNewsService.Get(id);
+            string url = WebHelper.Instance.RootUrl + topicNews.Locations;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));
-            return File(stream, "application/octet-stream", fileName);
+            return File(stream, "image/jpeg", fileName);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _topicVideoService.Dispose();
+                _topicNewsService.Dispose();
             }
             base.Dispose(disposing);
         }

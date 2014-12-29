@@ -135,6 +135,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ApplyForDownloadController.cs" />
+    <Compile Include="Controllers\TopicNewsontroller.cs" />
+    <Compile Include="Controllers\TopicTextController.cs" />
     <Compile Include="Controllers\TopicVideoController.cs" />
     <Compile Include="Controllers\UserPlateController.cs" />
     <Compile Include="Controllers\NodeController.cs" />
@@ -213,6 +215,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ApplyForDownloadService.cs" />
     <Compile Include="Services\GraphicDesignService.cs" />
+    <Compile Include="Services\TopicNewsService.cs" />
+    <Compile Include="Services\TopicTextService.cs" />
     <Compile Include="Services\TopicVideoService.cs" />
     <Compile Include="Services\TopicImageService.cs" />
     <Compile Include="Services\UserPlateService.cs" />
@@ -446,6 +450,18 @@
     <Content Include="Views\TopicVideo\_PanelPartial.cshtml" />
     <Content Include="Views\TopicVideo\Detail.cshtml" />
     <Content Include="Views\TopicVideo\List.cshtml" />
+    <Content Include="Views\TopicText\_PanelPartial.cshtml" />
+    <Content Include="Views\TopicText\Detail.cshtml" />
+    <Content Include="Views\TopicText\List.cshtml" />
+    <Content Include="Views\TopicNews\_PanelPartial.cshtml" />
+    <Content Include="Views\TopicNews\Detail.cshtml">
+      <SubType>
+      </SubType>
+    </Content>
+    <Content Include="Views\TopicNews\List.cshtml">
+      <SubType>
+      </SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

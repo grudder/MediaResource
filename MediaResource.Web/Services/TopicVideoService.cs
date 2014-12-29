@@ -51,6 +51,8 @@ namespace MediaResource.Web.Services
             // 执行查询
             IQueryable<TopicVideo> query =
                 from topicVideo in _db.TopicVideos
+                where topicVideo.IsConverted == true
+                && topicVideo.ImagePath != null
                 orderby topicVideo.OrderNum descending
                 select topicVideo;
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 
+using MediaResource.Web.Helper;
 using MediaResource.Web.Models;
 using MediaResource.Web.Services;
 
@@ -18,9 +19,27 @@ namespace MediaResource.Web.Controllers
             return View(map);
         }
 
+        // POST: Topic/IsAuthorized
+        [HttpPost]
+        public JsonResult IsAuthorized(int id)
+        {
+            bool isAuthorized = _topicService.IsAuthorized(id, WebHelper.Instance.CurrentUser);
+
+            return Json(new
+            {
+                result = isAuthorized
+            });
+        }
+
         // GET: Topic/Detail/5
         public ActionResult Detail(int id)
         {
+            bool isAuthorized = _topicService.IsAuthorized(id, WebHelper.Instance.CurrentUser);
+            if (!isAuthorized)
+            {
+                return RedirectToAction("Index");
+            }
+
             ViewBag.TopicId = id;
 
             List<UserPlate> userPlates = _userPlateService.GetUserPlatesByTopicId(id);

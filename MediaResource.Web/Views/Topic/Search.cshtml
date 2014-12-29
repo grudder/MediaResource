@@ -7,7 +7,7 @@
 
 @Html.Action("TopicSearchPartial", new {id = Model.Id})
 
-<iframe height="500" scrolling="no" src='@Url.Action("SearchFrame", "Topic", new {Model.Id, ViewBag.Keyword})' onload="iframeAutoHeight()"></iframe>
+<iframe height="1500" scrolling="no" src='@Url.Action("SearchFrame", "Topic", new {Model.Id, ViewBag.Keyword})' onload="iframeAutoHeight()"></iframe>
 
 <div id="topicImageDetailModal" class="modal fade">
 	<div class="modal-dialog modal-dialog-lg">
@@ -16,6 +16,18 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <div id="topicVideoDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="topicTextDetailModal" class="modal fade">
+	<div class="modal-dialog modal-dialog-lg">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="topicNewsDetailModal" class="modal fade">
 	<div class="modal-dialog modal-dialog-lg">
 		<div class="modal-content">
 		</div><!-- /.modal-content -->
@@ -31,6 +43,12 @@
                 $(this).removeData("bs.modal");
             });
             $("#topicVideoDetailModal").on("hidden.bs.modal", function () {
+                $(this).removeData("bs.modal");
+            });
+            $("#topicTextDetailModal").on("hidden.bs.modal", function () {
+                $(this).removeData("bs.modal");
+            });
+            $("#topicNewsDetailModal").on("hidden.bs.modal", function () {
                 $(this).removeData("bs.modal");
             });
         });

@@ -59,6 +59,14 @@ namespace MediaResource.Web.Helper
             }
         }
 
+        public string TopicImageRootUrl
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["TopicImageRootUrl"];
+            }
+        }
+
         public string MessageQueuePath
         {
             get

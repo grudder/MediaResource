@@ -7,36 +7,35 @@ using System.Linq.Expressions;
 using MediaResource.Web.DataAccess;
 using MediaResource.Web.Helper;
 using MediaResource.Web.Models;
-using MediaResource.Web.Models.ViewModels;
 
 using PagedList;
 
 namespace MediaResource.Web.Services
 {
-    public class TopicImageService : IDisposable
+    public class TopicNewsService : IDisposable
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
         private readonly NodeService _nodeService = new NodeService();
         private readonly UserPlateService _userPlateService = new UserPlateService();
 
-        public TopicImage Get(int? id)
+        public TopicNews Get(int? id)
         {
-            return _db.TopicImages.Find(id);
+            return _db.TopicNewss.Find(id);
         }
 
-        public TopicImage View(int? id)
+        public TopicNews View(int? id)
         {
-            TopicImage topicImage = _db.TopicImages.Find(id);
-            topicImage.ClickCount = (topicImage.ClickCount == null) ? 1 : topicImage.ClickCount + 1;
+            TopicNews topicNews = _db.TopicNewss.Find(id);
+            topicNews.ClickCount = (topicNews.ClickCount == null) ? 1 : topicNews.ClickCount + 1;
 
-            _db.Entry(topicImage).State = EntityState.Modified;
+            _db.Entry(topicNews).State = EntityState.Modified;
             _db.SaveChanges();
 
-            return topicImage;
+            return topicNews;
         }
 
         /// <summary>
-        /// 获取节点或自建版块下的专题图片分页列表。
+        /// 获取专题下的媒体报道分页列表。
         /// </summary>
         /// <param name="topicId">专题编号。</param>
         /// <param name="nodeId">节点标识。</param>
@@ -44,15 +43,15 @@ namespace MediaResource.Web.Services
         /// <param name="keyword">关键字。</param>
         /// <param name="pageSize">分页大小。</param>
         /// <param name="pageIndex">页码。</param>
-        /// <returns>节点或自建版块下的专题图片分页列表。</returns>
-        public StaticPagedList<ImageViewModel> AdvancedSearch(int? topicId, int? nodeId, int? userPlateId, string keyword, int? pageSize, int? pageIndex)
+        /// <returns>专题下的媒体报道分页列表。</returns>
+        public StaticPagedList<TopicNews> AdvancedSearch(int? topicId, int? nodeId, int? userPlateId, string keyword, int? pageSize, int? pageIndex)
         {
             // 执行查询
-            IQueryable<TopicImage> query =
-                from topicImage in _db.TopicImages
-                where topicImage.Locations != null
-                orderby topicImage.OrderNum descending
-                select topicImage;
+            IQueryable<TopicNews> query =
+                from topicNews in _db.TopicNewss
+                where topicNews.Locations != null
+                orderby topicNews.OrderNum descending
+                select topicNews;
 
             // 构造查询条件
             if (topicId != null)
@@ -62,7 +61,7 @@ namespace MediaResource.Web.Services
             if (nodeId != null)
             {
                 List<Node> nodes = _nodeService.GetChildNodes(nodeId.Value);
-                Expression<Func<TopicImage, bool>> nodeCondition = i => false;
+                Expression<Func<TopicNews, bool>> nodeCondition = i => false;
                 foreach (Node node in nodes)
                 {
                     var theNode = node;
@@ -84,27 +83,20 @@ namespace MediaResource.Web.Services
             pageSize = (pageSize ?? 8);
             pageIndex = (pageIndex ?? 1);
             int totalCount;
-            IEnumerable<ImageViewModel> images = GetImagesInPage(query, pageIndex.Value, pageSize.Value, out totalCount);
-            var pagedList = new StaticPagedList<ImageViewModel>(images, pageIndex.Value, pageSize.Value, totalCount);
+            IEnumerable<TopicNews> topicNewss = GetTopicNewsInPage(query, pageIndex.Value, pageSize.Value, out totalCount);
+            var pagedList = new StaticPagedList<TopicNews>(topicNewss, pageIndex.Value, pageSize.Value, totalCount);
 
             return pagedList;
         }
 
-        private IEnumerable<ImageViewModel> GetImagesInPage(IEnumerable<TopicImage> query, int pageIndex, int pageSize,
+        private IEnumerable<TopicNews> GetTopicNewsInPage(IEnumerable<TopicNews> query, int pageIndex, int pageSize,
             out int totalCount)
         {
-            IEnumerable<TopicImage> enumerable = query as TopicImage[] ?? query.ToArray();
+            IEnumerable<TopicNews> enumerable = query as TopicNews[] ?? query.ToArray();
             totalCount = enumerable.Count();
-            IEnumerable<TopicImage> topicImages = enumerable.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            IEnumerable<TopicNews> topicNewss = enumerable.Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
-            return topicImages.ToList().Select(topicImage => new ImageViewModel
-            {
-                Id = topicImage.Id,
-                Name = topicImage.Name,
-                RawUrl = WebHelper.Instance.RootUrl + topicImage.Locations,
-                FileUrl = ImageHelper.GetSmallThumbUrl(topicImage.Locations),
-                CreateDate = topicImage.CreateDate
-            });
+            return topicNewss.ToList();
         }
 
         #region IDisposable 成员

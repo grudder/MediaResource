@@ -1,7 +1,8 @@
-﻿@using MediaResource.Web.Models
+﻿@using MediaResource.Web.Helper
+@using MediaResource.Web.Models
 @model Topic
 
-<div style="margin-bottom: 20px; height: 100px; background: url('@Model.DetailPhotoUrl') no-repeat">
+<div style="margin-bottom: 20px; height: 100px; background: url('@WebHelper.Instance.TopicImageRootUrl@Model.DetailPhotoUrl.Replace("../../", "/")') no-repeat">
     <br/><br/>
     <div class="pull-right">
         <form id="formTopicSearch" class="form-inline" role="form" method="POST">

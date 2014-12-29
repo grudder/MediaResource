@@ -150,14 +150,14 @@ namespace MediaResource.Web.Models
         }
 
         [Display(Name = "点击次数", Order = 100)]
-        public int? ClickCount
+        public int ClickCount
         {
             get;
             set;
         }
 
         [Display(Name = "下载次数", Order = 110)]
-        public int? DownloadCount
+        public int DownloadCount
         {
             get;
             set;

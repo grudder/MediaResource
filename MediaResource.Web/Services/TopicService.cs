@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using MediaResource.Web.DataAccess;
+using MediaResource.Web.Helper;
 using MediaResource.Web.Models;
 
 namespace MediaResource.Web.Services
@@ -51,6 +52,13 @@ namespace MediaResource.Web.Services
                         orderby topic.OrderNum descending
                         select topic;
             return query.ToList();
+        }
+
+        public bool IsAuthorized(int topicId, User user)
+        {
+            Topic topic = Get(topicId);
+            bool isAuthorized = topic.Offices.Contains(user.GroupEntity.Name);
+            return isAuthorized;
         }
 
         #region IDisposable 成员
