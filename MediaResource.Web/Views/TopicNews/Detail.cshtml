@@ -1,0 +1,263 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Helper
+@using MediaResource.Web.Models
+@model TopicNews
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.Name
+		@Html.HiddenFor(model => model.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+				    <div class="img-lg-wrap">
+					    <img src="@WebHelper.Instance.RootUrl@Model.Locations" />
+				    </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenTopicNewsScore">评分：</label>
+						<input type="hidden" id="hiddenTopicNewsScore" value="0" />
+						<div id="divTopicNewsScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonTopicNewsPostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postTopicNewsScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblTopicNewsScore">@Model.Score</label>
+							（<label id="lblTopicNewsScoreCount">@Model.ScoreCount</label>次打分）
+                            <a href="@Url.Action("Download", new {id = @Model.Id})" target="_blank" class="btn btn-default">下载</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="topicNewsTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#topicNewsDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#topicNewsCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblTopicNewsCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="topicNewsDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									@Html.DisplayNameFor(model => model.Name)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Name)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.TextDate)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.TextDate)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Staff)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Staff)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Summary)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Summary)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Source)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Source)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="topicNewsCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textTopicNewsCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgTopicNewsVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshTopicNewsVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputTopicNewsVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postTopicNewsCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframeTopicNewsCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+	var _topicNewsId;
+
+	$(function () {
+		_topicNewsId = $("#Id").val();
+
+		changeTopicNewsScore();
+		showTopicNewsCommentList();
+		showTopicNewsCommentCount();
+	});
+
+	function changeTopicNewsScore() {
+	    var buttons = document.getElementById("divTopicNewsScore").getElementsByTagName("input");
+	    for (var i = 0; i < parseInt(document.getElementById("hiddenTopicNewsScore").value) ; i++) {
+			buttons[i].style.backgroundPosition = "right center";
+		}
+
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].onclick = function () {
+				for (var m = 0; m < buttons.length; m++) {
+					buttons[m].style.backgroundPosition = "right center";
+				}
+				for (var n = 0; n < this.value; n++) {
+					buttons[n].style.backgroundPosition = "left center";
+				}
+				document.getElementById("hiddenTopicNewsScore").value = this.value;
+			}
+		}
+	}
+
+	function postTopicNewsScore() {
+	    var score = $("#hiddenTopicNewsScore").val();
+		$.post(
+			'@Url.Action("Create", "Score")',
+			{
+				ObjectType: ObjectType.TopicNews,
+				ObjectId: _topicNewsId,
+				Value: score
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					// 禁用评分按钮
+				    $("#buttonTopicNewsPostScore").attr("disabled", "disabled");
+
+					// 刷新平均分和评分次数
+				    $("#lblTopicNewsScore").text(result.Score);
+				    $("#lblTopicNewsScoreCount").text(result.ScoreCount);
+				}
+			}
+		);
+	}
+
+    function showTopicNewsCommentList() {
+		var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.TopicNews + "&objectId=" + _topicNewsId;
+	    $("#iframeTopicNewsCommentList").attr("src", commentListPageUrl);
+	}
+
+    function showTopicNewsCommentCount() {
+		$.get(
+			'@Url.Action("Count", "Comment")',
+			{
+				objectType: ObjectType.TopicNews,
+				objectId: _topicNewsId
+			},
+			function (result) {
+			    $("#lblTopicNewsCommentCount").text(result.count);
+			}
+		);
+	}
+
+    function refreshTopicNewsVerificationCode() {
+        var img = $("#imgTopicNewsVerificationCode");
+		img.attr("src", img.attr("src") + "?");
+	}
+
+    function postTopicNewsCommit() {
+	    var content = $("#textTopicNewsCommentContent").val();
+		if (content === "") {
+			alert("评论内容不能为空！");
+			return;
+		}
+		var verificationCode = $("#inputTopicNewsVerificationCode").val();
+		if (verificationCode === "") {
+			alert("验证码不能为空！");
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+				if (!result.success) {
+					alert("验证码错误！");
+					refreshTopicNewsVerificationCode();
+					return;
+				}
+
+				$.post(
+					'@Url.Action("Create", "Comment")',
+					{
+						ObjectType: ObjectType.TopicNews,
+						ObjectId: _topicNewsId,
+						Content: content
+					},
+					function (result1) {
+						if (result1.success) {
+							alert(result1.message);
+
+							// 清空表单
+							$("#commentContent").val("");
+							$("#verificationCode").val("");
+
+							// 刷新验证码
+							refreshTopicNewsVerificationCode();
+
+							// 刷新评论数量
+							showTopicNewsCommentCount();
+
+							// 刷新评论列表
+							showTopicNewsCommentList();
+						}
+					}
+				);
+			}
+		);
+	}
+</script>

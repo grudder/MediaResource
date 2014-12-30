@@ -62,6 +62,8 @@ namespace MediaResource.Web.Models
         }
 
         [Display(Name = "Ê±¡¡¡¡¼ä", Order = 40)]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? TextDate
         {
             get;

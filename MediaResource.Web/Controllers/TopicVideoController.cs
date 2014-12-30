@@ -87,7 +87,7 @@ namespace MediaResource.Web.Controllers
         // GET: TopicVideo/Download
         public FileResult Download(int? id)
         {
-            TopicVideo topicVideo = _topicVideoService.Get(id);
+            TopicVideo topicVideo = _topicVideoService.DownloadCount(id);
             string url = WebHelper.Instance.RootUrl + topicVideo.Locations;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));

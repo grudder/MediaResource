@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 
 namespace MediaResource.Web.Controllers
 {
+    [Authorize]
     public class NodeController : Controller
     {
         private readonly NodeService _nodeService = new NodeService();

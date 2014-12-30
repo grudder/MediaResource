@@ -16,6 +16,7 @@ using PagedList;
 
 namespace MediaResource.Web.Controllers
 {
+    [Authorize]
     public class UserPhotoController : Controller
     {
         private readonly UserPhotoService _userPhotoService = new UserPhotoService();

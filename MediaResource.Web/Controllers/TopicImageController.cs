@@ -91,7 +91,7 @@ namespace MediaResource.Web.Controllers
         // GET: TopicImage/Download
         public FileResult Download(int? id)
         {
-            TopicImage topicImage = _topicImageService.Get(id);
+            TopicImage topicImage = _topicImageService.DownloadCount(id);
             string url = WebHelper.Instance.RootUrl + topicImage.Locations;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));
@@ -117,7 +117,7 @@ namespace MediaResource.Web.Controllers
             string[] arrayId = ids.Split(',');
             foreach (string id in arrayId)
             {
-                TopicImage topicImage = _topicImageService.Get(int.Parse(id));
+                TopicImage topicImage = _topicImageService.DownloadCount(int.Parse(id));
                 string fileUrl = topicImage.Locations.TrimStart('\\', '/');
 
                 // 不同目录的文件存放在不同的磁盘根路径

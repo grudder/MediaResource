@@ -16,6 +16,7 @@ using PagedList;
 
 namespace MediaResource.Web.Controllers
 {
+    [Authorize]
 	public class UserVideoController : Controller
 	{
 		private readonly UserVideoService _userVideoService = new UserVideoService();

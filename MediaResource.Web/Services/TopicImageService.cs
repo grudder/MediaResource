@@ -27,7 +27,18 @@ namespace MediaResource.Web.Services
         public TopicImage View(int? id)
         {
             TopicImage topicImage = _db.TopicImages.Find(id);
-            topicImage.ClickCount = (topicImage.ClickCount == null) ? 1 : topicImage.ClickCount + 1;
+            topicImage.ClickCount += 1;
+
+            _db.Entry(topicImage).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            return topicImage;
+        }
+
+        public TopicImage DownloadCount(int? id)
+        {
+            TopicImage topicImage = _db.TopicImages.Find(id);
+            topicImage.DownloadCount += 1;
 
             _db.Entry(topicImage).State = EntityState.Modified;
             _db.SaveChanges();

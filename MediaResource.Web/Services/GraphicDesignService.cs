@@ -33,6 +33,17 @@ namespace MediaResource.Web.Services
             return graphicDesign;
         }
 
+        public GraphicDesign DownloadCount(int? id)
+        {
+            GraphicDesign graphicDesign = _db.GraphicDesigns.Find(id);
+            graphicDesign.DownloadCount = (graphicDesign.DownloadCount == null) ? 1 : graphicDesign.DownloadCount + 1;
+
+            _db.Entry(graphicDesign).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            return graphicDesign;
+        }
+
         public List<ImageViewModel> GetTopImages(int count)
         {
             var graphicDesigns = from graphicDesign in _db.GraphicDesigns

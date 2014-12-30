@@ -60,7 +60,7 @@
         <div id="userPlate-@userPlate.Id" class="tab-pane">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <iframe id="iframeUserPlate-@userPlate.Id" height="500" scrolling="no" src='@Url.Action("Topic", "UserPlate", new {userPlate.Id})' onload="iframeAutoHeight()"></iframe>
+                    <iframe id="iframeUserPlate-@userPlate.Id" height="500" scrolling="no" src='@Url.Action("Topic", "UserPlate", new {ViewBag.TopicId, UserPlateId = userPlate.Id})' onload="iframeAutoHeight()"></iframe>
                 </div>
             </div>
         </div>

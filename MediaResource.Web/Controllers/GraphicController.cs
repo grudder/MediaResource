@@ -112,7 +112,7 @@ namespace MediaResource.Web.Controllers
         // GET: /Graphic/Download
         public FileResult Download(int? id)
         {
-            Graphic graphic = _graphicService.Get(id);
+            Graphic graphic = _graphicService.DownloadCount(id);
             string url = WebHelper.Instance.RootUrl + graphic.PreviewPath;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));

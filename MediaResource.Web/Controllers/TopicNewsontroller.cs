@@ -86,7 +86,7 @@ namespace MediaResource.Web.Controllers
         // GET: TopicNews/Download
         public FileResult Download(int? id)
         {
-            TopicNews topicNews = _topicNewsService.Get(id);
+            TopicNews topicNews = _topicNewsService.DownloadCount(id);
             string url = WebHelper.Instance.RootUrl + topicNews.Locations;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));

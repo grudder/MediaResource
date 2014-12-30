@@ -9,6 +9,7 @@ using MediaResource.Web.Services;
 
 namespace MediaResource.Web.Controllers
 {
+    [Authorize]
 	public class UserFolderController : Controller
 	{
 		private readonly UserFolderService _userFolderService = new UserFolderService();

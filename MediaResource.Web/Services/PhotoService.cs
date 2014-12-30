@@ -32,6 +32,17 @@ namespace MediaResource.Web.Services
             return photo;
         }
 
+        public Photo DownloadCount(int? id)
+        {
+            Photo photo = _db.Photos.Find(id);
+            photo.DownloadCount = (photo.DownloadCount == null) ? 1 : photo.DownloadCount + 1;
+
+            _db.Entry(photo).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            return photo;
+        }
+
         private List<Category> GetTopPhotoCategories()
         {
             var categories = from category in _db.Categorys

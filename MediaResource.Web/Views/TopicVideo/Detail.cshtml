@@ -1,0 +1,288 @@
+﻿@{
+	Layout = null;
+}
+
+@model MediaResource.Web.Models.ViewModels.TopicVideoViewModel
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.TopicVideo.Name
+		@Html.HiddenFor(model => model.TopicVideo.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<div id="topicVideoPlayer">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				@{
+					int index = 0;
+				}
+				@foreach (string thubminalImage in Model.ThubminalImages)
+				{
+				    <div class="col-md-2">
+				        <div class="img-xs-wrap">
+				            <img src="@thubminalImage" />
+                        </div>
+				    </div>
+					if (index == 4)
+					{
+						@:</div><br/><br/><div class="row">
+					}
+					++index;
+				}
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenTopicVideoScore">评分：</label>
+						<input type="hidden" id="hiddenTopicVideoScore" value="0" />
+						<div id="divTopicVideoScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonTopicVideoPostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postTopicVideoScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblTopicVideoScore">@Model.TopicVideo.Score</label>
+							（<label id="lblTopicVideoScoreCount">@Model.TopicVideo.ScoreCount</label>次打分）
+                            <a href="@Url.Action("Download", new {id = @Model.TopicVideo.Id})" target="_blank" class="btn btn-default">下载</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="topicVideoTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#topicVideoDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#topicVideoCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblTopicVideoCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="topicVideoDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									@Html.DisplayNameFor(model => model.TopicVideo.Name)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.TopicVideo.Name)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.TopicVideo.TextDate)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.TopicVideo.TextDate)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.TopicVideo.Staff)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.TopicVideo.Staff)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.TopicVideo.Summary)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.TopicVideo.Summary)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.TopicVideo.Source)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.TopicVideo.Source)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="topicVideoCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textTopicVideoCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgTopicVideoVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshTopicVideoVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputTopicVideoVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postTopicVideoCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframeTopicVideoCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/jwplayer/jwplayer.js")'></script>
+<script type="text/javascript" src='@Url.Content("~/Scripts/jwplayer/jwplayer.html5.js")'></script>
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+    var _topicVideoId;
+    var _topicVideoPlayer;
+
+	$(function () {
+	    _topicVideoId = $("#Id").val();
+
+	    var topicVideoUrl = "@Model.FlvUrl";
+	    _topicVideoPlayer = jwplayer("topicVideoPlayer").setup({
+	        file: topicVideoUrl,
+	        width: "480px",
+	        height: "360px"
+	    });
+
+		changeTopicVideoScore();
+		showTopicVideoCommentList();
+		showTopicVideoCommentCount();
+	});
+
+	function changeTopicVideoScore() {
+	    var buttons = document.getElementById("divTopicVideoScore").getElementsByTagName("input");
+	    for (var i = 0; i < parseInt(document.getElementById("hiddenTopicVideoScore").value) ; i++) {
+			buttons[i].style.backgroundPosition = "right center";
+		}
+
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].onclick = function () {
+				for (var m = 0; m < buttons.length; m++) {
+					buttons[m].style.backgroundPosition = "right center";
+				}
+				for (var n = 0; n < this.value; n++) {
+					buttons[n].style.backgroundPosition = "left center";
+				}
+				document.getElementById("hiddenTopicVideoScore").value = this.value;
+			}
+		}
+	}
+
+	function postTopicVideoScore() {
+	    var score = $("#hiddenTopicVideoScore").val();
+		$.post(
+			'@Url.Action("Create", "Score")',
+			{
+				ObjectType: ObjectType.TopicVideo,
+				ObjectId: _topicVideoId,
+				Value: score
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					// 禁用评分按钮
+				    $("#buttonTopicVideoPostScore").attr("disabled", "disabled");
+
+					// 刷新平均分和评分次数
+				    $("#lblTopicVideoScore").text(result.Score);
+				    $("#lblTopicVideoScoreCount").text(result.ScoreCount);
+				}
+			}
+		);
+	}
+
+    function showTopicVideoCommentList() {
+		var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.TopicVideo + "&objectId=" + _topicVideoId;
+	    $("#iframeTopicVideoCommentList").attr("src", commentListPageUrl);
+	}
+
+    function showTopicVideoCommentCount() {
+		$.get(
+			'@Url.Action("Count", "Comment")',
+			{
+				objectType: ObjectType.TopicVideo,
+				objectId: _topicVideoId
+			},
+			function (result) {
+			    $("#lblTopicVideoCommentCount").text(result.count);
+			}
+		);
+	}
+
+    function refreshTopicVideoVerificationCode() {
+        var img = $("#imgTopicVideoVerificationCode");
+		img.attr("src", img.attr("src") + "?");
+	}
+
+    function postTopicVideoCommit() {
+	    var content = $("#textTopicVideoCommentContent").val();
+		if (content === "") {
+			alert("评论内容不能为空！");
+			return;
+		}
+		var verificationCode = $("#inputTopicVideoVerificationCode").val();
+		if (verificationCode === "") {
+			alert("验证码不能为空！");
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+				if (!result.success) {
+					alert("验证码错误！");
+					refreshTopicVideoVerificationCode();
+					return;
+				}
+
+				$.post(
+					'@Url.Action("Create", "Comment")',
+					{
+						ObjectType: ObjectType.TopicVideo,
+						ObjectId: _topicVideoId,
+						Content: content
+					},
+					function (result1) {
+						if (result1.success) {
+							alert(result1.message);
+
+							// 清空表单
+							$("#commentContent").val("");
+							$("#verificationCode").val("");
+
+							// 刷新验证码
+							refreshTopicVideoVerificationCode();
+
+							// 刷新评论数量
+							showTopicVideoCommentCount();
+
+							// 刷新评论列表
+							showTopicVideoCommentList();
+						}
+					}
+				);
+			}
+		);
+	}
+</script>

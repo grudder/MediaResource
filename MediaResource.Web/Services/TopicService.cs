@@ -56,6 +56,12 @@ namespace MediaResource.Web.Services
 
         public bool IsAuthorized(int topicId, User user)
         {
+            string groupName = user.GroupEntity.Name;
+            if (groupName == "测试用组" || groupName == "发改委记者站" || groupName == "中心领导")
+            {
+                return true;
+            }
+
             Topic topic = Get(topicId);
             bool isAuthorized = topic.Offices.Contains(user.GroupEntity.Name);
             return isAuthorized;

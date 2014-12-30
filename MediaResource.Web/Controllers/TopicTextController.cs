@@ -2,6 +2,7 @@
 using System.Net;
 using System.Web.Mvc;
 
+using MediaResource.Web.Helper;
 using MediaResource.Web.Models;
 using MediaResource.Web.Services;
 
@@ -80,6 +81,16 @@ namespace MediaResource.Web.Controllers
             StaticPagedList<TopicText> topicTexts = _topicTextService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
 
             return View(topicTexts);
+        }
+
+        // GET: TopicText/Download
+        public FileResult Download(int? id)
+        {
+            TopicText topicText = _topicTextService.DownloadCount(id);
+            string url = WebHelper.Instance.RootUrl + topicText.Locations;
+            var stream = new WebClient().OpenRead(url);
+            string fileName = url.Substring(url.LastIndexOf(@"\"));
+            return File(stream, "image/jpeg", fileName);
         }
 
         protected override void Dispose(bool disposing)

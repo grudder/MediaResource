@@ -1,0 +1,72 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Helper
+@using MediaResource.Web.Models
+@using PagedList.Mvc;
+
+@model PagedList.StaticPagedList<TopicText>
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>专题文字资料</title>
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		@Scripts.Render("~/bundles/html5")
+    <![endif]-->
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-6">
+            <h3 class="panel-title">
+                <img src='@Url.Content("~/Images/graphic-icon.png")' />
+                专题文字资料
+            </h3>
+        </div>
+        @if ((ViewBag.TopicId != null && ViewBag.UserPlateId == null) || ViewBag.NodeId != null)
+        {
+            <div class="col-sm-5">
+                <a href="javascript: history.back();" class="navbar-right">返回</a>
+            </div>
+        }
+    </div>
+    <hr/>
+	<ul class="list-group">
+		@foreach (var item in Model)
+		{
+			<li class="list-group-item">
+			    <a title="查看" data-toggle="modal" href="#" onclick="showTopicTextDetailModal(@item.Id)">
+					@Html.TrimText(item.Name, 30)
+				</a>
+                (<a href="@Url.Action("Download", new {id = item.Id})" target="_blank">下载</a>)
+				<span class="badge">
+					@Html.DisplayFor(model => item.TextDate)
+				</span>
+			</li>
+		}
+	</ul>
+    <div class="text-center">
+        @Html.PagedListPager(Model, page => Url.Action("List", new { page, ViewBag.TopicId, ViewBag.NodeId, ViewBag.UserPlateId, ViewBag.Keyword }))
+    </div>
+	
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/bootstrap")
+	<script type="text/javascript">
+		function showTopicTextDetailModal(id) {
+			parent.parent.$("#topicTextDetailModal").modal({
+				show: true,
+				remote: '@Url.Action("Detail")' + "/" + id
+			});
+		}
+	</script>
+</body>
+</html>

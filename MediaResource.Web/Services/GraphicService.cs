@@ -33,6 +33,17 @@ namespace MediaResource.Web.Services
             return graphic;
         }
 
+        public Graphic DownloadCount(int? id)
+        {
+            Graphic graphic = _db.Graphics.Find(id);
+            graphic.DownloadCount = (graphic.DownloadCount == null) ? 1 : graphic.DownloadCount + 1;
+
+            _db.Entry(graphic).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            return graphic;
+        }
+
         public List<ImageViewModel> GetTopImages(int count)
         {
             var graphics = from graphic in _db.Graphics

@@ -1,0 +1,259 @@
+﻿@{
+	Layout = null;
+}
+
+@using MediaResource.Web.Models
+@model TopicText
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title">
+		@Model.Name
+		@Html.HiddenFor(model => model.Id)
+	</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" role="form">
+						<label class="sr-only" for="hiddenTopicTextScore">评分：</label>
+						<input type="hidden" id="hiddenTopicTextScore" value="0" />
+						<div id="divTopicTextScore" class="form-group score">
+							<input type="button" value="1" />
+							<input type="button" value="2" />
+							<input type="button" value="3" />
+							<input type="button" value="4" />
+							<input type="button" value="5" />
+						</div>
+						<button id="buttonTopicTextPostScore" type="button" class="btn btn-primary" title="每个用户只能评分一次" onclick="postTopicTextScore()">评分</button>
+						<div class="form-group">
+							当前平均分：<label id="lblTopicTextScore">@Model.Score</label>
+							（<label id="lblTopicTextScoreCount">@Model.ScoreCount</label>次打分）
+                            <a href="@Url.Action("Download", new {id = @Model.Id})" target="_blank" class="btn btn-default">下载</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<ul id="topicTextTab" class="nav nav-tabs">
+					    <li class="active">
+					        <a href="#topicTextDetailTab" data-toggle="tab">详细信息</a>
+					    </li>
+						<li>
+							<a href="#topicTextCommentTab" data-toggle="tab">
+								评论（
+								<label id="lblTopicTextCommentCount"></label>
+								）
+							</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="topicTextDetailTab">
+							<dl class="dl-horizontal">
+								<dt>
+									@Html.DisplayNameFor(model => model.Name)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Name)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.TextDate)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.TextDate)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Staff)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Staff)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Summary)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Summary)
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.Source)
+								</dt>
+								<dd>
+									@Html.DisplayFor(model => model.Source)
+								</dd>
+							</dl>
+						</div>
+						<div class="tab-pane" id="topicTextCommentTab">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="col-md-12">
+												<textarea id="textTopicTextCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<img id="imgTopicTextVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshTopicTextVerificationCode()" />
+											<div class="col-md-3">
+												<input id="inputTopicTextVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
+											</div>
+											<div class="col-md-7">
+												<button class="btn btn-primary" type="button" onclick="postTopicTextCommit()">发表评论</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<iframe id="iframeTopicTextCommentList" src="#" height="360"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src='@Url.Content("~/Scripts/common-const.js")'></script>
+<script type="text/javascript">
+	var _topicTextId;
+
+	$(function () {
+		_topicTextId = $("#Id").val();
+
+		changeTopicTextScore();
+		showTopicTextCommentList();
+		showTopicTextCommentCount();
+	});
+
+	function changeTopicTextScore() {
+	    var buttons = document.getElementById("divTopicTextScore").getElementsByTagName("input");
+	    for (var i = 0; i < parseInt(document.getElementById("hiddenTopicTextScore").value) ; i++) {
+			buttons[i].style.backgroundPosition = "right center";
+		}
+
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].onclick = function () {
+				for (var m = 0; m < buttons.length; m++) {
+					buttons[m].style.backgroundPosition = "right center";
+				}
+				for (var n = 0; n < this.value; n++) {
+					buttons[n].style.backgroundPosition = "left center";
+				}
+				document.getElementById("hiddenTopicTextScore").value = this.value;
+			}
+		}
+	}
+
+	function postTopicTextScore() {
+	    var score = $("#hiddenTopicTextScore").val();
+		$.post(
+			'@Url.Action("Create", "Score")',
+			{
+				ObjectType: ObjectType.TopicText,
+				ObjectId: _topicTextId,
+				Value: score
+			},
+			function (result) {
+				alert(result.message);
+				if (result.success) {
+					// 禁用评分按钮
+				    $("#buttonTopicTextPostScore").attr("disabled", "disabled");
+
+					// 刷新平均分和评分次数
+				    $("#lblTopicTextScore").text(result.Score);
+				    $("#lblTopicTextScoreCount").text(result.ScoreCount);
+				}
+			}
+		);
+	}
+
+    function showTopicTextCommentList() {
+		var commentListPageUrl = '@Url.Action("Index", "Comment", new { pageSize = 5 })' + "&objectType=" + ObjectType.TopicText + "&objectId=" + _topicTextId;
+	    $("#iframeTopicTextCommentList").attr("src", commentListPageUrl);
+	}
+
+    function showTopicTextCommentCount() {
+		$.get(
+			'@Url.Action("Count", "Comment")',
+			{
+				objectType: ObjectType.TopicText,
+				objectId: _topicTextId
+			},
+			function (result) {
+			    $("#lblTopicTextCommentCount").text(result.count);
+			}
+		);
+	}
+
+    function refreshTopicTextVerificationCode() {
+        var img = $("#imgTopicTextVerificationCode");
+		img.attr("src", img.attr("src") + "?");
+	}
+
+    function postTopicTextCommit() {
+	    var content = $("#textTopicTextCommentContent").val();
+		if (content === "") {
+			alert("评论内容不能为空！");
+			return;
+		}
+		var verificationCode = $("#inputTopicTextVerificationCode").val();
+		if (verificationCode === "") {
+			alert("验证码不能为空！");
+			return;
+		}
+
+		$.post(
+			'@Url.Action("Verify", "VerificationCode")',
+			{
+			    VerificationCode: verificationCode
+			},
+			function (result) {
+				if (!result.success) {
+					alert("验证码错误！");
+					refreshTopicTextVerificationCode();
+					return;
+				}
+
+				$.post(
+					'@Url.Action("Create", "Comment")',
+					{
+						ObjectType: ObjectType.TopicText,
+						ObjectId: _topicTextId,
+						Content: content
+					},
+					function (result1) {
+						if (result1.success) {
+							alert(result1.message);
+
+							// 清空表单
+							$("#commentContent").val("");
+							$("#verificationCode").val("");
+
+							// 刷新验证码
+							refreshTopicTextVerificationCode();
+
+							// 刷新评论数量
+							showTopicTextCommentCount();
+
+							// 刷新评论列表
+							showTopicTextCommentList();
+						}
+					}
+				);
+			}
+		);
+	}
+</script>

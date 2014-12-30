@@ -95,7 +95,7 @@ namespace MediaResource.Web.Controllers
         // GET: /Photo/Download
         public FileResult Download(int? id)
         {
-            Photo photo = _photoService.Get(id);
+            Photo photo = _photoService.DownloadCount(id);
             string url = WebHelper.Instance.RootUrl + photo.FileUrl;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));

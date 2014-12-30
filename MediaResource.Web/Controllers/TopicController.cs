@@ -7,6 +7,7 @@ using MediaResource.Web.Services;
 
 namespace MediaResource.Web.Controllers
 {
+    [Authorize]
     public class TopicController : Controller
     {
         private readonly TopicService _topicService = new TopicService();

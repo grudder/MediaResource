@@ -89,7 +89,7 @@ namespace MediaResource.Web.Controllers
         // GET: /GraphicDesign/Download
         public FileResult Download(int? id)
         {
-            GraphicDesign graphicDesign = _graphicDesignService.Get(id);
+            GraphicDesign graphicDesign = _graphicDesignService.DownloadCount(id);
             string url = WebHelper.Instance.RootUrl + graphicDesign.PreviewPath;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));

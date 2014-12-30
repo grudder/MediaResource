@@ -26,7 +26,18 @@ namespace MediaResource.Web.Services
         public TopicNews View(int? id)
         {
             TopicNews topicNews = _db.TopicNewss.Find(id);
-            topicNews.ClickCount = (topicNews.ClickCount == null) ? 1 : topicNews.ClickCount + 1;
+            topicNews.ClickCount += 1;
+
+            _db.Entry(topicNews).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            return topicNews;
+        }
+
+        public TopicNews DownloadCount(int? id)
+        {
+            TopicNews topicNews = _db.TopicNewss.Find(id);
+            topicNews.DownloadCount += 1;
 
             _db.Entry(topicNews).State = EntityState.Modified;
             _db.SaveChanges();

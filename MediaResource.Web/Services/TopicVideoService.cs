@@ -27,13 +27,24 @@ namespace MediaResource.Web.Services
         public TopicVideoViewModel View(int? id)
         {
             TopicVideo topicVideo = _db.TopicVideos.Find(id);
-            topicVideo.ClickCount = (topicVideo.ClickCount == null) ? 1 : topicVideo.ClickCount + 1;
+            topicVideo.ClickCount += 1;
 
             _db.Entry(topicVideo).State = EntityState.Modified;
             _db.SaveChanges();
 
             var topicVideoViewModel = new TopicVideoViewModel(topicVideo);
             return topicVideoViewModel;
+        }
+
+        public TopicVideo DownloadCount(int? id)
+        {
+            TopicVideo topicVideo = _db.TopicVideos.Find(id);
+            topicVideo.ClickCount += 1;
+
+            _db.Entry(topicVideo).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            return topicVideo;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿@using MediaResource.Web.Models
+﻿@using MediaResource.Web.Helper
+@using MediaResource.Web.Models
 @model Dictionary<string, List<Topic>>
 
 @{
@@ -6,7 +7,7 @@
 }
 
 <h2>专题</h2>
-<hr/>
+<hr />
 
 @foreach (string offices in Model.Keys)
 {
@@ -18,10 +19,29 @@
         @foreach (Topic topic in Model[offices])
         {
             <div class="col-md-6">
-                <a href="@Url.Action("Detail", "Topic", new {id = topic.Id})">
-                    <img width="450" height="200" alt="@topic.Name" src="@topic.ListPhotoUrl"/>
+                <a href="javascript: redirectToDetail(@topic.Id)">
+                    <img width="450" height="200" alt="@topic.Name" src='@WebHelper.Instance.TopicImageRootUrl@topic.ListPhotoUrl.Replace("../../", "/")' />
                 </a>
             </div>
         }
     </div>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        function redirectToDetail(topicId) {
+            $.post(
+                "@Url.Action("IsAuthorized")" + "/" + topicId,
+                function (data) {
+                    if (data.result === true) {
+                        var url = '@Url.Action("Detail", "Topic")' + "/" + topicId;
+                        location.href = url;
+                    }
+                    else {
+                        alert("您没有权限查看此专题！");
+                    }
+                });
+        }
+    </script>
 }
