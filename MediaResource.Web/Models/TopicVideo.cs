@@ -78,17 +78,17 @@ namespace MediaResource.Web.Models
             set;
         }
 
-        [Display(Name = "概　　要", Order = 60)]
+        [Display(Name = "来　　源", Order = 60)]
         [StringLength(1024)]
-        public string Summary
+        public string Source
         {
             get;
             set;
         }
 
-        [Display(Name = "出　　处", Order = 70)]
+        [Display(Name = "概　　述", Order = 70)]
         [StringLength(1024)]
-        public string Source
+        public string Summary
         {
             get;
             set;

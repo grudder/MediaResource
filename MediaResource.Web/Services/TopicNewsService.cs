@@ -54,8 +54,9 @@ namespace MediaResource.Web.Services
         /// <param name="keyword">关键字。</param>
         /// <param name="pageSize">分页大小。</param>
         /// <param name="pageIndex">页码。</param>
+        /// <param name="searchCondition">高级搜索的查询条件。</param>
         /// <returns>专题下的媒体报道分页列表。</returns>
-        public StaticPagedList<TopicNews> AdvancedSearch(int? topicId, int? nodeId, int? userPlateId, string keyword, int? pageSize, int? pageIndex)
+        public StaticPagedList<TopicNews> AdvancedSearch(int? topicId, int? nodeId, int? userPlateId, string keyword, int? pageSize, int? pageIndex, Dictionary<string, string> searchCondition)
         {
             // 执行查询
             IQueryable<TopicNews> query =
@@ -64,7 +65,9 @@ namespace MediaResource.Web.Services
                 orderby topicNews.OrderNum descending
                 select topicNews;
 
+            //
             // 构造查询条件
+            //
             if (topicId != null)
             {
                 query = query.Where(i => i.TopicId == topicId);
@@ -88,6 +91,43 @@ namespace MediaResource.Web.Services
             if (!String.IsNullOrWhiteSpace(keyword))
             {
                 query = query.Where(i => i.Name.Contains(keyword) || i.KeyWords.Contains(keyword) || i.Summary.Contains(keyword));
+            }
+
+            // 高级搜索的查询条件
+            if (searchCondition.ContainsKey("Name"))
+            {
+                string name = searchCondition["Name"];
+                query = query.Where(i => i.Name.Contains(name));
+            }
+            if (searchCondition.ContainsKey("KeyWords"))
+            {
+                string keyWords = searchCondition["KeyWords"];
+                query = query.Where(i => i.KeyWords.Contains(keyWords));
+            }
+            if (searchCondition.ContainsKey("Staff"))
+            {
+                string staff = searchCondition["Staff"];
+                query = query.Where(i => i.Staff.Contains(staff));
+            }
+            if (searchCondition.ContainsKey("Source"))
+            {
+                string source = searchCondition["Source"];
+                query = query.Where(i => i.Source.Contains(source));
+            }
+            if (searchCondition.ContainsKey("Summary"))
+            {
+                string summary = searchCondition["Summary"];
+                query = query.Where(i => i.Summary.Contains(summary));
+            }
+            if (searchCondition.ContainsKey("StartTextDate"))
+            {
+                DateTime startTextDate = DateTime.Parse(searchCondition["StartTextDate"]);
+                query = query.Where(i => i.TextDate != null && i.TextDate >= startTextDate);
+            }
+            if (searchCondition.ContainsKey("EndTextDate"))
+            {
+                DateTime endTextDate = DateTime.Parse(searchCondition["EndTextDate"]).AddDays(1);
+                query = query.Where(i => i.TextDate != null && i.TextDate < endTextDate);
             }
 
             // 进行静态分页处理

@@ -67,6 +67,14 @@ namespace MediaResource.Web.Controllers
             ViewBag.TopicId = id;
             ViewBag.Keyword = keyword;
 
+            ViewBag.Name = Request["Name"];
+            ViewBag.KeyWords = Request["KeyWords"];
+            ViewBag.Staff = Request["Staff"];
+            ViewBag.Source = Request["Source"];
+            ViewBag.Summary = Request["Summary"];
+            ViewBag.StartTextDate = Request["StartTextDate"];
+            ViewBag.EndTextDate = Request["EndTextDate"];
+
             return View();
         }
 

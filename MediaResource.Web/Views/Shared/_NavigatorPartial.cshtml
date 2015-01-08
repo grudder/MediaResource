@@ -19,14 +19,6 @@
 					@Html.ActionLink("首页", "Index", "Home")
 				</li>
 				<li
-			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "TaskList").ToLower()))
-			        {
-			            @:class="active"
-			        }
-			        >
-					@Html.ActionLink("任务单", "Index", "TaskList")
-				</li>
-				<li
 			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "Photo").ToLower()))
 			        {
 			            @:class="active"
@@ -92,6 +84,14 @@
 			        >
 			        @Html.ActionLink("专题", "Index", "Topic")
 			    </li>
+				<li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "TaskList").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+					@Html.ActionLink("拍摄委托", "Index", "TaskList")
+				</li>
 			    <li
 			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "User").ToLower()))
 			        {

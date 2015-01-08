@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
 
@@ -54,7 +55,52 @@ namespace MediaResource.Web.Controllers
             }
             ViewBag.Keyword = keyword;
 
-            StaticPagedList<ImageViewModel> images = _topicVideoService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
+            // 高级搜索的查询条件
+            var searchCondition = new Dictionary<string, string>();
+            string name = Request["Name"];
+            if (!String.IsNullOrEmpty(Request["Name"]))
+            {
+                ViewBag.Name = name;
+                searchCondition.Add("Name", name);
+            }
+            string keyWords = Request["KeyWords"];
+            if (!String.IsNullOrEmpty(Request["KeyWords"]))
+            {
+                ViewBag.KeyWords = keyWords;
+                searchCondition.Add("KeyWords", keyWords);
+            }
+            string staff = Request["Staff"];
+            if (!String.IsNullOrEmpty(Request["Staff"]))
+            {
+                ViewBag.Staff = staff;
+                searchCondition.Add("Staff", staff);
+            }
+            string source = Request["Source"];
+            if (!String.IsNullOrEmpty(Request["Source"]))
+            {
+                ViewBag.Source = source;
+                searchCondition.Add("Source", source);
+            }
+            string summary = Request["Summary"];
+            if (!String.IsNullOrEmpty(Request["Summary"]))
+            {
+                ViewBag.Summary = summary;
+                searchCondition.Add("Summary", summary);
+            }
+            string startTextDate = Request["StartTextDate"];
+            if (!String.IsNullOrEmpty(Request["StartTextDate"]))
+            {
+                ViewBag.StartTextDate = startTextDate;
+                searchCondition.Add("StartTextDate", startTextDate);
+            }
+            string endTextDate = Request["EndTextDate"];
+            if (!String.IsNullOrEmpty(Request["EndTextDate"]))
+            {
+                ViewBag.EndTextDate = endTextDate;
+                searchCondition.Add("EndTextDate", endTextDate);
+            }
+
+            StaticPagedList<ImageViewModel> images = _topicVideoService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page, searchCondition);
 
             return PartialView("_PanelPartial", images);
         }
@@ -79,7 +125,52 @@ namespace MediaResource.Web.Controllers
             }
             ViewBag.Keyword = keyword;
 
-            StaticPagedList<ImageViewModel> images = _topicVideoService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page);
+            // 高级搜索的查询条件
+            var searchCondition = new Dictionary<string, string>();
+            string name = Request["Name"];
+            if (!String.IsNullOrEmpty(Request["Name"]))
+            {
+                ViewBag.Name = name;
+                searchCondition.Add("Name", name);
+            }
+            string keyWords = Request["KeyWords"];
+            if (!String.IsNullOrEmpty(Request["KeyWords"]))
+            {
+                ViewBag.KeyWords = keyWords;
+                searchCondition.Add("KeyWords", keyWords);
+            }
+            string staff = Request["Staff"];
+            if (!String.IsNullOrEmpty(Request["Staff"]))
+            {
+                ViewBag.Staff = staff;
+                searchCondition.Add("Staff", staff);
+            }
+            string source = Request["Source"];
+            if (!String.IsNullOrEmpty(Request["Source"]))
+            {
+                ViewBag.Source = source;
+                searchCondition.Add("Source", source);
+            }
+            string summary = Request["Summary"];
+            if (!String.IsNullOrEmpty(Request["Summary"]))
+            {
+                ViewBag.Summary = summary;
+                searchCondition.Add("Summary", summary);
+            }
+            string startTextDate = Request["StartTextDate"];
+            if (!String.IsNullOrEmpty(Request["StartTextDate"]))
+            {
+                ViewBag.StartTextDate = startTextDate;
+                searchCondition.Add("StartTextDate", startTextDate);
+            }
+            string endTextDate = Request["EndTextDate"];
+            if (!String.IsNullOrEmpty(Request["EndTextDate"]))
+            {
+                ViewBag.EndTextDate = endTextDate;
+                searchCondition.Add("EndTextDate", endTextDate);
+            }
+
+            StaticPagedList<ImageViewModel> images = _topicVideoService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page, searchCondition);
 
             return View(images);
         }

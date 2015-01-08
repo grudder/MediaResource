@@ -15,7 +15,7 @@
 					@foreach (var item in Model)
 					{
 						<li class="list-group-item">
-							@Html.TrimText(item.Name, 30)
+							@Html.TrimText(item.Name, 18)
 							<span class="badge">
 								@Html.FormatValue(item.CreateDate, "{0:yyyy-MM-dd}")
 							</span>
