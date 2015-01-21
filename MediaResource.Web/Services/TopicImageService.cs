@@ -80,14 +80,14 @@ namespace MediaResource.Web.Services
                 foreach (Node node in nodes)
                 {
                     var theNode = node;
-                    nodeCondition = nodeCondition.Or(i => ("|" + i.Nodes + "|").Contains("|" + theNode.NodeName + "|"));
+                    nodeCondition = nodeCondition.Or(i => ("|" + i.Nodes + "|").Contains("|" + theNode.NodeName + "(" + theNode.Id + ")|"));
                 }
                 query = query.Where(nodeCondition);
             }
             if (userPlateId != null)
             {
                 UserPlate userPlate = _userPlateService.Get(userPlateId);
-                query = query.Where(i => ("|" + i.Nodes + "|").Contains("|" + userPlate.PlateName + "|"));
+                query = query.Where(i => ("|" + i.Nodes + "|").Contains("|" + userPlate.PlateName + "(" + userPlate.Id + ")|"));
             }
             if (!String.IsNullOrWhiteSpace(keyword))
             {

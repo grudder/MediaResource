@@ -3,48 +3,51 @@
 
 @model PagedList.StaticPagedList<ImageViewModel>
 
-<div class="panel panel-info">
-	<div class="panel-heading">
-	    <div class="row">
-		    <div class="col-sm-6">
-			    <h3 class="panel-title">
-				    <img src='@Url.Content("~/Images/video-icon.png")' />
-				    视频
-			    </h3>
-		    </div>
-		    <div class="col-sm-6">
-			    <a href='@Url.Action("List", "TopicVideo", new { ViewBag.TopicId, ViewBag.NodeId, ViewBag.UserPlateId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate })' class="navbar-right">更多&gt;&gt;</a>
-		    </div>
-	    </div>
-	</div>
-	<div class="panel-body">
-        <div class="row">
-	        @foreach (var item in Model)
-	        {
-		        <div class="col-sm-3 thumbnail-sm">
-			        <div class="thumbnail">
-			            <a title="查看" data-toggle="modal" href="#" onclick="showTopicVideoDetailModal(@item.Id)">
-			                <div class="img-md-wrap">
-			                    <img src="@item.FileUrl" />
-			                </div>
-			            </a>
-			            <div class="caption">
-			                <p class="title">
-			                    @Html.TrimText(item.Name, 18)
-			                </p>
-			            </div>
-			        </div>
+@if (Model.Count > 0)
+{
+    <div class="panel panel-info">
+	    <div class="panel-heading">
+	        <div class="row">
+		        <div class="col-sm-6">
+			        <h3 class="panel-title">
+				        <img src='@Url.Content("~/Images/video-icon.png")' />
+				        视频资料
+			        </h3>
 		        </div>
-	        }
-        </div>
-	</div>
-</div>
+		        <div class="col-sm-6">
+			        <a href='@Url.Action("List", "TopicVideo", new { ViewBag.TopicId, ViewBag.NodeId, ViewBag.UserPlateId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate })' class="navbar-right">更多&gt;&gt;</a>
+		        </div>
+	        </div>
+	    </div>
+	    <div class="panel-body">
+            <div class="row">
+	            @foreach (var item in Model)
+	            {
+		            <div class="col-sm-3 thumbnail-sm">
+			            <div class="thumbnail">
+			                <a title="查看" data-toggle="modal" href="#" onclick="showTopicVideoDetailModal(@item.Id)">
+			                    <div class="img-md-wrap">
+			                        <img src="@item.FileUrl" />
+			                    </div>
+			                </a>
+			                <div class="caption">
+			                    <p class="title">
+			                        @Html.TrimText(item.Name, 18)
+			                    </p>
+			                </div>
+			            </div>
+		            </div>
+	            }
+            </div>
+	    </div>
+    </div>
 
-<script type="text/javascript">
-    function showTopicVideoDetailModal(id) {
-        parent.parent.$("#topicVideoDetailModal").modal({
-            show: true,
-            remote: '@Url.Action("Detail", "TopicVideo")' + "/" + id
-        });
-    }
-</script>
+    <script type="text/javascript">
+        function showTopicVideoDetailModal(id) {
+            parent.parent.$("#topicVideoDetailModal").modal({
+                show: true,
+                remote: '@Url.Action("Detail", "TopicVideo")' + "/" + id
+            });
+        }
+    </script>
+}

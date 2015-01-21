@@ -19,10 +19,13 @@
     <![endif]-->
 </head>
 <body>
-    @Html.Action("PanelPartial", "TopicImage", new {ViewBag.TopicId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})
-    @Html.Action("PanelPartial", "TopicVideo", new {ViewBag.TopicId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})
-    @Html.Action("PanelPartial", "TopicText", new {ViewBag.TopicId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})
-    @Html.Action("PanelPartial", "TopicNews", new {ViewBag.TopicId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})
+    @if (ViewBag.AdvSearch != true)
+    {
+        @Html.Action("PanelPartial", "TopicImage", new {ViewBag.TopicId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})
+        @Html.Action("PanelPartial", "TopicVideo", new {ViewBag.TopicId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})
+        @Html.Action("PanelPartial", "TopicText", new {ViewBag.TopicId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})
+        @Html.Action("PanelPartial", "TopicNews", new {ViewBag.TopicId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})
+    }
 
     <p class="text-center">
         <label>高级搜索</label>
@@ -62,7 +65,7 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-12">
+            <div class="col-sm-12 text-center">
                 <button type="submit" class="btn btn-primary">查询</button>
             </div>
         </div>

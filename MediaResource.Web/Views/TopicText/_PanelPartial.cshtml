@@ -3,43 +3,46 @@
 
 @model PagedList.StaticPagedList<TopicText>
 
-<div class="panel panel-info">
-	<div class="panel-heading">
-	    <div class="row">
-		    <div class="col-sm-6">
-			    <h3 class="panel-title">
-				    <img src='@Url.Content("~/Images/graphic-icon.png")' />
-				    文字资料
-			    </h3>
-		    </div>
-		    <div class="col-sm-6">
-			    <a href='@Url.Action("List", "TopicText", new { ViewBag.TopicId, ViewBag.NodeId, ViewBag.UserPlateId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate })' class="navbar-right">更多&gt;&gt;</a>
-		    </div>
+@if (Model.Count > 0)
+{
+    <div class="panel panel-info">
+	    <div class="panel-heading">
+	        <div class="row">
+		        <div class="col-sm-6">
+			        <h3 class="panel-title">
+				        <img src='@Url.Content("~/Images/graphic-icon.png")' />
+				        文献报告
+			        </h3>
+		        </div>
+		        <div class="col-sm-6">
+			        <a href='@Url.Action("List", "TopicText", new { ViewBag.TopicId, ViewBag.NodeId, ViewBag.UserPlateId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate })' class="navbar-right">更多&gt;&gt;</a>
+		        </div>
+	        </div>
 	    </div>
-	</div>
-	<div class="panel-body">
-		<ul class="list-group">
-			@foreach (var item in Model)
-			{
-			    <li class="list-group-item">
-			        <a title="查看" data-toggle="modal" href="#" onclick="showTopicTextDetailModal(@item.Id)">
-			            @Html.TrimText(item.Name, 30)
-			        </a>
-                    (<a href="@Url.Action("Download", new {id = item.Id})" target="_blank">下载</a>)
-			        <span class="badge">
-						@Html.DisplayFor(model => item.TextDate)
-					</span>
-			    </li>
-			}
-		</ul>
-	</div>
-</div>
+	    <div class="panel-body">
+		    <ul class="list-group">
+			    @foreach (var item in Model)
+			    {
+			        <li class="list-group-item">
+			            <a title="查看" data-toggle="modal" href="#" onclick="showTopicTextDetailModal(@item.Id)">
+			                @Html.TrimText(item.Name, 30)
+			            </a>
+                        (<a href="@Url.Action("Download", new {id = item.Id})" target="_blank">下载</a>)
+			            <span class="badge">
+						    @Html.DisplayFor(model => item.TextDate)
+					    </span>
+			        </li>
+			    }
+		    </ul>
+	    </div>
+    </div>
 
-<script type="text/javascript">
-    function showTopicTextDetailModal(id) {
-        parent.parent.$("#topicTextDetailModal").modal({
-            show: true,
-            remote: '@Url.Action("Detail", "TopicText")' + "/" + id
-        });
-    }
-</script>
+    <script type="text/javascript">
+        function showTopicTextDetailModal(id) {
+            parent.parent.$("#topicTextDetailModal").modal({
+                show: true,
+                remote: '@Url.Action("Detail", "TopicText")' + "/" + id
+            });
+        }
+    </script>
+}

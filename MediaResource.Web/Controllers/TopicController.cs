@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 using MediaResource.Web.Helper;
@@ -56,6 +57,8 @@ namespace MediaResource.Web.Controllers
         {
             ViewBag.Keyword = keyword;
 
+            ViewBag.AdvSearch = Convert.ToBoolean(Request["AdvSearch"]);
+
             Topic topic = _topicService.Get(id);
             return View(topic);
         }
@@ -74,6 +77,8 @@ namespace MediaResource.Web.Controllers
             ViewBag.Summary = Request["Summary"];
             ViewBag.StartTextDate = Request["StartTextDate"];
             ViewBag.EndTextDate = Request["EndTextDate"];
+
+            ViewBag.AdvSearch = Convert.ToBoolean(Request["AdvSearch"]);
 
             return View();
         }

@@ -105,7 +105,7 @@ namespace MediaResource.Web.Controllers
             }
 
             StaticPagedList<ImageViewModel> images = _topicImageService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page, searchCondition);
-
+            
             return PartialView("_PanelPartial", images);
         }
 

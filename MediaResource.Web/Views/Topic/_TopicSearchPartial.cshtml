@@ -11,7 +11,7 @@
                 <input id="inputTopicKeyword" type="text" class="form-control" placeholder="输入内容搜索本专题" value="@ViewBag.Keyword" />
             </div>
             <button type="submit" class="btn btn-primary" onclick=" javascript: return doTopicSearch(); ">搜索</button>
-            <a class="btn btn-primary" data-role="button" href="@Url.Action("Search", "Topic", new { Model.Id })">高级搜索</a>
+            <a class="btn btn-primary" data-role="button" href="@Url.Action("Search", "Topic", new { Model.Id, advSearch = true })">高级搜索</a>
         </form>
 
         <script type="text/javascript">

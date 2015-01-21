@@ -7,7 +7,7 @@
 
 @Html.Action("TopicSearchPartial", new {id = Model.Id})
 
-<iframe height="1500" scrolling="no" src='@Url.Action("SearchFrame", "Topic", new {Model.Id, ViewBag.Keyword})' onload="iframeAutoHeight()"></iframe>
+<iframe height="1500" scrolling="no" src='@Url.Action("SearchFrame", "Topic", new {Model.Id, ViewBag.Keyword, ViewBag.AdvSearch})' onload="iframeAutoHeight()"></iframe>
 
 <div id="topicImageDetailModal" class="modal fade">
 	<div class="modal-dialog modal-dialog-lg">
