@@ -41,7 +41,7 @@
     function advancedSearch() {
         var objectType = $("#selectObjectType").val();
         if (objectType != "UserPhoto" && objectType != "UserVideo") {
-            var url = "/" + objectType + "/Category";
+            var url = "/" + objectType + "/Category?advSearch=true";
             location.href = url;
         }
     }

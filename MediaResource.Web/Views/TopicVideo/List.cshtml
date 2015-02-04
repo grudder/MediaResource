@@ -14,7 +14,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>视频资料</title>
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/modernizr")
@@ -26,7 +25,7 @@
 </head>
 <body>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-xs-6">
             <h3 class="panel-title">
                 <img src='@Url.Content("~/Images/video-icon.png")' />
                 视频资料
@@ -34,25 +33,28 @@
         </div>
         @if ((ViewBag.TopicId != null && ViewBag.UserPlateId == null) || ViewBag.NodeId != null)
         {
-            <div class="col-sm-5">
+            <div class="col-xs-5">
                 <a href="javascript: history.back();" class="navbar-right">返回</a>
             </div>
         }
     </div>
     <hr/>
 	<div class="row">
+	    @{
+            string imageWrapClass = (Request["fullWidth"].ToLower() == "true") ? "img-md-wrap-2" : "img-md-wrap";
+	    }
 		@foreach (var item in Model)
 		{
-			<div class="col-sm-3 thumbnail-sm">
+			<div class="col-xs-3 thumbnail-sm">
 			    <div class="thumbnail">
 			        <a title="查看" data-toggle="modal" href="#" onclick="showTopicVideoDetailModal(@item.Id)">
-			            <div class="img-md-wrap">
+			            <div class="@imageWrapClass">
 			                <img src="@item.FileUrl" />
 			            </div>
 			        </a>
 			        <div class="caption">
 			            <p class="title">
-			                @Html.TrimText(item.Name, 18)
+			                @Html.TrimText(item.Name, 36)
 			            </p>
 			            <a href="@Url.Action("Download", new {id = @item.Id})" target="_blank" class="btn btn-default">下载</a>
 			        </div>

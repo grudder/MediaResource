@@ -13,7 +13,6 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - 媒体资源系统</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -26,14 +25,14 @@
 				@using (Html.BeginForm("Login", "Account", new { ViewBag.ReturnUrl }, FormMethod.Post, new { id = "theForm", @class = "form-horizontal", role = "form" }))
 				{
 					<div class="form-group">
-						@Html.LabelFor(m => m.Name, new { @class = "col-md-3 control-label" })
-						<div class="col-md-9">
+						@Html.LabelFor(m => m.Name, new { @class = "col-xs-3 control-label" })
+						<div class="col-xs-9">
 							@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
 						</div>
 					</div>
 					<div class="form-group">
-						@Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
-						<div class="col-md-9">
+						@Html.LabelFor(m => m.Password, new { @class = "col-xs-3 control-label" })
+						<div class="col-xs-9">
 							@Html.PasswordFor(m => m.Password, new { @class = "form-control" })
 						</div>
 					</div>

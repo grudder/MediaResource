@@ -9,7 +9,6 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>注册 - 媒体资源系统</title>
 </head>
 <body>
@@ -25,34 +24,34 @@
 	</div>
 	<div class="modal-body">
 		<div class="form-group">
-			@Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
-			<div class="col-md-10">
+			@Html.LabelFor(m => m.Name, new { @class = "col-xs-2 control-label" })
+			<div class="col-xs-10">
 				@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
                 <span class="label label-warning">建议使用发改委邮箱注册</span>
 				@Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
 			</div>
 		</div>
 		<div class="form-group">
-			@Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-			<div class="col-md-10">
+			@Html.LabelFor(m => m.Password, new { @class = "col-xs-2 control-label" })
+			<div class="col-xs-10">
 				@Html.PasswordFor(m => m.Password, new { @class = "form-control" })
 				@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 			</div>
 		</div>
 		<div class="form-group">
-			@Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-			<div class="col-md-10">
+			@Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-xs-2 control-label" })
+			<div class="col-xs-10">
 				@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
 				@Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
 			</div>
 		</div>
 		<div class="form-group">
-			@Html.LabelFor(m => m.GroupId, new { @class = "col-md-2 control-label" })
-		    <div class="col-md-10">
+			@Html.LabelFor(m => m.GroupId, new { @class = "col-xs-2 control-label" })
+		    <div class="col-xs-10">
 		        <div class="row">
 		            @foreach (var group in ViewBag.Groups)
 		            {
-		                <div class="col-md-6">
+		                <div class="col-xs-6">
 		                    <label class="radio-inline">
 		                        <input type="radio" name="GroupId" value="@group.Id" />
 		                        @group.Name
@@ -63,22 +62,22 @@
 		    </div>
 		</div>
 		<div class="form-group">
-			@Html.LabelFor(m => m.FullName, new { @class = "col-md-2 control-label" })
-			<div class="col-md-10">
+			@Html.LabelFor(m => m.FullName, new { @class = "col-xs-2 control-label" })
+			<div class="col-xs-10">
 				@Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
 				@Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
 			</div>
 		</div>
 		<div class="form-group">
-			@Html.LabelFor(m => m.Ext, new { @class = "col-md-2 control-label" })
-			<div class="col-md-10">
+			@Html.LabelFor(m => m.Ext, new { @class = "col-xs-2 control-label" })
+			<div class="col-xs-10">
 				@Html.TextBoxFor(m => m.Ext, new { @class = "form-control" })
 				@Html.ValidationMessageFor(m => m.Ext, "", new { @class = "text-danger" })
 			</div>
 		</div>
 		<div class="form-group">
-			@Html.LabelFor(m => m.Mobile, new { @class = "col-md-2 control-label" })
-			<div class="col-md-10">
+			@Html.LabelFor(m => m.Mobile, new { @class = "col-xs-2 control-label" })
+			<div class="col-xs-10">
 				@Html.TextBoxFor(m => m.Mobile, new { @class = "form-control" })
 				@Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
 			</div>

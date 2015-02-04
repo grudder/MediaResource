@@ -55,12 +55,22 @@ namespace MediaResource.Web.Services
                            {
                                Id = graphic.Id,
                                Name = graphic.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                               FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                               FileUrl = graphic.PreviewPath,
                                CreateDate = graphic.CreateDate
                            };
 
             List<ImageViewModel> list = graphics.Take(count).ToList();
+
+            // 获取缩略图地址
+            int index = 0;
+            foreach (ImageViewModel item in list)
+            {
+                item.FileUrl = (index == 0)
+                    ? ImageHelper.GetLargeThumbUrl(item.FileUrl)
+                    : ImageHelper.GetSmallThumbUrl(item.FileUrl);
+                ++index;
+            }
 
             return list;
         }
@@ -80,8 +90,8 @@ namespace MediaResource.Web.Services
                            {
                                Id = graphic.Id,
                                Name = graphic.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                               FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                               FileUrl = graphic.PreviewPath,
                                CreateDate = graphic.CreateDate,
                                ObjectType = ObjectType.Graphic
                            };
@@ -102,15 +112,20 @@ namespace MediaResource.Web.Services
                            {
                                Id = graphic.Id,
                                Name = graphic.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                               FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                               FileUrl = graphic.PreviewPath,
                                CreateDate = graphic.CreateDate,
                                ObjectType = ObjectType.Graphic
                            };
             }
 
-            // 获取缩略图地址
             List<ImageViewModel> groupGraphics = graphics.Take(count).ToList();
+
+            // 获取缩略图地址
+            foreach (ImageViewModel item in groupGraphics)
+            {
+                item.FileUrl = ImageHelper.GetSmallThumbUrl(item.FileUrl);
+            }
 
             return groupGraphics;
         }
@@ -135,8 +150,8 @@ namespace MediaResource.Web.Services
                 {
                     Id = graphic.Id,
                     Name = graphic.Name,
-                    RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                    FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                    RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                    FileUrl = graphic.PreviewPath,
                     CreateDate = graphic.CreateDate
                 });
 
@@ -144,6 +159,12 @@ namespace MediaResource.Web.Services
             pageSize = (pageSize ?? 20);
             pageIndex = (pageIndex ?? 1);
             var pagedList = query.ToPagedList(pageIndex.Value, pageSize.Value);
+
+            // 获取缩略图地址
+            foreach (ImageViewModel item in pagedList)
+            {
+                item.FileUrl = ImageHelper.GetSmallThumbUrl(item.FileUrl);
+            }
             
             return pagedList;
         }
@@ -164,8 +185,8 @@ namespace MediaResource.Web.Services
                            {
                                Id = graphic.Id,
                                Name = graphic.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                               FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                               FileUrl = graphic.PreviewPath,
                                CreateDate = graphic.CreateDate,
                                ObjectType = ObjectType.Graphic
                            };
@@ -186,8 +207,8 @@ namespace MediaResource.Web.Services
                            {
                                Id = graphic.Id,
                                Name = graphic.Name,
-                               RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                               FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                               RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                               FileUrl = graphic.PreviewPath,
                                CreateDate = graphic.CreateDate,
                                ObjectType = ObjectType.Graphic
                            };
@@ -198,6 +219,12 @@ namespace MediaResource.Web.Services
             pageSize = (pageSize ?? 20);
             pageIndex = (pageIndex ?? 1);
             var pagedList = graphics.ToPagedList(pageIndex.Value, pageSize.Value);
+
+            // 获取缩略图地址
+            foreach (ImageViewModel item in pagedList)
+            {
+                item.FileUrl = ImageHelper.GetSmallThumbUrl(item.FileUrl);
+            }
 
             return pagedList;
         }
@@ -280,8 +307,8 @@ namespace MediaResource.Web.Services
             {
                 Id = graphic.Id,
                 Name = graphic.Name,
-                RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                FileUrl = ImageHelper.GetSmallThumbUrl(graphic.PreviewPath),
                 CreateDate = graphic.CreateDate
             });
         }
@@ -299,8 +326,8 @@ namespace MediaResource.Web.Services
                         {
                             Id = graphic.Id,
                             Name = graphic.Name,
-                            RawUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
-                            FileUrl = WebHelper.Instance.RootUrl + graphic.PreviewPath,
+                            RawUrl = WebHelper.Instance.RootUrl + graphic.FileUrl,
+                            FileUrl = graphic.PreviewPath,
                             CreateDate = graphic.CreateDate
                         };
 
@@ -308,6 +335,12 @@ namespace MediaResource.Web.Services
             pageSize = (pageSize ?? 20);
             pageIndex = (pageIndex ?? 1);
             var pagedList = query.ToPagedList(pageIndex.Value, pageSize.Value);
+
+            // 获取缩略图地址
+            foreach (ImageViewModel item in pagedList)
+            {
+                item.FileUrl = ImageHelper.GetSmallThumbUrl(item.FileUrl);
+            }
 
             return pagedList;
         }

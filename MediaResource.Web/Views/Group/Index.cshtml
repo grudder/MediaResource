@@ -5,14 +5,14 @@
 }
 
 <div class="row">
-	<div class="col-md-3">
+	<div class="col-xs-3">
 		@Html.Action("IndexPartial", "Group", new {actionUrl = Url.Action("Index", "Group")})
 	</div>
-    <div class="col-md-9">
+    <div class="col-xs-9">
         @if (Model != null)
         {
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <p>
                         处室：
                         <label>
@@ -23,13 +23,13 @@
             </div>
         }
 		<div class="row">
-		    <div class="col-md-8">
+		    <div class="col-xs-8">
 		        @Html.Action("GroupPartial", "UserPhoto", new {groupId = (Model == null) ? null : (int?)Model.Id})
 		        @Html.Action("GroupPartial", "UserVideo", new {groupId = (Model == null) ? null : (int?)Model.Id})
 		        @Html.Action("GroupPartial", "Graphic", new {groupId = (Model == null) ? null : (int?)Model.Id})
 		        @Html.Action("GroupPartial", "News", new {groupId = (Model == null) ? null : (int?)Model.Id})
 		    </div>
-		    <div class="col-md-4">
+		    <div class="col-xs-4">
 		        @Html.Action("StatPartial", new {groupId = (Model == null) ? null : (int?)Model.Id})
 		        @Html.Action("RankPartial", new {groupId = (Model == null) ? null : (int?)Model.Id})
 		    </div>

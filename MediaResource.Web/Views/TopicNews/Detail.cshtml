@@ -15,16 +15,16 @@
 </div>
 <div class="modal-body">
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-xs-6">
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-xs-12">
 				    <div class="img-lg-wrap">
 					    <img src="@WebHelper.Instance.RootUrl@Model.Locations" />
 				    </div>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-xs-12">
 					<form class="form-inline" role="form">
 						<label class="sr-only" for="hiddenTopicNewsScore">评分：</label>
 						<input type="hidden" id="hiddenTopicNewsScore" value="0" />
@@ -45,9 +45,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-xs-6">
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-xs-12">
 					<ul id="topicNewsTab" class="nav nav-tabs">
 					    <li class="active">
 					        <a href="#topicNewsDetailTab" data-toggle="tab">详细信息</a>
@@ -98,19 +98,19 @@
 						</div>
 						<div class="tab-pane" id="topicNewsCommentTab">
 							<div class="row">
-								<div class="col-md-12">
+								<div class="col-xs-12">
 									<form class="form-horizontal" role="form">
 										<div class="form-group">
-											<div class="col-md-12">
+											<div class="col-xs-12">
 												<textarea id="textTopicNewsCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
 											</div>
 										</div>
 										<div class="form-group">
-											<img id="imgTopicNewsVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshTopicNewsVerificationCode()" />
-											<div class="col-md-3">
+											<img id="imgTopicNewsVerificationCode" alt="点击刷新" class="col-xs-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshTopicNewsVerificationCode()" />
+											<div class="col-xs-3">
 												<input id="inputTopicNewsVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
 											</div>
-											<div class="col-md-7">
+											<div class="col-xs-7">
 												<button class="btn btn-primary" type="button" onclick="postTopicNewsCommit()">发表评论</button>
 											</div>
 										</div>
@@ -118,7 +118,7 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-12">
+								<div class="col-xs-12">
 									<iframe id="iframeTopicNewsCommentList" src="#" height="360"></iframe>
 								</div>
 							</div>

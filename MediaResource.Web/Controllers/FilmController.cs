@@ -41,16 +41,17 @@ namespace MediaResource.Web.Controllers
 
 		//
 		// GET: /Film/Category
-		public ActionResult Category(int? id)
+        public ActionResult Category(int? id, bool? advSearch)
 		{
-			ViewBag.Id = id;
+            ViewBag.Id = id;
+            ViewBag.AdvSearch = advSearch;
 
 			return View();
 		}
 
 		//
 		// GET: /Film/List
-		public ActionResult List(int? id, int? pageSize, int? page)
+        public ActionResult List(int? id, int? pageSize, int? page, bool? advSearch)
         {
             if (id == null)
             {
@@ -66,6 +67,13 @@ namespace MediaResource.Web.Controllers
             ViewBag.StartTime = Request["startTime"];
             ViewBag.EndTime = Request["endTime"];
             ViewBag.GroupIds = Request["groupIds"];
+
+            // 高级查询
+            ViewBag.AdvSearch = advSearch;
+            if (advSearch == true)
+            {
+                return View();
+            }
 
             StaticPagedList<ImageViewModel> images = _filmService.AdvancedSearch(ViewBag.NameOrKeyword, ViewBag.Person, ViewBag.StartTime, ViewBag.EndTime, ViewBag.GroupIds, id, pageSize, page);
 

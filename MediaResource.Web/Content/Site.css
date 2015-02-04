@@ -1,4 +1,11 @@
-﻿/* Set width on the form input elements since they're 100% wide by default */
+﻿.container {
+    width: 1170px;
+}
+.navbar-nav > li {
+    float: left;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
 input, select, textarea {
     /* max-width: 280px; */
 }
@@ -142,6 +149,25 @@ dd:before {
         max-height: 120px;
     }
 
+.thumbnail .img-md-wrap-2 {
+    margin-left: 9px;
+}
+.img-md-wrap-2 {
+    width: 220px;
+    height: 120px;
+    text-align: center;
+    font-family: arial;
+    line-height: 120px;
+    font-size: 0;
+    _font-size: 100px;
+}
+    .img-md-wrap-2 img {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 220px;
+        max-height: 120px;
+    }
+
 .img-sm-wrap {
     width: 120px;
     height: 90px;
@@ -176,20 +202,21 @@ dd:before {
 
 
 .thumbnail-sm p {
-    margin-top: -40px;
+    margin-top: -45px;
     background-color: #222;
     opacity: 0.8;
     color: white;
     width: 160px;
-    height: 40px;
+    height: 45px;
     padding: 2px;
 }
 
     .thumbnail-sm p.title {
-        background-color: #000;
-        opacity: 1;
-        margin-top: -10px;
-        height: 20px;
+        margin-top: -45px;
+        background-color: #222;
+        opacity: 0.8;
+        color: white;
+        height: 45px;
         margin-left: auto;
         margin-right: auto;
     }

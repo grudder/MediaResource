@@ -36,7 +36,7 @@ namespace MediaResource.Web.Controllers
 
         // GET: TopicVideo/PanelPartial
         [ChildActionOnly]
-        public ActionResult PanelPartial(string keyword, int? pageSize, int? page)
+        public ActionResult PanelPartial(string keyword, int? page)
         {
             int? topicId = null;
             if (!String.IsNullOrEmpty(Request["TopicId"]))
@@ -100,6 +100,7 @@ namespace MediaResource.Web.Controllers
                 searchCondition.Add("EndTextDate", endTextDate);
             }
 
+            const int pageSize = 8;
             StaticPagedList<ImageViewModel> images = _topicVideoService.AdvancedSearch(topicId, nodeId, userPlateId, keyword, pageSize, page, searchCondition);
 
             return PartialView("_PanelPartial", images);

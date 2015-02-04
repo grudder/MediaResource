@@ -5,40 +5,42 @@
 
 @if (Model.Count > 0)
 {
+    bool fullWidth = (Request.Path != "/Node");
+    string imageWrapClass = fullWidth ? "img-md-wrap-2" : "img-md-wrap";
     <div class="panel panel-info">
 	    <div class="panel-heading">
 	        <div class="row">
-		        <div class="col-sm-6">
+		        <div class="col-xs-6">
 			        <h3 class="panel-title">
 				        <img src='@Url.Content("~/Images/photo-icon.png")' />
 				        照片资料
 			        </h3>
 		        </div>
-		        <div class="col-sm-6">
-			        <a href='@Url.Action("List", "TopicImage", new {ViewBag.TopicId, ViewBag.NodeId, ViewBag.UserPlateId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})' class="navbar-right">更多&gt;&gt;</a>
+		        <div class="col-xs-6">
+			        <a href='@Url.Action("List", "TopicImage", new {fullWidth, ViewBag.TopicId, ViewBag.NodeId, ViewBag.UserPlateId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})' class="navbar-right">更多&gt;&gt;</a>
 		        </div>
 	        </div>
 	    </div>
 	    <div class="panel-body">
-            <div class="row">
+	        <div class="row">
 	            @foreach (var item in Model)
 	            {
-		            <div class="col-sm-3 thumbnail-sm">
-			            <div class="thumbnail">
-			                <a title="查看" data-toggle="modal" href="#" onclick="showTopicImageDetailModal(@item.Id)">
-			                    <div class="img-md-wrap">
-			                        <img src="@item.FileUrl" />
-			                    </div>
-			                </a>
-			                <div class="caption">
-			                    <p class="title">
-			                        @Html.TrimText(item.Name, 18)
-			                    </p>
-			                </div>
-			            </div>
-		            </div>
+	                <div class="col-xs-3 thumbnail-sm">
+	                    <div class="thumbnail">
+	                        <a title="查看" data-toggle="modal" href="#" onclick="showTopicImageDetailModal(@item.Id)">
+	                            <div class="@imageWrapClass">
+	                                <img src="@item.FileUrl"/>
+	                            </div>
+	                        </a>
+	                        <div class="caption">
+	                            <p class="title">
+	                                @Html.TrimText(item.Name, 36)
+	                            </p>
+	                        </div>
+	                    </div>
+	                </div>
 	            }
-            </div>
+	        </div>
 	    </div>
     </div>
 

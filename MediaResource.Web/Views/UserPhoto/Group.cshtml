@@ -10,10 +10,10 @@
 @model PagedList.IPagedList<ImageViewModel>
 
 <div class="row">
-	<div class="col-md-3">
+	<div class="col-xs-3">
 		@Html.Action("IndexPartial", "Group", new {actionUrl = "/UserPhoto/Group"})
 	</div>
-	<div class="col-md-9">
+	<div class="col-xs-9">
 		<h4>
 			照片——处室：
 			@if (ViewBag.Group != null)
@@ -24,7 +24,7 @@
 		<div class="row">
 			@foreach (var item in Model)
 			{
-				<div class="col-sm-3 thumbnail-sm">
+				<div class="col-xs-3 thumbnail-sm">
 				    <div class="thumbnail">
 				        @if (item.ObjectType == ObjectType.UserPhoto)
                         {
@@ -35,7 +35,7 @@
                             </a>
 				            <div class="caption">
 				                <p class="title">
-				                    @Html.TrimText(item.Name, 18)
+				                    @Html.TrimText(item.Name, 36)
 				                </p>
 						        <a href="@item.RawUrl" target="_blank" class="btn btn-default">下载</a>
 				            </div>
@@ -49,7 +49,7 @@
                             </a>
                             <div class="caption">
                                 <p class="title">
-                                    @Html.TrimText(item.Name, 18)
+                                    @Html.TrimText(item.Name, 36)
                                 </p>
                                 <a href="@Url.Action("Download", "Photo", new {id = @item.Id})" target="_blank" class="btn btn-default">下载</a>
                             </div>

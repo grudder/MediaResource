@@ -2,23 +2,23 @@
 @model List<MediaResource.Web.Models.ViewModels.ImageViewModel>
 
 <div id="videoListPanel" class="row">
-	<div class="col-md-12">
+	<div class="col-xs-12">
 		<div class="panel panel-info">
 			<div class="panel-heading">
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-xs-6">
 						<h3 class="panel-title">
 							<img src='@Url.Content("~/Images/video-icon.png")' />
 							视频素材
 						</h3>
 					</div>
-					<div class="col-md-6">
+					<div class="col-xs-6">
 						<a href='@Url.Action("Category", "Video")' class="navbar-right">更多&gt;&gt;</a>
 					</div>
 				</div>
 			</div>
 			<div class="panel-body">
-				<div class="col-md-6 thumbnail-xl">
+				<div class="col-xs-6 thumbnail-xl">
 					@if (Model.Count > 0)
 					{
 						<a data-toggle="modal" href='@Url.Action("Detail", "Video", new { id = Model[0].Id})' data-target="#videoDetailModal">
@@ -31,18 +31,18 @@
 						</p>
 					}
 				</div>
-				<div class="col-md-6">
+				<div class="col-xs-6">
 					<div class="row">
 						@for (int i = 1; i < Model.Count; ++i)
 						{
-							<div class="col-md-6 thumbnail-sm">
+							<div class="col-xs-6 thumbnail-sm">
 								<a data-toggle="modal" href='@Url.Action("Detail", "Video", new { id = Model[i].Id})' data-target="#videoDetailModal">
 								    <div class="img-md-wrap">
 								        <img src='@Url.Content(Model[i].FileUrl)' />
                                     </div>
 								</a>
 								<p>
-									@Html.TrimText(Model[i].Name, 38)
+									@Html.TrimText(Model[i].Name, 36)
 								</p>
 							</div>
 						}

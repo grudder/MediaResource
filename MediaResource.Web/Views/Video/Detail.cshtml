@@ -13,9 +13,9 @@
 </div>
 <div class="modal-body">
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-xs-6">
 			<div class="row">
-			    <div class="col-md-12">
+			    <div class="col-xs-12">
 			        <p>
 				        <div class="img-lg-wrap">
 					        <img id="imgPreviewImage" src="@Model.ImageUrl" />
@@ -26,7 +26,7 @@
 			<div class="row">
 				@foreach (string previewImage in Model.PreviewImages)
 				{
-				    <div class="col-md-4">
+				    <div class="col-xs-4">
 				        <p>
 				            <a href="#">
 				                <div class="img-sm-wrap">
@@ -38,7 +38,7 @@
 				}
 			</div>
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-xs-12">
 					<form class="form-inline" role="form">
 						<label class="sr-only" for="hiddenVideoScore">评分：</label>
 						<input type="hidden" id="hiddenVideoScore" value="0" />
@@ -58,9 +58,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-xs-6">
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-xs-12">
 					<ul id="videoTab" class="nav nav-tabs">
 					    <li class="active">
 					        <a href="#videoDetailTab" data-toggle="tab">详细信息</a>
@@ -147,19 +147,19 @@
 						</div>
 						<div class="tab-pane" id="videoCommentTab">
 							<div class="row">
-								<div class="col-md-12">
+								<div class="col-xs-12">
 									<form class="form-horizontal" role="form">
 										<div class="form-group">
-											<div class="col-md-12">
+											<div class="col-xs-12">
 												<textarea id="textVideoCommentContent" class="form-control" rows="5" placeholder="评论内容"></textarea>
 											</div>
 										</div>
 										<div class="form-group">
-											<img id="imgVideoVerificationCode" alt="点击刷新" class="col-md-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshVideoVerificationCode()" />
-											<div class="col-md-3">
+											<img id="imgVideoVerificationCode" alt="点击刷新" class="col-xs-2" src='@Url.Action("Create", "VerificationCode")' onclick="refreshVideoVerificationCode()" />
+											<div class="col-xs-3">
 												<input id="inputVideoVerificationCode" type="text" class="form-control" maxlength="5" placeholder="验证码" />
 											</div>
-											<div class="col-md-7">
+											<div class="col-xs-7">
 												<button class="btn btn-primary" type="button" onclick="postVideoCommit()">发表评论</button>
 											</div>
 										</div>
@@ -167,7 +167,7 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-12">
+								<div class="col-xs-12">
 									<iframe id="iframeVideoCommentList" src="#" height="360"></iframe>
 								</div>
 							</div>

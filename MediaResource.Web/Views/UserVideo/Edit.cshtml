@@ -11,7 +11,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>修改个人视频 - 媒体资源系统</title>
 </head>
 <body>
@@ -30,29 +29,29 @@
 			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 			<div class="form-group">
-				@Html.LabelFor(model => model.Title, new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
+				@Html.LabelFor(model => model.Title, new { @class = "control-label col-xs-2" })
+				<div class="col-xs-10">
 					@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
 					@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
 				</div>
 			</div>
 			<div class="form-group">
-				@Html.LabelFor(model => model.FileUrl, new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
+				@Html.LabelFor(model => model.FileUrl, new { @class = "control-label col-xs-2" })
+				<div class="col-xs-10">
 					@Html.HiddenFor(model => model.FileUrl)
 					<input type="file" name="photoFile" />
 				</div>
 			</div>
 			<div class="form-group">
-				@Html.LabelFor(model => model.FolderId, new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
+				@Html.LabelFor(model => model.FolderId, new { @class = "control-label col-xs-2" })
+				<div class="col-xs-10">
 					@Html.DropDownList("FolderId", (List<SelectListItem>)ViewBag.UserVideoFolders, new { @class = "form-control" })
 					@Html.ValidationMessageFor(model => model.FolderId, "", new { @class = "text-danger" })
 				</div>
 			</div>
 			<div class="form-group">
-				@Html.LabelFor(model => model.IsPublic, new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
+				@Html.LabelFor(model => model.IsPublic, new { @class = "control-label col-xs-2" })
+				<div class="col-xs-10">
                     <label class="radio-inline">
                         <input type="radio" name="IsPublic" value="true"
                             @if (Model.IsPublic == true)
@@ -72,14 +71,14 @@
 				</div>
 			</div>
 			<div class="form-group hide">
-				@Html.LabelFor(model => model.CreateBy, new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
+				@Html.LabelFor(model => model.CreateBy, new { @class = "control-label col-xs-2" })
+				<div class="col-xs-10">
 					@Html.EditorFor(model => model.CreateBy)
 				</div>
 			</div>
 			<div class="form-group">
-				@Html.LabelFor(model => model.CreateDate, new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
+				@Html.LabelFor(model => model.CreateDate, new { @class = "control-label col-xs-2" })
+				<div class="col-xs-10">
 					@Html.EditorFor(model => model.CreateDate, new { htmlAttributes = new { @class = "form-control", @readonly="readonly" } })
 					@Html.ValidationMessageFor(model => model.CreateDate, "", new { @class = "text-danger" })
 				</div>

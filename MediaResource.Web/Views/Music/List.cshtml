@@ -14,7 +14,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>音频素材</title>
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/modernizr")
@@ -37,10 +36,10 @@
 	<div class="row">
 		@foreach (var item in Model)
 		{
-			<div class="col-sm-3 thumbnail-sm">
+			<div class="col-xs-3 thumbnail-sm">
 				<div class="thumbnail">
 					<a title="查看" data-toggle="modal" href="#" onclick="showMusicDetailModal(@item.Id)">
-						@Html.TrimText(item.Title, 18)
+						@Html.TrimText(item.Title, 36)
 					</a>
 					<div class="caption">
 						<input type="checkbox" onclick="checkMusic('@item.Title')" />

@@ -131,7 +131,7 @@ namespace MediaResource.Web.Services
             }
 
             // 进行静态分页处理
-            pageSize = (pageSize ?? 8);
+            pageSize = (pageSize ?? 20);
             pageIndex = (pageIndex ?? 1);
             int totalCount;
             IEnumerable<TopicNews> topicNewss = GetTopicNewsInPage(query, pageIndex.Value, pageSize.Value, out totalCount);
