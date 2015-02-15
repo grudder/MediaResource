@@ -63,36 +63,39 @@
 					<div class="tab-content">
 						<div class="tab-pane active" id="userPhotoDetailTab">
 							<dl class="dl-horizontal">
-								<dt>
-									@Html.DisplayNameFor(model => model.Name)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Name)
-								</dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Name)
+                                </dd>
 								<dt>
 									@Html.DisplayNameFor(model => model.Folder)
 								</dt>
 								<dd>
 									@Html.DisplayFor(model => model.Folder.Name)
 								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.IsPublic)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.IsPublic)
-								</dd>
+                                @if (Model.IsPublic != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.IsPublic)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.IsPublic)
+								    </dd>
+                                }
 								<dt>
 									@Html.DisplayNameFor(model => model.CreateByEntity)
 								</dt>
 								<dd>
 									@Html.DisplayFor(model => model.CreateByEntity.FullName)
 								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.CreateDate)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.CreateDate)
-								</dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.CreateDate)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.CreateDate)
+                                </dd>
 							</dl>
 						</div>
 						<div class="tab-pane" id="userPhotoCommentTab">

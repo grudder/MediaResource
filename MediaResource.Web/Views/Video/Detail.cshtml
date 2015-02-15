@@ -83,66 +83,96 @@
 								<dd>
 									@Html.DisplayFor(model => model.Video.Id)
 								</dd>
-								<dt>
-									名　　称
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Video.Name)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Video.RecordingTime)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Video.RecordingTime)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Video.Location)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Video.Location)
-								</dd>
-								<dt>
-                                    拍&nbsp;&nbsp;摄&nbsp;&nbsp;人
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Video.Shooting)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Video.Leadership)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Video.Leadership)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Video.Participants)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Video.Participants)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Video.Offices)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Video.Offices)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Video.Association)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Video.Association)
-								</dd>
+                                @if (!String.IsNullOrWhiteSpace(Model.Video.Name))
+                                {
+                                    <dt>
+                                        名 称
+                                    </dt>
+                                    <dd>
+                                        @Html.DisplayFor(model => model.Video.Name)
+                                    </dd>
+                                }
+                                @if (Model.Video.RecordingTime != null)
+                                {
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.Video.RecordingTime)
+                                    </dt>
+                                    <dd>
+                                        @Html.DisplayFor(model => model.Video.RecordingTime)
+                                    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Video.Location))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Video.Location)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Video.Location)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Video.Shooting))
+                                {
+								    <dt>
+                                        拍&nbsp;&nbsp;摄&nbsp;&nbsp;人
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Video.Shooting)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Video.Leadership))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Video.Leadership)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Video.Leadership)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Video.Participants))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Video.Participants)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Video.Participants)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Video.Offices))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Video.Offices)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Video.Offices)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Video.Association))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Video.Association)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Video.Association)
+								    </dd>
+                                }
+                                @if (Model.Video.ClickCount != null)
+                                {
 								<dt>
 									@Html.DisplayNameFor(model => model.Video.ClickCount)
 								</dt>
 								<dd>
 									@Html.DisplayFor(model => model.Video.ClickCount)
 								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Video.DownloadCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Video.DownloadCount)
-								</dd>
+                                }
+                                @if (Model.Video.DownloadCount != null)
+                                {
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.Video.DownloadCount)
+                                    </dt>
+                                    <dd>
+                                        @Html.DisplayFor(model => model.Video.DownloadCount)
+                                    </dd>
+                                }
 							</dl>
 						</div>
 						<div class="tab-pane" id="videoCommentTab">

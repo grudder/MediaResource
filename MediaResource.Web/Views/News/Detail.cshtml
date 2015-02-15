@@ -84,66 +84,96 @@
 								<dd>
 									@Html.DisplayFor(model => model.News.Id)
 								</dd>
-								<dt>
-                                    名　　称
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.News.Name)
-								</dd>
-								<dt>
-                                    分　　类
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.News.BroadcastType)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.News.StoryTime)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.News.StoryTime)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.News.NewsSection)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.News.NewsSection)
-								</dd>
-								<dt>
-                                    人　　物
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.News.Reporter)
-								</dd>
-								<dt>
-                                    长　　度
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.News.Length)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.News.Association)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.News.Association)
-								</dd>
-								<dt>
-                                    描　　述
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.News.Release)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.News.ClickCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.News.ClickCount)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.News.DownloadCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.News.DownloadCount)
-								</dd>
+                                @if (!String.IsNullOrWhiteSpace(Model.News.Name))
+                                {
+                                    <dt>
+                                        名 称
+                                    </dt>
+                                    <dd>
+                                        @Html.DisplayFor(model => model.News.Name)
+                                    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.News.BroadcastType))
+                                {
+								    <dt>
+                                        分　　类
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.News.BroadcastType)
+								    </dd>
+                                }
+                                @if (Model.News.StoryTime != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.News.StoryTime)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.News.StoryTime)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.News.NewsSection))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.News.NewsSection)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.News.NewsSection)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.News.Reporter))
+                                {
+								    <dt>
+                                        人　　物
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.News.Reporter)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.News.Length))
+                                {
+								    <dt>
+                                        长　　度
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.News.Length)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.News.Association))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.News.Association)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.News.Association)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.News.Release))
+                                {
+								    <dt>
+                                        描　　述
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.News.Release)
+								    </dd>
+                                }
+                                @if (Model.News.ClickCount != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.News.ClickCount)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.News.ClickCount)
+								    </dd>
+                                }
+                                @if (Model.News.DownloadCount != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.News.DownloadCount)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.News.DownloadCount)
+								    </dd>
+                                }
 							</dl>
 						</div>
 						<div class="tab-pane" id="newsCommentTab">

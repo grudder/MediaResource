@@ -69,66 +69,96 @@
 								<dd>
 									@Html.DisplayFor(model => model.Id)
 								</dd>
-								<dt>
-									名　　称
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Name)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.RecordingTime)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.RecordingTime)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Location)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Location)
-								</dd>
-								<dt>
-									拍&nbsp;&nbsp;摄&nbsp;&nbsp;人
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Shooting)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Leadership)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Leadership)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Participants)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Participants)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Offices)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Offices)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Association)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Association)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.ClickCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.ClickCount)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.DownloadCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.DownloadCount)
-								</dd>
+                                @if (!String.IsNullOrWhiteSpace(Model.Name))
+                                {
+                                    <dt>
+                                        名 称
+                                    </dt>
+                                    <dd>
+                                        @Html.DisplayFor(model => model.Name)
+                                    </dd>
+                                }
+                                @if (Model.RecordingTime != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.RecordingTime)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.RecordingTime)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Location))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Location)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Location)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Shooting))
+                                {
+								    <dt>
+									    拍&nbsp;&nbsp;摄&nbsp;&nbsp;人
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Shooting)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Leadership))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Leadership)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Leadership)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Participants))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Participants)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Participants)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Offices))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Offices)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Offices)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Association))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Association)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Association)
+								    </dd>
+                                }
+                                @if (Model.ClickCount != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.ClickCount)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.ClickCount)
+								    </dd>
+                                }
+                                @if (Model.DownloadCount != null)
+                                {
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.DownloadCount)
+                                    </dt>
+                                    <dd>
+                                        @Html.DisplayFor(model => model.DownloadCount)
+                                    </dd>
+                                }
 							</dl>
 						</div>
 						<div class="tab-pane" id="photoCommentTab">

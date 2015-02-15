@@ -64,36 +64,51 @@
 					<div class="tab-content">
 						<div class="tab-pane active" id="topicImageDetailTab">
 							<dl class="dl-horizontal">
-								<dt>
-									@Html.DisplayNameFor(model => model.Name)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Name)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.TextDate)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.TextDate)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Staff)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Staff)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Source)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Source)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Summary)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Summary)
-								</dd>
+                                @if (!String.IsNullOrWhiteSpace(Model.Name))
+                                {
+                                    <dt>
+                                        @Html.DisplayNameFor(model => model.Name)
+                                    </dt>
+                                    <dd>
+                                        @Html.DisplayFor(model => model.Name)
+                                    </dd>
+                                }
+                                @if (Model.TextDate != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.TextDate)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.TextDate)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Staff))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Staff)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Staff)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Source))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Source)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Source)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Summary))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Summary)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Summary)
+								    </dd>
+                                }
 							</dl>
 						</div>
 						<div class="tab-pane" id="topicImageCommentTab">

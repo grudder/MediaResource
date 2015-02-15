@@ -2,7 +2,7 @@
 @using MediaResource.Web.Models
 @model Topic
 
-<div style="margin-bottom: 20px; height: 100px; background: url('@WebHelper.Instance.TopicImageRootUrl@Model.DetailPhotoUrl.Replace("../../", "").Replace("\\", "/")') no-repeat">
+<div onclick="goToTopicDetail()" style="cursor: pointer; margin-bottom: 20px; height: 100px; background: url('@WebHelper.Instance.TopicImageRootUrl@Model.DetailPhotoUrl.Replace("../../", "").Replace("\\", "/")') no-repeat">
     <br/><br/><br/>
     <div class="pull-right">
         <form id="formTopicSearch" class="form-inline" role="form" method="POST">
@@ -28,6 +28,14 @@
                 $("#formTopicSearch")[0].action = actionUrl;
 
                 return true;
+            }
+
+            function goToTopicDetail() {
+                var theEvent = window.event || arguments.callee.caller.arguments[0];
+                var srcElement = theEvent.srcElement ? theEvent.srcElement : theEvent.target;
+                if (srcElement.tagName === "DIV") {
+                    window.parent.location.href = '@Url.Action("Detail", "Topic", new { Model.Id })';
+                }
             }
         </script>
     </div>

@@ -18,6 +18,9 @@
     <![endif]-->
 </head>
 <body>
+    <p class="text-right">
+        <a target="_top" href='@Url.Action("Detail", "Topic", new { id = ViewBag.TopicId })'>返回</a>
+    </p>
     @if (ViewBag.AdvSearch != true)
     {
         @Html.Action("PanelPartial", "TopicImage", new {ViewBag.TopicId, ViewBag.Keyword, ViewBag.Name, ViewBag.KeyWords, ViewBag.Staff, ViewBag.Source, ViewBag.Summary, ViewBag.StartTextDate, ViewBag.EndTextDate})

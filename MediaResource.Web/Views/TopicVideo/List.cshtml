@@ -41,7 +41,8 @@
     <hr/>
 	<div class="row">
 	    @{
-            string imageWrapClass = (Request["fullWidth"].ToLower() == "true") ? "img-md-wrap-2" : "img-md-wrap";
+            bool fullWidth = (Request["fullWidth"] == null) || (Request["fullWidth"].ToLower() == "true");
+            string imageWrapClass = fullWidth ? "img-md-wrap-2" : "img-md-wrap";
 	    }
 		@foreach (var item in Model)
 		{

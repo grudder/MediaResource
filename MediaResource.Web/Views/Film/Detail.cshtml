@@ -81,45 +81,63 @@
 								<dt>
 									ID　　号
 								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Film.Id)
-								</dd>
-								<dt>
-									片　　名
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Film.Title)
-								</dd>
-								<dt>
-                                    片　　长
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Film.Length)
-								</dd>
-								<dt>
-                                    描　　述
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Film.Description)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Film.Association)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Film.Association)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Film.ClickCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Film.ClickCount)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Film.DownloadCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Film.DownloadCount)
-								</dd>
+							    <dd>
+							        @Html.DisplayFor(model => model.Film.Id)
+							    </dd>
+                                @if (!String.IsNullOrWhiteSpace(Model.Film.Title))
+                                {
+								    <dt>
+									    片　　名
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Film.Title)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Film.Length))
+                                {
+								    <dt>
+                                        片　　长
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Film.Length)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Film.Description))
+                                {
+								    <dt>
+                                        描　　述
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Film.Description)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Film.Association))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Film.Association)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Film.Association)
+								    </dd>
+                                }
+                                @if (Model.Film.ClickCount != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Film.ClickCount)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Film.ClickCount)
+								    </dd>
+                                }
+                                @if (Model.Film.DownloadCount != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Film.DownloadCount)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Film.DownloadCount)
+								    </dd>
+                                }
 							</dl>
 						</div>
 						<div class="tab-pane" id="filmCommentTab">

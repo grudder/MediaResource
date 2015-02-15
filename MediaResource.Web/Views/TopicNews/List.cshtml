@@ -44,7 +44,7 @@
 		{
 			<li class="list-group-item">
 			    <a title="查看" data-toggle="modal" href="#" onclick="showTopicNewsDetailModal(@item.Id)">
-					@Html.TrimText(item.Name, 36)
+					@Html.TrimText(item.Name, 150)
 				</a>
                 (<a href="@Url.Action("Download", new {id = item.Id})" target="_blank">下载</a>)
 				<span class="badge">

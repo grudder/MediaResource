@@ -69,36 +69,51 @@
 								<dd>
 									@Html.DisplayFor(model => model.Id)
 								</dd>
-								<dt>
-									名　　称
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Name)
-								</dd>
-								<dt>
-									描　　述
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Description)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Associate)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Associate)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.ClickCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.ClickCount)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.DownloadCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.DownloadCount)
-								</dd>
+                                @if (!String.IsNullOrWhiteSpace(Model.Name))
+                                {
+								    <dt>
+									    名　　称
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Name)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Description))
+                                {
+								    <dt>
+									    描　　述
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Description)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Associate))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Associate)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Associate)
+								    </dd>
+                                }
+                                @if (Model.ClickCount != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.ClickCount)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.ClickCount)
+								    </dd>
+                                }
+                                @if (Model.DownloadCount != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.DownloadCount)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.DownloadCount)
+								    </dd>
+                                }
 							</dl>
 						</div>
 						<div class="tab-pane" id="graphicDesignCommentTab">

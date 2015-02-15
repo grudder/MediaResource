@@ -69,48 +69,69 @@
 								<dd>
 									@Html.DisplayFor(model => model.Id)
 								</dd>
-								<dt>
-									名　　称
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Name)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.FileSize)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.FileSize)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Format)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Format)
-								</dd>
-								<dt>
-									描　　述
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Description)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.Association)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.Association)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.ClickCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.ClickCount)
-								</dd>
-								<dt>
-									@Html.DisplayNameFor(model => model.DownloadCount)
-								</dt>
-								<dd>
-									@Html.DisplayFor(model => model.DownloadCount)
-								</dd>
+                                @if (!String.IsNullOrWhiteSpace(Model.Name))
+                                {
+								    <dt>
+									    名　　称
+								    </dt>
+							        <dd>
+							            @Html.DisplayFor(model => model.Name)
+							        </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.FileSize))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.FileSize)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.FileSize)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Format))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Format)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Format)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Description))
+                                {
+								    <dt>
+									    描　　述
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Description)
+								    </dd>
+                                }
+                                @if (!String.IsNullOrWhiteSpace(Model.Association))
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.Association)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.Association)
+								    </dd>
+                                }
+                                @if (Model.ClickCount != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.ClickCount)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.ClickCount)
+								    </dd>
+                                }
+                                @if (Model.DownloadCount != null)
+                                {
+								    <dt>
+									    @Html.DisplayNameFor(model => model.DownloadCount)
+								    </dt>
+								    <dd>
+									    @Html.DisplayFor(model => model.DownloadCount)
+								    </dd>
+                                }
 							</dl>
 						</div>
 						<div class="tab-pane" id="graphicCommentTab">
