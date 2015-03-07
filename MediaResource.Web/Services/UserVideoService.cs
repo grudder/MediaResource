@@ -192,7 +192,6 @@ namespace MediaResource.Web.Services
                          && video.PreviewPath != null
                          && video.PreviewPath != ""
                          && (video.CreateByEntity.GroupId == groupId
-                         || video.Keyword.Contains(groupName)
                          || video.Offices.Contains(groupName)
                          || video.Association.Contains(groupName))
                          orderby video.Score descending
@@ -288,7 +287,6 @@ namespace MediaResource.Web.Services
                          && video.PreviewPath != null
                          && video.PreviewPath != ""
                          && (video.CreateByEntity.GroupId == groupId
-                         || video.Keyword.Contains(groupName)
                          || video.Offices.Contains(groupName)
                          || video.Association.Contains(groupName))
                          orderby video.CreateDate descending

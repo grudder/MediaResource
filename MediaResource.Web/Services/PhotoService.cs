@@ -241,7 +241,9 @@ namespace MediaResource.Web.Services
         {
             // 执行查询
             var query = from photo in _db.Photos
-                        where photo.Name.Contains(keyword)
+                        where (photo.Name.Contains(keyword)
+                        || photo.Leadership.Contains(keyword)
+                        || photo.Participants.Contains(keyword))
                         && photo.Status == 1
                         && photo.FileUrl != null
                         && photo.FileUrl != ""

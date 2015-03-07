@@ -215,7 +215,9 @@ namespace MediaResource.Web.Services
                         where video.Status == 1
                         && video.PreviewPath != null
                         && video.PreviewPath != ""
-                        && video.Name.Contains(keyword)
+                        && (video.Name.Contains(keyword)
+                        || video.Leadership.Contains(keyword)
+                        || video.Participants.Contains(keyword))
                         orderby video.CreateDate descending
                         select new ImageViewModel
                         {

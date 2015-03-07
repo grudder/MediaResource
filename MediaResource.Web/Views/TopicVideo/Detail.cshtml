@@ -79,51 +79,77 @@
 					<div class="tab-content">
 						<div class="tab-pane active" id="topicVideoDetailTab">
 							<dl class="dl-horizontal">
-                                @if (!String.IsNullOrWhiteSpace(Model.TopicVideo.Name))
-                                {
-                                    <dt>
-                                        @Html.DisplayNameFor(model => model.TopicVideo.Name)
-                                    </dt>
-                                    <dd>
+                                <dt>
+                                    ID　　号
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => Model.TopicVideo.Id)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.TopicVideo.Name)
+                                </dt>
+                                <dd>
+                                    @if (!String.IsNullOrWhiteSpace(Model.TopicVideo.Name))
+                                    {
                                         @Html.DisplayFor(model => model.TopicVideo.Name)
-                                    </dd>
-                                }
-                                @if (Model.TopicVideo.TextDate != null)
-                                {
-								    <dt>
-									    @Html.DisplayNameFor(model => model.TopicVideo.TextDate)
-								    </dt>
-								    <dd>
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                </dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.TopicVideo.TextDate)
+								</dt>
+								<dd>
+                                    @if (Model.TopicVideo.TextDate != null)
+                                    {
 									    @Html.DisplayFor(model => model.TopicVideo.TextDate)
-								    </dd>
-                                }
-                                @if (!String.IsNullOrWhiteSpace(Model.TopicVideo.Staff))
-                                {
-								    <dt>
-									    @Html.DisplayNameFor(model => model.TopicVideo.Staff)
-								    </dt>
-								    <dd>
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.TopicVideo.Staff)
+								</dt>
+								<dd>
+                                    @if (!String.IsNullOrWhiteSpace(Model.TopicVideo.Staff))
+                                    {
 									    @Html.DisplayFor(model => model.TopicVideo.Staff)
-								    </dd>
-                                }
-                                @if (!String.IsNullOrWhiteSpace(Model.TopicVideo.Source))
-                                {
-								    <dt>
-									    @Html.DisplayNameFor(model => model.TopicVideo.Source)
-								    </dt>
-								    <dd>
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+								</dd>
+								<dt>
+									@Html.DisplayNameFor(model => model.TopicVideo.Source)
+								</dt>
+								<dd>
+                                    @if (!String.IsNullOrWhiteSpace(Model.TopicVideo.Source))
+                                    {
 									    @Html.DisplayFor(model => model.TopicVideo.Source)
-								    </dd>
-                                }
-                                @if (!String.IsNullOrWhiteSpace(Model.TopicVideo.Summary))
-                                {
-                                    <dt>
-                                        @Html.DisplayNameFor(model => model.TopicVideo.Summary)
-                                    </dt>
-                                    <dd>
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+								</dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.TopicVideo.Summary)
+                                </dt>
+                                <dd>
+                                    @if (!String.IsNullOrWhiteSpace(Model.TopicVideo.Summary))
+                                    {
                                         @Html.DisplayFor(model => model.TopicVideo.Summary)
-                                    </dd>
-                                }
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                </dd>
 							</dl>
 						</div>
 						<div class="tab-pane" id="topicVideoCommentTab">

@@ -65,7 +65,7 @@ namespace MediaResource.Web.Services
                 from topicVideo in _db.TopicVideos
                 where topicVideo.IsConverted == true
                 && topicVideo.ImagePath != null
-                orderby topicVideo.OrderNum descending
+                orderby topicVideo.CreateDate descending
                 select topicVideo;
 
             // 构造查询条件

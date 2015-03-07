@@ -62,7 +62,7 @@ namespace MediaResource.Web.Services
             IQueryable<TopicNews> query =
                 from topicNews in _db.TopicNewss
                 where topicNews.Locations != null
-                orderby topicNews.OrderNum descending
+                orderby topicNews.CreateDate descending
                 select topicNews;
 
             //

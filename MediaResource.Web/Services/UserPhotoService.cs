@@ -104,7 +104,6 @@ namespace MediaResource.Web.Services
                          && photo.FileUrl != null
                          && photo.FileUrl != ""
                          && (photo.CreateByEntity.GroupId == groupId
-                         || photo.Keyword.Contains(groupName)
                          || photo.Offices.Contains(groupName)
                          || photo.Association.Contains(groupName))
                          orderby photo.CreateDate descending
@@ -192,7 +191,6 @@ namespace MediaResource.Web.Services
                          && photo.FileUrl != null
                          && photo.FileUrl != ""
                          && (photo.CreateByEntity.GroupId == groupId
-                         || photo.Keyword.Contains(groupName)
                          || photo.Offices.Contains(groupName)
                          || photo.Association.Contains(groupName))
                          orderby photo.Score descending
@@ -281,7 +279,6 @@ namespace MediaResource.Web.Services
                          && photo.FileUrl != null
                          && photo.FileUrl != ""
                          && (photo.CreateByEntity.GroupId == groupId
-                         || photo.Keyword.Contains(groupName)
                          || photo.Offices.Contains(groupName)
                          || photo.Association.Contains(groupName))
                          orderby photo.CreateDate descending

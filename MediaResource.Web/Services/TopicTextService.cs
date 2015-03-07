@@ -62,7 +62,7 @@ namespace MediaResource.Web.Services
             IQueryable<TopicText> query =
                 from topicText in _db.TopicTexts
                 where topicText.Locations != null
-                orderby topicText.OrderNum descending
+                orderby topicText.CreateDate descending
                 select topicText;
 
             // 构造查询条件
