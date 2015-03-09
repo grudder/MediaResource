@@ -99,7 +99,6 @@ namespace MediaResource.Web.Services
                          && video.PreviewPath != null
                          && video.PreviewPath != ""
                          && (video.CreateByEntity.GroupId == groupId
-                         || video.Keyword.Contains(groupName)
                          || video.Offices.Contains(groupName)
                          || video.Association.Contains(groupName))
                          orderby video.CreateDate descending
@@ -286,8 +285,7 @@ namespace MediaResource.Web.Services
                          && video.Status == 1
                          && video.PreviewPath != null
                          && video.PreviewPath != ""
-                         && (video.CreateByEntity.GroupId == groupId
-                         || video.Offices.Contains(groupName)
+                         && (video.Offices.Contains(groupName)
                          || video.Association.Contains(groupName))
                          orderby video.CreateDate descending
                          select new ImageViewModel

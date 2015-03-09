@@ -26,13 +26,21 @@
 			        >
 					@Html.ActionLink("视频素材", "Category", "Video")
 				</li>
-				<li
-			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "GraphicDesign").ToLower()))
+			    <li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "Topic").ToLower()))
 			        {
 			            @:class="active"
 			        }
 			        >
-					@Html.ActionLink("设计成品", "Category", "GraphicDesign")
+			        @Html.ActionLink("重点专题", "Index", "Topic")
+			    </li>
+				<li
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "News").ToLower()))
+			        {
+			            @:class="active"
+			        }
+			        >
+					@Html.ActionLink("电视新闻", "Category", "News")
 				</li>
 				<li
 			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "Graphic").ToLower()))
@@ -51,12 +59,12 @@
 					@Html.ActionLink("影视成片", "Category", "Film")
 				</li>
 				<li
-			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "News").ToLower()))
+			        @if (Request.Path.ToLower().StartsWith(Url.Action("Category", "GraphicDesign").ToLower()))
 			        {
 			            @:class="active"
 			        }
 			        >
-					@Html.ActionLink("电视新闻", "Category", "News")
+					@Html.ActionLink("设计成品", "Category", "GraphicDesign")
 				</li>
 				<li
 			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "Group").ToLower())
@@ -68,21 +76,13 @@
 			        >
 					@Html.ActionLink("处室专栏", "Index", "Group")
 				</li>
-			    <li
-			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "Topic").ToLower()))
-			        {
-			            @:class="active"
-			        }
-			        >
-			        @Html.ActionLink("专题", "Index", "Topic")
-			    </li>
 				<li
 			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "TaskList").ToLower()))
 			        {
 			            @:class="active"
 			        }
 			        >
-					@Html.ActionLink("拍摄委托", "Index", "TaskList")
+					@Html.ActionLink("委托拍摄", "Index", "TaskList")
 				</li>
 			    <li
 			        @if (Request.Path.ToLower().StartsWith(Url.Action("Index", "User").ToLower()))

@@ -63,7 +63,7 @@ namespace MediaResource.Web.Services
             IQueryable<TopicImage> query =
                 from topicImage in _db.TopicImages
                 where topicImage.Locations != null
-                orderby topicImage.CreateDate descending
+                orderby topicImage.TextDate descending
                 select topicImage;
 
             //

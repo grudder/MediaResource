@@ -205,6 +205,8 @@ namespace MediaResource.Web.Services
                 foreach (string groupId in groupIds.Split(','))
                 {
                     string groupName = _db.Groups.Find(int.Parse(groupId)).Name;
+                    groupCondition = groupCondition.Or(i => i.CreateByEntity.GroupId == int.Parse(groupId));
+                    groupCondition = groupCondition.Or(i => i.Offices.Contains(groupName));
                     groupCondition = groupCondition.Or(i => i.Association.Contains(groupName));
                 }
                 query = query.Where(groupCondition);

@@ -51,12 +51,16 @@ namespace MediaResource.Web.Services
 
         public List<ImageViewModel> GetTopImages(int count, int groupId)
         {
+            string groupName = _db.Groups.Find(groupId).Name;
+
             var videos = from video in _db.Videos
                          orderby video.CreateDate descending
                          where video.Status == 1
                          && video.PreviewPath != null
                          && video.PreviewPath != ""
-                         && video.CreateByEntity.GroupId == groupId
+                         && (video.CreateByEntity.GroupId == groupId
+                         || video.Offices.Contains(groupName)
+                         || video.Association.Contains(groupName))
                          select new ImageViewModel
                          {
                              Id = video.Id,
@@ -83,9 +87,13 @@ namespace MediaResource.Web.Services
 
         public List<Video> GetTopRankList(int count, int groupId)
         {
+            string groupName = _db.Groups.Find(groupId).Name;
+
             var videos = from video in _db.Videos
                          where video.Status == 1
-                         && video.CreateByEntity.GroupId == groupId
+                         && (video.CreateByEntity.GroupId == groupId
+                         || video.Offices.Contains(groupName)
+                         || video.Association.Contains(groupName))
                          && video.PreviewPath != null
                          && video.PreviewPath != ""
                          orderby video.Score descending
@@ -177,7 +185,9 @@ namespace MediaResource.Web.Services
                 foreach (string groupId in groupIds.Split(','))
                 {
                     string groupName = _db.Groups.Find(int.Parse(groupId)).Name;
-                    groupCondition = groupCondition.Or(i => i.Association == groupName);
+                    groupCondition = groupCondition.Or(i => i.CreateByEntity.GroupId == int.Parse(groupId));
+                    groupCondition = groupCondition.Or(i => i.Offices.Contains(groupName));
+                    groupCondition = groupCondition.Or(i => i.Association.Contains(groupName));
                 }
                 query = query.Where(groupCondition);
             }
