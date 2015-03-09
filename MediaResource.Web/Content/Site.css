@@ -154,18 +154,18 @@ dd:before {
 }
 .img-md-wrap-2 {
     width: 220px;
-    height: 120px;
+    height: 165px;
     text-align: center;
     font-family: arial;
-    line-height: 120px;
+    line-height: 165px;
     font-size: 0;
-    _font-size: 100px;
+    _font-size: 165px;
 }
     .img-md-wrap-2 img {
         display: inline-block;
         vertical-align: middle;
         max-width: 220px;
-        max-height: 120px;
+        max-height: 165px;
     }
 
 .img-sm-wrap {
@@ -206,7 +206,6 @@ dd:before {
     background-color: #222;
     opacity: 0.8;
     color: white;
-    width: 160px;
     height: 45px;
     padding: 2px;
 }
