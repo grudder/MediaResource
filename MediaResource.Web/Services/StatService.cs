@@ -79,7 +79,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "纸质媒体",
+					Name = "纸媒选登",
 					Count = graphics.LongCount()
 				},
 				new StatViewModel
@@ -175,7 +175,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "纸质媒体",
+					Name = "纸媒选登",
 					Count = graphics.LongCount()
 				},
 				new StatViewModel
@@ -271,7 +271,7 @@ namespace MediaResource.Web.Services
 				},
 				new StatViewModel
 				{
-					Name = "纸质媒体",
+					Name = "纸媒选登",
 					Count = graphics.LongCount()
 				},
 				new StatViewModel

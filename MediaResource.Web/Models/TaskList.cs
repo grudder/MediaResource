@@ -17,7 +17,7 @@ namespace MediaResource.Web.Models
 		}
 
 		[Required]
-		[Display(Name = "Ãû³Æ", Order = 10)]
+        [Display(Name = "ÈÎÎñ", Order = 10)]
 		[StringLength(256)]
 		public string Name
 		{

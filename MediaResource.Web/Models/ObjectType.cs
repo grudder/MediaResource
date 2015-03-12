@@ -8,7 +8,7 @@
         Film = 0,
 
         /// <summary>
-        /// 纸质媒体。
+        /// 纸媒选登。
         /// </summary>
         Graphic = 1,
 
