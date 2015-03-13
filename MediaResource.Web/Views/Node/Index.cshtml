@@ -1,4 +1,6 @@
-﻿@{
+﻿@model MediaResource.Web.Models.Node
+
+@{
 	Layout = null;
 }
 
@@ -18,6 +20,12 @@
     <![endif]-->
 </head>
 <body>
+    @if (Model != null && !String.IsNullOrEmpty(Model.Remark))
+    {
+        <blockquote>
+            <p>@Model.Remark</p>
+        </blockquote>
+    }
     @Html.Action("PanelPartial", "TopicImage", new {ViewBag.TopicId, ViewBag.NodeId})
     @Html.Action("PanelPartial", "TopicVideo", new {ViewBag.TopicId, ViewBag.NodeId})
     @Html.Action("PanelPartial", "TopicText", new {ViewBag.TopicId, ViewBag.NodeId})

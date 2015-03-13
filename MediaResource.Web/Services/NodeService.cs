@@ -12,6 +12,11 @@ namespace MediaResource.Web.Services
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
+        public Node Get(int? id)
+        {
+            return _db.Nodes.Find(id);
+        }
+
         public List<Node> GetChildNodes(int nodeId)
         {
             var query = from node in _db.Nodes

@@ -93,5 +93,11 @@ namespace MediaResource.Web.Models
             get;
             set;
         }
+
+        public string Remark
+        {
+            get;
+            set;
+        }
 	}
 }

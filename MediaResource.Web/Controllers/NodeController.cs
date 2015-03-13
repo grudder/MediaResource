@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 
+using MediaResource.Web.Models;
 using MediaResource.Web.Models.ViewModels;
 using MediaResource.Web.Services;
 
@@ -20,7 +21,8 @@ namespace MediaResource.Web.Controllers
             ViewBag.TopicId = topicId;
             ViewBag.NodeId = nodeId;
 
-            return View();
+            Node node = _nodeService.Get(nodeId);
+            return View(node);
         }
 
         // GET: Node/GetChildNodes
