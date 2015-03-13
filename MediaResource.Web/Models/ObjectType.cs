@@ -48,7 +48,7 @@
         GraphicDesign = 9,
 
         /// <summary>
-        /// 专题文字资料。
+        /// 专题文献报告。
         /// </summary>
         TopicText = 10,
 

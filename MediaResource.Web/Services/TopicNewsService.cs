@@ -46,7 +46,7 @@ namespace MediaResource.Web.Services
         }
 
         /// <summary>
-        /// 获取专题下的媒体报道分页列表。
+        /// 获取专题下的报刊新闻分页列表。
         /// </summary>
         /// <param name="topicId">专题编号。</param>
         /// <param name="nodeId">节点标识。</param>
@@ -55,7 +55,7 @@ namespace MediaResource.Web.Services
         /// <param name="pageSize">分页大小。</param>
         /// <param name="pageIndex">页码。</param>
         /// <param name="searchCondition">高级搜索的查询条件。</param>
-        /// <returns>专题下的媒体报道分页列表。</returns>
+        /// <returns>专题下的报刊新闻分页列表。</returns>
         public StaticPagedList<TopicNews> AdvancedSearch(int? topicId, int? nodeId, int? userPlateId, string keyword, int? pageSize, int? pageIndex, Dictionary<string, string> searchCondition)
         {
             // 执行查询

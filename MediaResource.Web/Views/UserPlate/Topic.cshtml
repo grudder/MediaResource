@@ -12,11 +12,11 @@
 {
     @Html.Action("List", "TopicVideo", new {ViewBag.TopicId, ViewBag.UserPlateId})
 }
-@if (Model.Category == "文字资料")
+@if (Model.Category == "文献报告")
 {
     @Html.Action("List", "TopicText", new {ViewBag.TopicId, ViewBag.UserPlateId})
 }
-@if (Model.Category == "媒体报道")
+@if (Model.Category == "报刊新闻")
 {
     @Html.Action("List", "TopicNews", new {ViewBag.TopicId, ViewBag.UserPlateId})
 }
