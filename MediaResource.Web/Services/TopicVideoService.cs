@@ -156,11 +156,20 @@ namespace MediaResource.Web.Services
                 FileUrl = ImageHelper.GetSnapUrl(topicVideo.ImagePath),
                 CreateDate = topicVideo.CreateDate
             });
-        }
+		}
 
-        #region IDisposable 成员
+		public void PostScore(int topicVideoId, double scoreValue, int scoreCount)
+		{
+			TopicVideo topicVideo = _db.TopicVideos.Find(topicVideoId);
+			topicVideo.Score = scoreValue;
+			topicVideo.ScoreCount = scoreCount;
+			_db.Entry(topicVideo).State = EntityState.Modified;
+			_db.SaveChanges();
+		}
 
-        public void Dispose()
+		#region IDisposable 成员
+
+		public void Dispose()
         {
             _db.Dispose();
         }

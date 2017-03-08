@@ -148,11 +148,20 @@ namespace MediaResource.Web.Services
             IEnumerable<TopicNews> topicNewss = enumerable.Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
             return topicNewss.ToList();
-        }
+		}
 
-        #region IDisposable 成员
+		public void PostScore(int topicNewsId, double scoreValue, int scoreCount)
+		{
+			TopicNews topicNews = _db.TopicNewss.Find(topicNewsId);
+			topicNews.Score = scoreValue;
+			topicNews.ScoreCount = scoreCount;
+			_db.Entry(topicNews).State = EntityState.Modified;
+			_db.SaveChanges();
+		}
 
-        public void Dispose()
+		#region IDisposable 成员
+
+		public void Dispose()
         {
             _db.Dispose();
         }

@@ -18,8 +18,9 @@ namespace MediaResource.Web.Controllers
     public class TopicImageController : Controller
     {
         private readonly TopicImageService _topicImageService = new TopicImageService();
+		private readonly VisitLogService _visitLogService = new VisitLogService();
 
-        private const string UserDownloadTopicImagePath = @"mov1\Download\TopicImage\";
+		private const string UserDownloadTopicImagePath = @"mov1\Download\TopicImage\";
 
         // GET: TopicImage/Detail
         public ActionResult Detail(int? id)
@@ -33,9 +34,12 @@ namespace MediaResource.Web.Controllers
             if (topicImage == null)
             {
                 return HttpNotFound();
-            }
+			}
 
-            return View(topicImage);
+			// 记录点击日志
+			_visitLogService.LogClick(ObjectType.TopicImage, topicImage.Id, topicImage.TopicId);
+
+			return View(topicImage);
         }
 
         // GET: TopicImage/PanelPartial
@@ -184,7 +188,11 @@ namespace MediaResource.Web.Controllers
         public FileResult Download(int? id)
         {
             TopicImage topicImage = _topicImageService.DownloadCount(id);
-            string url = WebHelper.Instance.RootUrl + topicImage.Locations;
+
+			// 记录下载日志
+			_visitLogService.LogDownload(ObjectType.TopicImage, topicImage.Id, topicImage.TopicId);
+
+			string url = WebHelper.Instance.RootUrl + topicImage.Locations;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));
             return File(stream, "image/jpeg", fileName);
@@ -228,11 +236,14 @@ namespace MediaResource.Web.Controllers
                 {
                     string destFilePath = Path.Combine(folderPath, Path.GetFileName(sourceFilePath));
                     System.IO.File.Copy(sourceFilePath, destFilePath);
-                }
-            }
+				}
 
-            // 生成压缩文件
-            string zipFilePath = folderPath + ".zip";
+				// 记录下载日志
+				_visitLogService.LogDownload(ObjectType.TopicImage, topicImage.Id, topicImage.TopicId);
+			}
+
+			// 生成压缩文件
+			string zipFilePath = folderPath + ".zip";
             ZipFile.CreateFromDirectory(folderPath, zipFilePath);
 
             var zipFileContents = System.IO.File.ReadAllBytes(zipFilePath);

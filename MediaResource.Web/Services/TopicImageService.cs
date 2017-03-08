@@ -156,11 +156,20 @@ namespace MediaResource.Web.Services
                 FileUrl = ImageHelper.GetSmallThumbUrl(topicImage.Locations),
                 CreateDate = topicImage.CreateDate
             });
-        }
+		}
 
-        #region IDisposable 成员
+		public void PostScore(int topicImageId, double scoreValue, int scoreCount)
+		{
+			TopicImage topicImage = _db.TopicImages.Find(topicImageId);
+			topicImage.Score = scoreValue;
+			topicImage.ScoreCount = scoreCount;
+			_db.Entry(topicImage).State = EntityState.Modified;
+			_db.SaveChanges();
+		}
 
-        public void Dispose()
+		#region IDisposable 成员
+
+		public void Dispose()
         {
             _db.Dispose();
         }

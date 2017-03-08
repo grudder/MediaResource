@@ -15,6 +15,7 @@ namespace MediaResource.Web.Controllers
 		private readonly GraphicService _graphicService = new GraphicService();
         private readonly CategoryService _categoryService = new CategoryService();
         private readonly GroupService _groupService = new GroupService();
+		private readonly VisitLogService _visitLogService = new VisitLogService();
 
 		[ChildActionOnly]
 		public ActionResult IndexPartial()
@@ -46,6 +47,8 @@ namespace MediaResource.Web.Controllers
 				return HttpNotFound();
 			}
 
+			// 记录点击日志
+			_visitLogService.LogClick(ObjectType.Graphic, graphic.Id);
 
 			return View(graphic);
 		}
@@ -121,7 +124,11 @@ namespace MediaResource.Web.Controllers
         public FileResult Download(int? id)
         {
             Graphic graphic = _graphicService.DownloadCount(id);
-            string url = WebHelper.Instance.RootUrl + graphic.FileUrl;
+
+			// 记录下载日志
+			_visitLogService.LogDownload(ObjectType.Graphic, graphic.Id);
+
+			string url = WebHelper.Instance.RootUrl + graphic.FileUrl;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));
             return File(stream, "image/jpeg", fileName);

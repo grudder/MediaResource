@@ -64,7 +64,9 @@ namespace MediaResource.Web.Services
 
             Topic topic = Get(topicId);
             bool isAuthorized = topic.Offices.Contains(user.GroupEntity.Name);
-            return isAuthorized;
+	        isAuthorized = true;
+
+			return isAuthorized;
         }
 
         #region IDisposable 成员

@@ -16,9 +16,10 @@ namespace MediaResource.Web.Controllers
     public class TopicVideoController : Controller
     {
         private readonly TopicVideoService _topicVideoService = new TopicVideoService();
+		private readonly VisitLogService _visitLogService = new VisitLogService();
 
-        // GET: TopicVideo/Detail
-        public ActionResult Detail(int? id)
+		// GET: TopicVideo/Detail
+		public ActionResult Detail(int? id)
         {
             if (id == null)
             {
@@ -31,7 +32,10 @@ namespace MediaResource.Web.Controllers
                 return HttpNotFound();
             }
 
-            return View(topicVideoViewModel);
+			// 记录点击日志
+			_visitLogService.LogClick(ObjectType.TopicVideo, topicVideoViewModel.TopicVideo.Id, topicVideoViewModel.TopicVideo.TopicId);
+
+			return View(topicVideoViewModel);
         }
 
         // GET: TopicVideo/PanelPartial
@@ -180,7 +184,11 @@ namespace MediaResource.Web.Controllers
         public FileResult Download(int? id)
         {
             TopicVideo topicVideo = _topicVideoService.DownloadCount(id);
-            string url = WebHelper.Instance.RootUrl + topicVideo.Locations;
+
+			// 记录下载日志
+			_visitLogService.LogDownload(ObjectType.TopicVideo, topicVideo.Id, topicVideo.TopicId);
+
+			string url = WebHelper.Instance.RootUrl + topicVideo.Locations;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));
             return File(stream, "application/octet-stream", fileName);

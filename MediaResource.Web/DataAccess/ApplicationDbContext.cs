@@ -183,9 +183,15 @@ namespace MediaResource.Web.DataAccess
         {
             get;
             set;
-        }
+		}
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+		public virtual DbSet<VisitLog> VisitLogs
+		{
+			get;
+			set;
+		}
+
+		protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TaskList>()
                 .Property(e => e.TaskListType)

@@ -146,11 +146,20 @@ namespace MediaResource.Web.Services
             IEnumerable<TopicText> topicTexts = enumerable.Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
             return topicTexts.ToList();
-        }
+		}
 
-        #region IDisposable 成员
+		public void PostScore(int topicTextId, double scoreValue, int scoreCount)
+		{
+			TopicText topicText = _db.TopicTexts.Find(topicTextId);
+			topicText.Score = scoreValue;
+			topicText.ScoreCount = scoreCount;
+			_db.Entry(topicText).State = EntityState.Modified;
+			_db.SaveChanges();
+		}
 
-        public void Dispose()
+		#region IDisposable 成员
+
+		public void Dispose()
         {
             _db.Dispose();
         }

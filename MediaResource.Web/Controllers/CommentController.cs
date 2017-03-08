@@ -11,6 +11,11 @@ namespace MediaResource.Web.Controllers
 	public class CommentController : Controller
 	{
 		private readonly CommentService _commentService = new CommentService();
+		private readonly VisitLogService _visitLogService = new VisitLogService();
+		private readonly TopicImageService _topicImageService = new TopicImageService();
+		private readonly TopicNewsService _topicNewsService = new TopicNewsService();
+		private readonly TopicTextService _topicTextService = new TopicTextService();
+		private readonly TopicVideoService _topicVideoService = new TopicVideoService();
 
 		// GET: Comment
 		public ActionResult Index(ObjectType objectType, int objectId, int pageSize, int? page)
@@ -34,6 +39,39 @@ namespace MediaResource.Web.Controllers
 			};
 			_commentService.Create(comment);
 
+			// 记录评论日志
+			int? topicId;
+			switch (objectType)
+			{
+				case ObjectType.Film:
+				case ObjectType.Graphic:
+				case ObjectType.Music:
+				case ObjectType.News:
+				case ObjectType.Photo:
+				case ObjectType.Video:
+				case ObjectType.GraphicDesign:
+					topicId = null;
+					break;
+
+				case ObjectType.TopicText:
+					topicId = _topicTextService.Get(objectId).TopicId;
+					break;
+				case ObjectType.TopicImage:
+					topicId = _topicImageService.Get(objectId).TopicId;
+					break;
+				case ObjectType.TopicVideo:
+					topicId = _topicVideoService.Get(objectId).TopicId;
+					break;
+				case ObjectType.TopicNews:
+					topicId = _topicNewsService.Get(objectId).TopicId;
+					break;
+
+				default:
+					topicId = null;
+					break;
+			}
+			_visitLogService.LogComment(objectType, objectId, topicId);
+
 			return Json(new
 			{
 				success = true,
@@ -41,18 +79,18 @@ namespace MediaResource.Web.Controllers
 			});
 		}
 
-        // POST: Comment/Delete
-        [HttpPost]
-        public JsonResult Delete(int id)
-        {
-            Comment comment = _commentService.Find(id);
-            _commentService.Delete(comment);
+		// POST: Comment/Delete
+		[HttpPost]
+		public JsonResult Delete(int id)
+		{
+			Comment comment = _commentService.Find(id);
+			_commentService.Delete(comment);
 
-            return Json(new
-            {
-                success = true
-            });
-        }
+			return Json(new
+			{
+				success = true
+			});
+		}
 
 		// GET: Comment/Count
 		public JsonResult Count(ObjectType objectType, int objectId)

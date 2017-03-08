@@ -13,6 +13,7 @@ namespace MediaResource.Web.Controllers
 	{
 		private readonly MusicService _musicService = new MusicService();
 		private readonly CategoryService _categoryService = new CategoryService();
+		private readonly VisitLogService _visitLogService = new VisitLogService();
 
 		[ChildActionOnly]
 		public ActionResult IndexPartial()
@@ -35,6 +36,8 @@ namespace MediaResource.Web.Controllers
 				return HttpNotFound();
 			}
 
+			// 记录点击日志
+			_visitLogService.LogClick(ObjectType.Music, music.Id);
 
 			return View(music);
 		}

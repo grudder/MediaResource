@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Web.Mvc;
 
+using MediaResource.Web.Models;
 using MediaResource.Web.Models.ViewModels;
 using MediaResource.Web.Services;
 using PagedList;
@@ -13,6 +14,7 @@ namespace MediaResource.Web.Controllers
 		private readonly FilmService _filmService = new FilmService();
         private readonly CategoryService _categoryService = new CategoryService();
         private readonly GroupService _groupService = new GroupService();
+		private readonly VisitLogService _visitLogService = new VisitLogService();
 
 		[ChildActionOnly]
 		public ActionResult IndexPartial()
@@ -34,6 +36,9 @@ namespace MediaResource.Web.Controllers
 			{
 				return HttpNotFound();
 			}
+
+			// 记录点击日志
+			_visitLogService.LogClick(ObjectType.Film, id.Value);
 
 
 			return View(filmViewModel);

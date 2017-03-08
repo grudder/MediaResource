@@ -15,9 +15,10 @@ namespace MediaResource.Web.Controllers
     public class TopicNewsController : Controller
     {
         private readonly TopicNewsService _topicNewsService = new TopicNewsService();
+		private readonly VisitLogService _visitLogService = new VisitLogService();
 
-        // GET: TopicNews/Detail
-        public ActionResult Detail(int? id)
+		// GET: TopicNews/Detail
+		public ActionResult Detail(int? id)
         {
             if (id == null)
             {
@@ -28,9 +29,12 @@ namespace MediaResource.Web.Controllers
             if (topicNews == null)
             {
                 return HttpNotFound();
-            }
+			}
 
-            return View(topicNews);
+			// 记录点击日志
+			_visitLogService.LogClick(ObjectType.TopicNews, topicNews.Id, topicNews.TopicId);
+
+			return View(topicNews);
         }
 
         // GET: TopicNews/PanelPartial
@@ -179,7 +183,11 @@ namespace MediaResource.Web.Controllers
         public FileResult Download(int? id)
         {
             TopicNews topicNews = _topicNewsService.DownloadCount(id);
-            string url = WebHelper.Instance.RootUrl + topicNews.Locations;
+
+			// 记录下载日志
+			_visitLogService.LogDownload(ObjectType.TopicNews, topicNews.Id, topicNews.TopicId);
+
+			string url = WebHelper.Instance.RootUrl + topicNews.Locations;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));
             return File(stream, "image/jpeg", fileName);

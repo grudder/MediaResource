@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Web.Mvc;
 
+using MediaResource.Web.Models;
 using MediaResource.Web.Models.ViewModels;
 using MediaResource.Web.Services;
 
@@ -14,6 +15,7 @@ namespace MediaResource.Web.Controllers
 		private readonly VideoService _videoService = new VideoService();
         private readonly CategoryService _categoryService = new CategoryService();
         private readonly GroupService _gruopService = new GroupService();
+		private readonly VisitLogService _visitLogService = new VisitLogService();
 
 		[ChildActionOnly]
 		public ActionResult IndexPartial()
@@ -36,6 +38,8 @@ namespace MediaResource.Web.Controllers
 				return HttpNotFound();
 			}
 
+			// 记录点击日志
+			_visitLogService.LogClick(ObjectType.Video, videoViewModel.Video.Id);
 
 			return View(videoViewModel);
 		}

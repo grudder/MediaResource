@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -175,6 +176,8 @@
     <Compile Include="Models\ApplyForDownload.cs" />
     <Compile Include="Models\CustomValidations\UserValidation.cs" />
     <Compile Include="Models\GraphicDesign.cs" />
+    <Compile Include="Models\VisitType.cs" />
+    <Compile Include="Models\VisitLog.cs" />
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\TopicImage.cs" />
     <Compile Include="Models\TopicNews.cs" />
@@ -215,6 +218,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ApplyForDownloadService.cs" />
     <Compile Include="Services\GraphicDesignService.cs" />
+    <Compile Include="Services\VisitLogService.cs" />
     <Compile Include="Services\TopicNewsService.cs" />
     <Compile Include="Services\TopicTextService.cs" />
     <Compile Include="Services\TopicVideoService.cs" />

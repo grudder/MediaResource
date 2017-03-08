@@ -19,8 +19,9 @@ namespace MediaResource.Web.Controllers
         private readonly PhotoService _photoService = new PhotoService();
         private readonly CategoryService _categoryService = new CategoryService();
         private readonly GroupService _groupService = new GroupService();
+		private readonly VisitLogService _visitLogService = new VisitLogService();
 
-        private const string UserUploadPhotoPath = @"mov1\Download\Photo\";
+		private const string UserUploadPhotoPath = @"mov1\Download\Photo\";
 
         [ChildActionOnly]
         public ActionResult IndexPartial()
@@ -41,10 +42,12 @@ namespace MediaResource.Web.Controllers
             if (photo == null)
             {
                 return HttpNotFound();
-            }
+			}
 
-
-            return View(photo);
+			// 记录点击日志
+			_visitLogService.LogClick(ObjectType.Photo, photo.Id);
+			
+			return View(photo);
         }
 
         //
@@ -104,7 +107,11 @@ namespace MediaResource.Web.Controllers
         public FileResult Download(int? id)
         {
             Photo photo = _photoService.DownloadCount(id);
-            string url = WebHelper.Instance.RootUrl + photo.FileUrl;
+
+			// 记录下载日志
+			_visitLogService.LogDownload(ObjectType.Photo, photo.Id);
+
+			string url = WebHelper.Instance.RootUrl + photo.FileUrl;
             var stream = new WebClient().OpenRead(url);
             string fileName = url.Substring(url.LastIndexOf(@"\"));
             return File(stream, "image/jpeg", fileName);
@@ -148,8 +155,11 @@ namespace MediaResource.Web.Controllers
                 {
                     string destFilePath = Path.Combine(folderPath, Path.GetFileName(sourceFilePath));
                     System.IO.File.Copy(sourceFilePath, destFilePath);
-                }
-            }
+				}
+
+				// 记录下载日志
+				_visitLogService.LogDownload(ObjectType.Photo, photo.Id);
+			}
 
             // 生成压缩文件
             string zipFilePath = folderPath + ".zip";

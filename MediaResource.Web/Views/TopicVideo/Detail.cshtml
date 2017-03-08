@@ -8,7 +8,7 @@
 	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 	<h4 class="modal-title">
 		@Model.TopicVideo.Name
-		@Html.HiddenFor(model => model.TopicVideo.Id)
+		<input type="hidden" id="hiddenTopicVideoId" value="@Model.TopicVideo.Id" />
 	</h4>
 </div>
 <div class="modal-body">
@@ -194,7 +194,7 @@
     var _topicVideoPlayer;
 
 	$(function () {
-	    _topicVideoId = $("#Id").val();
+		_topicVideoId = $("#hiddenTopicVideoId").val();
 
 	    var topicVideoUrl = "@Model.FlvUrl";
 	    _topicVideoPlayer = jwplayer("topicVideoPlayer").setup({

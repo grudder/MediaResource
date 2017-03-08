@@ -9,7 +9,7 @@
 	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 	<h4 class="modal-title">
 		@Model.Name
-		@Html.HiddenFor(model => model.Id)
+		<input type="hidden" id="hiddenTopicTextId" value="@Model.Id" />
 	</h4>
 </div>
 <div class="modal-body">
@@ -172,7 +172,7 @@
 	var _topicTextId;
 
 	$(function () {
-		_topicTextId = $("#Id").val();
+		_topicTextId = $("#hiddenTopicTextId").val();
 
 		changeTopicTextScore();
 		showTopicTextCommentList();
